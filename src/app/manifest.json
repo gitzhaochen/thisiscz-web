@@ -1,0 +1,13 @@
+{
+  "name": "ThisIsCZ",
+  "short_name": "CZ",
+  "description": "Here, you will embark on a journey full of exploration and discovery.",
+  "icons": [
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/en"
+}

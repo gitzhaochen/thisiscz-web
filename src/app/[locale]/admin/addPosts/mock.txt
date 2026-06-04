@@ -1,0 +1,214 @@
+
+      <Button
+        variant="outline"
+        onClick={() => {
+          const mockData = [
+            {
+              title: 'Full Stack Blog 01: FrontEnd Project Creation',
+              content: '',
+              summary:
+                "Developing a personal blog using free resources not only showcases your personal brand and technical skills, but also allows you to practice full stack development. It's a zero-cost yet high-value project.",
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                '通过免费资源开发个人博客，既能展示个人品牌和技术能力，又能实践全栈开发技术，是一个零成本但高价值的项目实践。',
+              titleZh: '全栈开发个人博客01：创建前端项目',
+            },
+            {
+              title: 'Full Stack Blog 02: FrontEnd I18n',
+              content: '',
+              summary:
+                '`next-intl` is an internationalization library for Next.js applications that simplifies multi-language support. It manages translation content through APIs like `useTranslations` and `getTranslations`, supports static rendering at build time, and can be used in both server and client components.',
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                '`next-intl` 是一个用于 Next.js 应用的国际化库，简化了多语言支持，通过 `useTranslations` 和 `getTranslations` 等 API 来管理翻译内容，支持构建时静态渲染，服务端组件和客户端组件都可以使用。',
+              titleZh: '全栈开发个人博客02：前端国际化',
+            },
+            {
+              title: 'Full Stack Blog 03: FrontEnd Responsive Design',
+              content: '',
+              summary:
+                'Tailwind CSS is a powerful CSS framework that quickly builds responsive and customizable user interfaces through class names. It provides a large number of predefined classes such as `bg-blue-500`, `text-xl`, `p-4`, etc., making style application very efficient without writing a lot of custom CSS. Unlike traditional CSS frameworks, Tailwind CSS emphasizes composability and configurability, supporting customization of colors, spacing, fonts, and other properties through configuration files, greatly improving development speed while maintaining flexibility.',
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                'Tailwind CSS 是一个功能强大的 CSS 框架，通过类名快速构建响应式和可自定义的用户界面。它提供了大量的预定义类，如 `bg-blue-500`、`text-xl`、`p-4` 等，使得样式的应用变得非常高效，无需写大量自定义 CSS。与传统的 CSS 框架不同，Tailwind CSS 强调可组合和可配置性，支持通过配置文件定制颜色、间距、字体等属性，极大提高了开发速度并且保持了灵活性。',
+              titleZh: '全栈开发个人博客03：前端响应式设计',
+            },
+            {
+              title: 'Full Stack Blog 04: FrontEnd Dark Mode',
+              content: '',
+              summary:
+                'Shadcn/ui is a modern React UI component library designed to provide customizable, high-quality, dependency-free user interface components. It leverages the flexibility of Tailwind CSS and React to provide a set of easy-to-use, responsive, and extensible UI components, helping developers quickly build beautiful and feature-rich application interfaces while maintaining design consistency and flexibility.',
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                'Shadcn/ui 是一个现代化的 React UI 组件库，旨在提供可自定义、高质量、无依赖的用户界面组件。它利用 Tailwind CSS 和 React 的灵活性，提供了一组易于使用、响应式且可扩展的 UI 组件，帮助开发者快速构建美观且功能丰富的应用界面，同时保持设计的一致性和灵活性。',
+              titleZh: '全栈开发个人博客04：前端深色模式',
+            },
+            {
+              title: 'Full Stack Blog 05: Why DotNET',
+              content: '',
+              summary:
+                'Choosing .NET (ASP.NET Core) as the backend for my personal blog isn\'t because "Microsoft is good" or "the language is advanced," but because it has several very solid advantages in real production environments. Below, I\'ll clearly explain from the dimensions of performance, development efficiency, deployment cost, architecture, ecosystem, and scalability why I chose .NET as the blog\'s backend.',
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                '选择 .NET（ASP.NET Core）作为个人博客后端，不是因为“微软好”或“语言高级”，而是因为 它在真实生产环境里具备几个非常硬核的优势。下面我从 性能、开发效率、部署成本、架构、生态、扩展性 等维度给你清晰说明，为什么我会选 .NET 作为博客的后端。',
+              titleZh: '全栈开发个人博客05：为啥选择.NET作为网站后端语言',
+            },
+            {
+              title: 'Full Stack Blog 06: DotNET Project Creation',
+              content: '',
+              summary:
+                'Thisiscz API is a Web API project based on .NET 8.0, providing backend services for content management, user authentication, comment system, and other features.',
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                'Thisiscz API 是一个基于 .NET 8.0 的 Web API 项目，提供内容管理、用户认证、评论系统等功能的后端服务。',
+              titleZh: '全栈开发个人博客06：DotNET后端项目设计',
+            },
+            {
+              title: 'Full Stack Blog 07: DotNET EF Core',
+              content: '',
+              summary:
+                'The project uses `Entity Framework Core (EF Core)` as the ORM framework, connecting to an `Azure SQL Server` database. It also integrates `ASP.NET Core Identity` for user identity management.',
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                '项目使用 `Entity Framework Core (EF Core)` 作为 ORM 框架，连接 `Azure SQL Server` 数据库。同时集成了 `ASP.NET Core Identity` 进行用户身份管理。',
+              titleZh: '全栈开发个人博客 07：DotNET接入数据库',
+            },
+            {
+              title: 'Full Stack Blog 08: DotNET Posts Design',
+              content: '',
+              summary:
+                'This document provides a detailed overview of the complete development steps for the post API service, including entity models, DTO design, AutoMapper configuration, and controller implementation.',
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                '本文档详细概述了帖子接口服务的完整开发步骤，包括实体模型、DTO 设计、AutoMapper 配置和控制器实现。',
+              titleZh: '全栈开发个人博客08：DotNET帖子接口设计',
+            },
+            {
+              title: 'Full Stack Blog 09: FrontEnd TypedApiFetch',
+              content: '',
+              summary:
+                'This project uses the `orval` tool to automatically generate type-safe TypeScript API client code from the backend OpenAPI specification, achieving complete type synchronization between frontend and backend APIs, providing full type hints and autocomplete functionality.',
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                '本项目使用 `orval` 工具从后端 OpenAPI 规范自动生成类型安全的 TypeScript API 客户端代码，实现了前端与后端 API 的完全类型同步，提供了完整的类型提示和自动补全功能。',
+              titleZh: '全栈开发个人博客09：前端接入Api接口，支持类型提示',
+            },
+            {
+              title: 'Full Stack Blog 10: DotNET JWT Design',
+              content: '',
+              summary:
+                'The JWT (JSON Web Token) authentication system provides a secure identity verification and authorization mechanism for the blog application, supporting role-based access control (RBAC).',
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                'JWT（JSON Web Token）认证系统为博客应用提供了安全的身份验证和授权机制，支持基于角色的访问控制（RBAC）。',
+              titleZh: '全栈开发个人博客10：JWT 和权限设计',
+            },
+            {
+              title: 'Full Stack Blog 11: DotNET Google Login',
+              content: '',
+              summary:
+                'Google OAuth 2.0 allows users to quickly log in to the blog application using their Google account without creating a new account. The system automatically validates Google ID Tokens and creates user accounts on first login.',
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                'Google OAuth 2.0 允许用户使用 Google 账号快速登录博客应用，无需创建新账号。系统会自动验证 Google ID Token，并在首次登录时自动创建用户账号。',
+              titleZh: '全栈开发个人博客11：DotNET接入谷歌登录',
+            },
+            {
+              title: 'Full Stack Blog 12: FrontEnd Google Login',
+              content: '',
+              summary:
+                'Google login functionality provides a convenient third-party authentication method for the blog application, allowing users to quickly log in using their Google account without registering a new account.',
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                '谷歌登录功能为博客应用提供了便捷的第三方身份认证方式，用户可以通过 Google 账号快速登录，无需注册新账号。\n',
+              titleZh: '全栈开发个人博客12：前端接入谷歌登录',
+            },
+            {
+              title: 'Full Stack Blog 13: FrontEnd Authorization',
+              content: '',
+              summary:
+                'The frontend authorization system provides a complete identity verification and authorization mechanism for the blog application, ensuring users can only access functions and resources within their permissions.',
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                '前端鉴权系统为博客应用提供了完整的身份验证和授权机制，确保用户只能访问其权限范围内的功能和资源。\n',
+              titleZh: '全栈开发个人博客13：前端鉴权设计',
+            },
+            {
+              title: 'Full Stack Blog 14: FrontEnd Posts Design',
+              content: '',
+              summary:
+                'The post module provides complete post browsing functionality for the blog application, supporting list display, detail viewing, category filtering, pagination, and admin editing features.',
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                '帖子模块为博客应用提供了完整的帖子浏览功能，支持列表展示、详情查看、分类筛选、分页浏览以及管理员编辑等功能。',
+              titleZh: '全栈开发个人博客14：前端帖子设计',
+            },
+            {
+              title: 'Full Stack Blog 15: DotNET PostLike',
+              content: '',
+              summary:
+                'The post like functionality allows users to like and unlike blog articles, while providing like count statistics and current user like status queries.',
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                '帖子点赞功能允许用户对博客文章进行点赞和取消点赞操作，同时提供点赞数量统计和当前用户点赞状态查询。',
+              titleZh: '全栈开发个人博客15：DotNET帖子按赞设计',
+            },
+            {
+              title: 'Full Stack Blog 16: FrontEnd PostLike',
+              content: '',
+              summary:
+                "The frontend post like functionality allows users to like and unlike posts in blog article lists and detail pages, displaying like counts in real-time and the current user's like status.",
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                '前端帖子点赞功能允许用户在博客文章列表和详情页中对帖子进行点赞和取消点赞操作，实时显示点赞数量和当前用户的点赞状态。',
+              titleZh: '全栈开发个人博客16：前端帖子按赞设计',
+            },
+            {
+              title: 'Full Stack Blog 17: DotNET Comments',
+              content: '',
+              summary:
+                'The post comment functionality allows users to comment and reply on blog articles, supporting multi-level nested reply structures, while providing comment list queries, reply count statistics, and permission control.',
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                '帖子评论功能允许用户对博客文章进行评论和回复，支持多级嵌套回复结构，同时提供评论列表查询、回复数量统计和权限控制。',
+              titleZh: '全栈开发个人博客17：DotNET帖子评论设计',
+            },
+            {
+              title: 'Full Stack Blog 18: FrontEnd Comments',
+              content: '',
+              summary:
+                'Allows users to comment and reply on posts in blog article detail pages, supporting multi-level nested reply structures, infinite scroll loading, real-time comment count updates, and permission control (only comment author or admin can delete).',
+              category: PostCategory.work,
+              contentZh: '',
+              summaryZh:
+                '允许用户在博客文章详情页中对帖子进行评论和回复，支持多级嵌套回复结构、无限滚动加载、实时更新评论数量，并提供权限控制（仅评论作者或管理员可删除）。',
+              titleZh: '全栈开发个人博客18：前端帖子评论设计',
+            },
+          ]
+          ;(async () => {
+            for (const item of mockData) {
+              addPost({ data: item })
+              await new Promise((resolve) => setTimeout(resolve, 1000))
+            }
+          })()
+        }}
+      >
+        Add Mock Data
+      </Button>

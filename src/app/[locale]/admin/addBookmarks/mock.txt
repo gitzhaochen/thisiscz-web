@@ -1,0 +1,47 @@
+
+      <Button
+        variant="outline"
+        onClick={() => {
+          const mockData = [
+            {
+              title: 'DJJC',
+              description:
+                '主打一个便宜，15块一年，每个月200G，还要啥自行车，常年备用。太便宜都不屑于贴邀请了，我的邀请注册链接：https://djjc.cfd/#/register?code=sgnvsq0h',
+              url: 'https://thisiscz.s3.amazonaws.com/djjc.jpg',
+              imageUrl: 'https://thisiscz-assets.s3.ap-southeast-2.amazonaws.com/uploads/bookmarks/IMG_8484.jpeg',
+              category: LinkCategory.life,
+            },
+            {
+              title: 'FLYINGBIRD',
+              description:
+                '可靠稳定，15块钱每个月100G，完全够用了，季付9折。我的邀请注册链接：https://fbinv02.fbaff.cc/auth/register?code=TVkNTQjn',
+              url: 'https://fbcc01.fbaff01.pro',
+              imageUrl: 'https://thisiscz-assets.s3.ap-southeast-2.amazonaws.com/uploads/bookmarks/IMG_8483.jpeg',
+              category: LinkCategory.life,
+            },
+            {
+              title: 'Tinypng',
+              description: 'Smart AVIF, WebP, PNG and JPEG Compression for Faster Websites',
+              url: 'https://tinypng.com',
+              imageUrl: 'https://thisiscz-assets.s3.ap-southeast-2.amazonaws.com/uploads/bookmarks/IMG_8482.jpeg',
+              category: LinkCategory.work,
+            },
+            {
+              title: 'State of JavaScript',
+              description: 'The annual developer survey of the JavaScript ecosystem',
+              url: 'https://stateofjs.com',
+              imageUrl: 'https://thisiscz-assets.s3.ap-southeast-2.amazonaws.com/uploads/bookmarks/IMG_8481.jpeg',
+              category: LinkCategory.work,
+            },
+          ]
+
+          ;(async () => {
+            for (const item of mockData) {
+              addLink({ data: item })
+              await new Promise((resolve) => setTimeout(resolve, 1000))
+            }
+          })()
+        }}
+      >
+        Add Mock Data
+      </Button>

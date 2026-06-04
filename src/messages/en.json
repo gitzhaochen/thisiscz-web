@@ -1,0 +1,68 @@
+{
+  "Common": {
+    "siteTitle": "ThisIsCZ",
+    "description": "Here, you will embark on a journey filled with exploration and discovery. Life is an adventure, filled with unknown challenges and unexpected opportunities. I hope to record these precious moments through文字, and share them with everyone.",
+    "category": "Category"
+  },
+  "LocaleSwitcher": {
+    "zh": "简体中文",
+    "en": "English",
+    "label": "Language"
+  },
+  "HomePage": {
+    "title": "Hello world!"
+  },
+  "Navigation": {
+    "home": "Home",
+    "bookmarks": "Bookmarks",
+    "posts": "Posts",
+    "resume": "Resume",
+    "aiTalk": "AiTalk"
+  },
+
+  "PageAiTalk": {
+    "title": "AI Talk",
+    "currentMode": "Current Mode",
+    "voice": "Voice",
+    "text": "Text",
+    "pressAndSpeak": "Press and Speak",
+    "enterText": "Enter Text",
+    "send": "Send",
+    "listening": "Listening",
+    "recognitionError": "Recognition Error",
+    "yourMessage": "You",
+    "browserNotSupported": "Your browser does not support speech recognition"
+  },
+  "LinkCategory": {
+    "life": "Life",
+    "work": "Work",
+    "crypto": "Crypto",
+    "sports": "Sports",
+    "movies": "Movies",
+    "all": "All",
+    "selectPlaceholder": "Select category"
+  },
+  "PostCategory": {
+    "life": "Life",
+    "work": "Work",
+    "crypto": "Crypto",
+    "sports": "Sports",
+    "all": "All",
+    "selectPlaceholder": "Select category"
+  },
+  "Comments": {
+    "comments": "Comments",
+    "enterYourComment": "Enter your comment",
+    "submitting": "Submitting...",
+    "submit": "Submit",
+    "loadMoreComments": "Load more comments",
+    "pleaseLoginToComment": "Please login to comment",
+    "pleaseLoginToReply": "Please login to reply",
+    "enterYourReply": "Enter your reply",
+    "replying": "Replying...",
+    "reply": "Reply",
+    "cancel": "Cancel",
+    "loadMoreReplies": "Load more replies",
+    "replies": "{count} replies"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "Common": {
+    "siteTitle": "CZ的世界",
+    "description": "在这里，你将踏上一段充满探索与发现的旅程。生活如同一场冒险，充满了未知的挑战和意想不到的机遇。我希望通过文字，将这些珍贵的瞬间记录下来，与大家一同分享",
+    "category": "分类"
+  },
+  "LocaleSwitcher": {
+    "zh": "简体中文",
+    "en": "English",
+    "label": "Language"
+  },
+  "HomePage": {
+    "title": "你好，世界！"
+  },
+  "Navigation": {
+    "home": "首页",
+    "bookmarks": "书签",
+    "posts": "帖子",
+    "resume": "简历",
+    "aiTalk": "AI聊天"
+  },
+
+  "PageAiTalk": {
+    "title": "AI聊天助手",
+    "currentMode": "当前模式",
+    "voice": "语音",
+    "text": "文本",
+    "pressAndSpeak": "按住说话",
+    "enterText": "输入文本",
+    "send": "发送",
+    "listening": "正在聆听",
+    "recognitionError": "语音识别错误",
+    "yourMessage": "你说",
+    "browserNotSupported": "您的浏览器不支持语音识别功能"
+  },
+  "LinkCategory": {
+    "life": "生活",
+    "work": "工作",
+    "crypto": "加密货币",
+    "sports": "运动",
+    "movies": "电影",
+    "all": "全部",
+    "selectPlaceholder": "选择分类"
+  },
+  "PostCategory": {
+    "life": "生活",
+    "work": "工作",
+    "crypto": "加密货币",
+    "sports": "运动",
+    "all": "全部",
+    "selectPlaceholder": "选择分类"
+  },
+  "Comments": {
+    "comments": "评论",
+    "enterYourComment": "请输入您的评论",
+    "submitting": "提交中...",
+    "submit": "提交",
+    "loadMoreComments": "加载更多评论",
+    "pleaseLoginToComment": "请先登录",
+    "pleaseLoginToReply": "请先登录",
+    "enterYourReply": "请输入您的回复",
+    "replying": "回复中...",
+    "reply": "回复",
+    "cancel": "取消",
+    "loadMoreReplies": "加载更多回复",
+    "replies": "{count} 条回复"
+  }
+}
