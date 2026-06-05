@@ -4,6 +4,8 @@ Experience: **10 years** | Target roles: **Frontend / Full-stack Developer**
 
 Location: **Auckland, NZ** | Availability: **1-week notice** | Work Rights: **Work Visa**
 
+Website: [thisiscz.com](https://thisiscz.com) | GitHub: [github.com/gitzhaochen](https://github.com/gitzhaochen)
+
 ## Professional Profile
 
 Frontend-focused full-stack developer with 10 years of experience building commercial web systems, SaaS platforms, and Web3 Dapps. Strong hands-on experience with **React, Vue, responsive UI, ASP.NET Core, and Node.js**, with a solid understanding of web performance optimization, search engine optimization, and caching strategies. Experienced in using AI tools in daily development work, and enjoy sharing practical coding tools and workflows that improve team efficiency.
@@ -32,19 +34,19 @@ Currently living in Auckland with my family and holding a full-time work visa. I
 
 **Dates**: Mar 2025 – Dec 2025 | **Role**: Full-stack Developer | **Location**: Remote
 
-**Description**: Independently designed and built an open-source bilingual technical blog with authentication, content management, nested comments, analytics, SEO optimization, file uploads, and role-based access controls.
+**Description**: Independently designed and built an open-source bilingual technical website with authentication, content management, nested comments, SEO optimization, and role-based access control. Continuously developing meaningful life tools and AI-related applications.
 
 **Tech stack**: Next.js + Tailwind CSS + shadcn/ui + ASP.NET Core + EF Core + JWT + Orval + React Query + Zustand + Vercel + AWS CDN + Azure DevOps.
 
-**Link**: [thisiscz.vercel.app](https://thisiscz.com)
+**Link**: [thisiscz.com](https://thisiscz.com)
 
 ### 3. Web3 NFT Creation
 
 **Dates**: Sep 2022 – Dec 2024 | **Role**: Frontend Architect | **Location**: Remote
 
-**Description**: Built high-traffic NFT marketing websites with rich animations and music-driven interactions. Contributed to the TinFun NFT launch, which attracted approximately 25,000 ETH in public-sale participation and closed early due to oversubscription.
+**Description**: Built high-traffic Web3 NFT marketing websites with rich animations and music-driven interactions. Contributed to the TinFun NFT launch, which attracted approximately 25,000 ETH in public-sale participation and closed early due to oversubscription.
 
-**Tech stack**: Next.js + Tailwind CSS + Wagmi + GSAP + Three.js + Cloudflare
+**Tech stack**: Next.js + Tailwind CSS + Wagmi + Metamask + Ethereum + GSAP + Three.js + Cloudflare
 
 **Link**: [tinfun.com](https://tinfun.com) [chameleontravel.club](https://chameleontravel.club)
 
@@ -52,11 +54,11 @@ Currently living in Auckland with my family and holding a full-time work visa. I
 
 **Dates**: Jul 2019 – Aug 2022 | **Role**: Frontend Architect | **Location**: Shanghai, China
 
-**Description**: A steel trading e-commerce platform that supports buyers to find products, place orders and make payments online. Owned overall frontend architecture, coding standards, and technology selection.
+**Description**: A steel trading e-commerce platform that supports buyers to find products, place orders and make payments online. Owned overall frontend architecture, coding standards, and technology selection. Also developed the corresponding SaaS system, allowing merchants to manage purchase, sales, financial invoices and other business.
 
 **Tech stack**: Vue + Nuxt.js + React + Scss + Responsive Design + ESLint + Prettier .
 
-**Link**: [zhaogang.com](https://www.zhaogang.com)
+**Link**: [zhaogang.com](https://www.zhaogang.com) [erp.pangmaoyun.com](https://erp.pangmaoyun.com/)
 
 ### 5. YuanBen Web Store
 
@@ -71,9 +73,3 @@ Currently living in Auckland with my family and holding a full-time work visa. I
 ## Education
 
 Tongling University — Bachelor of Computer Science & Technology | 2009 – 2013
-
-## Links
-
-- **Blog**: [https://thisiscz.com/en](https://thisiscz.com/en)
-- **GitHub**: [https://github.com/gitzhaochen](https://github.com/gitzhaochen)
-- **LinkedIn**: [https://www.linkedin.com/in/realzhaochen](https://www.linkedin.com/in/realzhaochen)
