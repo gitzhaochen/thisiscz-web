@@ -13,7 +13,7 @@ export default async function ResumePage({ params }: Props) {
   //TODO:cdn的资源不是最新的
   const baseurl = `${process.env.NEXT_PUBLIC_APP_BASE_URL}/assets/resume/`
 
-  const resumePath = `${baseurl}${locale === 'zh' ? '赵晨-10年经验-Web开发.md' : 'CZ-10yrsExp-WebDeveloper-CV.md'}`
+  const resumePath = `${baseurl}${locale === 'zh' ? 'CZ-10yrsExp-WebDeveloper-CV.md' : 'CZ-10yrsExp-WebDeveloper-CV.md'}`
   // console.log(resumePath)
   const res = await fetch(resumePath)
   if (!res.ok) throw new Error('无法获取远程简历文件')
