@@ -2,7 +2,7 @@
 
 A multilingual personal website and content platform built with Next.js App Router. It includes a blog, bookmarks, resume, admin panel, and a few personal utility pages.
 
-Live demo: [thisiscz.vercel.app](https://thisiscz.vercel.app)
+Live demo: [thisiscz.vercel.app](https://thisiscz.com)
 
 ## Features
 
@@ -16,15 +16,15 @@ Live demo: [thisiscz.vercel.app](https://thisiscz.vercel.app)
 
 ## Tech Stack
 
-| Layer | Tools |
-| --- | --- |
-| Framework | Next.js 16, React 19, TypeScript |
-| UI | Tailwind CSS v4, shadcn/ui, Radix UI |
-| i18n | next-intl |
-| Data | TanStack Query v5, Orval (Swagger → hooks) |
-| State | Zustand (current user) |
-| Forms | react-hook-form + zod |
-| Assets | AWS S3 / Cloudflare R2 (production) |
+| Layer     | Tools                                      |
+| --------- | ------------------------------------------ |
+| Framework | Next.js 16, React 19, TypeScript           |
+| UI        | Tailwind CSS v4, shadcn/ui, Radix UI       |
+| i18n      | next-intl                                  |
+| Data      | TanStack Query v5, Orval (Swagger → hooks) |
+| State     | Zustand (current user)                     |
+| Forms     | react-hook-form + zod                      |
+| Assets    | AWS S3 / Cloudflare R2 (production)        |
 
 The frontend talks to a **standalone backend API**. A few Next.js Route Handlers act as a lightweight BFF (DeepSeek proxy, S3 presigned uploads).
 
@@ -50,17 +50,17 @@ Open [http://localhost:3000](http://localhost:3000) — the root path redirects 
 
 Create `.env.local` (or copy from `.env.development`):
 
-| Variable | Required | Description |
-| --- | --- | --- |
-| `NEXT_PUBLIC_APP_BASE_URL` | Yes | Frontend base URL, e.g. `http://localhost:3000` |
-| `NEXT_PUBLIC_API_BASE_URL` | Yes | Backend API base URL, e.g. `http://localhost:5239` |
-| `DEEPSEEK_API_KEY` | For AI Talk | DeepSeek API key (server-side only) |
-| `APP_AWS_ACCESS_KEY` | For S3 upload | AWS access key |
-| `APP_AWS_SECRET_KEY` | For S3 upload | AWS secret key |
-| `APP_AWS_REGION` | For S3 upload | AWS region |
-| `NEXT_PUBLIC_AWS_S3_BUCKET_NAME_ASSETS` | For S3 upload | S3 bucket name |
-| `NEXT_PUBLIC_AWS_S3_ASEETSPREFIX` | Production | CDN prefix for static assets |
-| `NEXT_PUBLIC_CLOUDFLARE_R2_ASEETSPREFIX` | Production | R2 CDN prefix for bookmark images |
+| Variable                                 | Required      | Description                                        |
+| ---------------------------------------- | ------------- | -------------------------------------------------- |
+| `NEXT_PUBLIC_APP_BASE_URL`               | Yes           | Frontend base URL, e.g. `http://localhost:3000`    |
+| `NEXT_PUBLIC_API_BASE_URL`               | Yes           | Backend API base URL, e.g. `http://localhost:5239` |
+| `DEEPSEEK_API_KEY`                       | For AI Talk   | DeepSeek API key (server-side only)                |
+| `APP_AWS_ACCESS_KEY`                     | For S3 upload | AWS access key                                     |
+| `APP_AWS_SECRET_KEY`                     | For S3 upload | AWS secret key                                     |
+| `APP_AWS_REGION`                         | For S3 upload | AWS region                                         |
+| `NEXT_PUBLIC_AWS_S3_BUCKET_NAME_ASSETS`  | For S3 upload | S3 bucket name                                     |
+| `NEXT_PUBLIC_AWS_S3_ASEETSPREFIX`        | Production    | CDN prefix for static assets                       |
+| `NEXT_PUBLIC_CLOUDFLARE_R2_ASEETSPREFIX` | Production    | R2 CDN prefix for bookmark images                  |
 
 > Do not commit real secrets. Keep `.env.local` out of version control.
 

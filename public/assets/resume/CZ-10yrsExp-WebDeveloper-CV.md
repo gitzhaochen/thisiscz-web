@@ -36,7 +36,7 @@ Currently living in Auckland with my family and holding a full-time work visa. I
 
 **Tech stack**: Next.js + Tailwind CSS + shadcn/ui + ASP.NET Core + EF Core + JWT + Orval + React Query + Zustand + Vercel + AWS CDN + Azure DevOps.
 
-**Link**: [thisiscz.vercel.app](https://thisiscz.vercel.app)
+**Link**: [thisiscz.vercel.app](https://thisiscz.com)
 
 ### 3. Web3 NFT Creation
 
@@ -74,6 +74,6 @@ Tongling University — Bachelor of Computer Science & Technology | 2009 – 201
 
 ## Links
 
-- **Blog**: [https://thisiscz.vercel.app/en](https://thisiscz.vercel.app/en)
+- **Blog**: [https://thisiscz.com/en](https://thisiscz.com/en)
 - **GitHub**: [https://github.com/gitzhaochen](https://github.com/gitzhaochen)
 - **LinkedIn**: [https://www.linkedin.com/in/realzhaochen](https://www.linkedin.com/in/realzhaochen)
