@@ -301,7 +301,7 @@ Next Route Handler，作为轻量 BFF 使用。
 ```text
 src/app/api/
 ├─ callGpt/route.ts
-└─ s3UploadImg/route.ts
+└─ s3Upload/route.ts
 ```
 
 #### `/api/callGpt`
@@ -310,7 +310,7 @@ src/app/api/
 
 调用方：`src/app/[locale]/aiTalk/page.tsx`
 
-#### `/api/s3UploadImg`
+#### `/api/s3Upload`
 
 返回 S3 `presigned post`，用于前端直传图片。
 
@@ -577,11 +577,7 @@ src/app/[locale]/about/page.tsx
 
 ```tsx
 export default function PageAbout() {
-  return (
-    <div className="page-wrapper py-6">
-      {/* page content */}
-    </div>
-  )
+  return <div className="page-wrapper py-6">{/* page content */}</div>
 }
 ```
 
@@ -979,7 +975,7 @@ useUserStore.setState({ user })
 
 ```tsx
 <div className="page-wrapper py-6">
-  <div className="flex items-center gap-2 text-sm text-muted-foreground" />
+  <div className="text-muted-foreground flex items-center gap-2 text-sm" />
 </div>
 ```
 
@@ -1346,7 +1342,7 @@ src/app/[locale]/nzspend
 
 - 页面 JS / HTML 可能先下发。
 - 首屏可能短暂显示 admin 内容。
-- Route Handler 如 `/api/s3UploadImg` 没有 admin 校验。
+- Route Handler 如 `/api/s3Upload` 没有 admin 校验。
 
 建议：
 
@@ -1485,11 +1481,7 @@ export default async function AboutPage({ params }: Props) {
   const { locale } = await params
   setRequestLocale(locale)
 
-  return (
-    <div className="page-wrapper py-6">
-      About
-    </div>
-  )
+  return <div className="page-wrapper py-6">About</div>
 }
 ```
 
@@ -1565,7 +1557,7 @@ const { mutate, isPending } = usePostApiXxx({
 
 当前约定：
 
-1. 前端调用 `/api/s3UploadImg?filePath=...`
+1. 前端调用 `/api/s3Upload?filePath=...`
 2. 服务端返回 presigned post。
 3. 前端用 `FormData` 直接 POST 到 S3。
 4. 图片 URL 拼为：

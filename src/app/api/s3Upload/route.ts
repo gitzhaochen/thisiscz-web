@@ -1,5 +1,6 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import { apiFetchServer } from '@/lib/apiFetch'
 import { NextRequest, NextResponse } from 'next/server'
 
 function getRequiredEnv(name: string) {
@@ -12,6 +13,13 @@ function getRequiredEnv(name: string) {
 
 async function handler(req: NextRequest) {
   try {
+    // 在签名上传前校验当前用户是否为 admin
+    const currentUser = await apiFetchServer('/api/users/me')
+    const role = String(currentUser?.role || '').toLowerCase()
+    if (role !== 'admin') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
     // 获取查询参数
     const searchParams = req.nextUrl.searchParams
     const filePath = searchParams.get('filePath')
@@ -47,8 +55,14 @@ async function handler(req: NextRequest) {
     return NextResponse.json({ url: putUrl })
   } catch (error) {
     console.error('R2 upload sign error:', error)
-    const message = error instanceof Error ? error.message : 'Internal Server Error'
-    return NextResponse.json({ error: message }, { status: 500 })
+    const message = error instanceof Error ? error.message : ''
+    if (message.includes('UNAUTHORIZED') || message.includes('401')) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+    if (message.includes('Forbidden') || message.includes('403')) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
   }
 }
 
