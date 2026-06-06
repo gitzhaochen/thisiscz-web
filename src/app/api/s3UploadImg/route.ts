@@ -2,6 +2,14 @@ import { S3Client } from '@aws-sdk/client-s3'
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post'
 import { NextRequest, NextResponse } from 'next/server'
 
+function getRequiredEnv(name: string) {
+  const value = process.env[name]
+  if (!value) {
+    throw new Error(`Missing required env var: ${name}`)
+  }
+  return value
+}
+
 async function handler(req: NextRequest) {
   try {
     // 获取查询参数
@@ -12,20 +20,26 @@ async function handler(req: NextRequest) {
       return NextResponse.json({ error: 'Filename is required' }, { status: 400 })
     }
 
+    const accessKeyId = getRequiredEnv('APP_CLOUDFLARE_R2_ACCESS_KEY_ID')
+    const secretAccessKey = getRequiredEnv('APP_CLOUDFLARE_R2_SECRET_ACCESS_KEY')
+    const endpoint = getRequiredEnv('APP_CLOUDFLARE_R2_ENDPOINT')
+    const bucket = getRequiredEnv('APP_CLOUDFLARE_R2_BUCKET_NAME')
+
     const s3Client = new S3Client({
       credentials: {
-        accessKeyId: process.env.APP_AWS_ACCESS_KEY!,
-        secretAccessKey: process.env.APP_AWS_SECRET_KEY!,
+        accessKeyId,
+        secretAccessKey,
       },
-      region: process.env.APP_AWS_REGION,
+      endpoint,
+      region: 'auto',
     })
 
     const post = await createPresignedPost(s3Client, {
-      Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME_ASSETS!,
+      Bucket: bucket,
       Key: filePath,
       Expires: 60, // seconds
       Conditions: [
-        ['content-length-range', 0, 5048576], // up to 1 MB
+        ['content-length-range', 0, 5048576], // up to 5 MB
       ],
     })
 

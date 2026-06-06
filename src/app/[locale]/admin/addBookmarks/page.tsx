@@ -23,6 +23,8 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
+const R2_ASSETS_PREFIX = process.env.NEXT_PUBLIC_CLOUDFLARE_R2_ASSETS_PREFIX
+
 const linkCategories = [
   LinkCategory.life,
   LinkCategory.work,
@@ -239,7 +241,12 @@ export default function AdminBookmarks() {
                               body: formData,
                             })
 
-                            const imageUrl = `${process.env.NEXT_PUBLIC_CLOUDFLARE_R2_ASEETSPREFIX}/${filePath}`
+                            if (!R2_ASSETS_PREFIX) {
+                              toast.error('Missing R2 public assets prefix env variable')
+                              return
+                            }
+
+                            const imageUrl = `${R2_ASSETS_PREFIX}/${filePath}`
 
                             field.onChange(imageUrl)
                           }

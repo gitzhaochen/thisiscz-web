@@ -30,7 +30,7 @@ Currently living in Auckland with my family and holding a full-time work visa. I
 
 **Tech stack**: Next.js + React + Node.js + Strapi + Shopify + Firebase.
 
-### 2. Open-source Full-stack Blog
+### 2. Open Source Full-stack Web Platform
 
 **Dates**: Mar 2025 – Dec 2025 | **Role**: Full-stack Developer | **Location**: Remote
 
