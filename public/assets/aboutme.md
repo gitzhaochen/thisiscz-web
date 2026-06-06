@@ -1,3 +1,5 @@
+## About Me
+
 ![Profile Image](https://cdn.thisiscz.com/life/avatar/cz-cv.png)
 
 I am CZ, a frontend-focused full-stack developer based in Auckland, New Zealand, with about 10 years of experience building web products, SaaS platforms, e-commerce systems, and Web3 applications.
