@@ -1,3 +1,5 @@
+![Profile Image](https://cdn.thisiscz.com/life/avatar/cz-cv.png)
+
 Name: **CZ** | Email: **realzhaochen@gmail.com**
 
 Experience: **10 years** | Target roles: **Frontend / Full-stack Developer**

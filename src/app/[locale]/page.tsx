@@ -9,14 +9,11 @@ type Props = {
   params: Promise<{ locale: Locale }>
 }
 
-const RESUME_VERSION = 'v202605231530'
 const RESUME_FILE_BY_LOCALE: Record<Locale, string> = {
   // zh: '赵晨-10年经验-Web开发.md',
-  zh: 'CZ-10yrsExp-WebDeveloper-CV.md',
-  en: 'CZ-10yrsExp-WebDeveloper-CV.md',
+  zh: 'aboutme_zh.md',
+  en: 'aboutme.md',
 }
-
-const revalidate = 86400
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -27,12 +24,10 @@ export default async function ResumePage({ params }: Props) {
   setRequestLocale(locale)
 
   // Keep base URL computation synchronous and cheap.
-  const baseUrl = `${process.env.NEXT_PUBLIC_APP_BASE_URL}/assets/resume/`
+  const baseUrl = `${process.env.NEXT_PUBLIC_APP_BASE_URL}/assets/`
 
   const resumePath = `${baseUrl}${RESUME_FILE_BY_LOCALE[locale]}`
-  const res = await fetch(`${resumePath}?${RESUME_VERSION}`, {
-    next: { revalidate },
-  })
+  const res = await fetch(resumePath)
   if (!res.ok) throw new Error('无法获取远程简历文件')
   const resume = await res.text()
 
