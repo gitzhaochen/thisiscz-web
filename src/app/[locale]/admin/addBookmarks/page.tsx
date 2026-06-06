@@ -227,19 +227,25 @@ export default function AdminBookmarks() {
                           const file = e.target.files?.[0]
                           if (file) {
                             const filename = encodeURIComponent(file.name)
-                            const filePath = `uploads/bookmarks/${filename}`
-                            const response = await fetch(`/api/s3UploadImg?filePath=${filePath}`)
+                            const filePath = `web/uploads/bookmarks/${filename}`
+                            const fileType = encodeURIComponent(file.type || 'application/octet-stream')
+                            const response = await fetch(
+                              `/api/s3UploadImg?filePath=${filePath}&fileType=${fileType}`
+                            )
 
                             const data = await response.json()
-                            const formData = new FormData()
-                            Object.entries({ ...data.fields, file }).forEach(([key, value]) => {
-                              // @ts-ignore
-                              formData.append(key, value)
+                            const uploadResponse = await fetch(data.url, {
+                              method: 'PUT',
+                              headers: {
+                                'Content-Type': file.type || 'application/octet-stream',
+                              },
+                              body: file,
                             })
-                            await fetch(data.url, {
-                              method: 'POST',
-                              body: formData,
-                            })
+
+                            if (!uploadResponse.ok) {
+                              toast.error('Upload image to R2 failed')
+                              return
+                            }
 
                             if (!R2_ASSETS_PREFIX) {
                               toast.error('Missing R2 public assets prefix env variable')

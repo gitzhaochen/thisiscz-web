@@ -1,5 +1,5 @@
-import { S3Client } from '@aws-sdk/client-s3'
-import { createPresignedPost } from '@aws-sdk/s3-presigned-post'
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { NextRequest, NextResponse } from 'next/server'
 
 function getRequiredEnv(name: string) {
@@ -15,6 +15,7 @@ async function handler(req: NextRequest) {
     // 获取查询参数
     const searchParams = req.nextUrl.searchParams
     const filePath = searchParams.get('filePath')
+    const fileType = searchParams.get('fileType')
 
     if (!filePath) {
       return NextResponse.json({ error: 'Filename is required' }, { status: 400 })
@@ -32,21 +33,22 @@ async function handler(req: NextRequest) {
       },
       endpoint,
       region: 'auto',
+      forcePathStyle: true,
     })
 
-    const post = await createPresignedPost(s3Client, {
+    const putCommand = new PutObjectCommand({
       Bucket: bucket,
       Key: filePath,
-      Expires: 60, // seconds
-      Conditions: [
-        ['content-length-range', 0, 5048576], // up to 5 MB
-      ],
+      ContentType: fileType || undefined,
     })
 
-    return NextResponse.json(post)
+    const putUrl = await getSignedUrl(s3Client as any, putCommand as any, { expiresIn: 60 })
+
+    return NextResponse.json({ url: putUrl })
   } catch (error) {
-    console.log(error)
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+    console.error('R2 upload sign error:', error)
+    const message = error instanceof Error ? error.message : 'Internal Server Error'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
 
