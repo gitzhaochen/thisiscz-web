@@ -1,5 +1,6 @@
 import MarkdownView from '@/components/MarkdownView'
-import { __IS_PROD__ } from '@/lib/constants'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 
@@ -10,14 +11,8 @@ export default async function ResumePage({ params }: Props) {
   const { locale } = await params
   setRequestLocale(locale)
 
-  //TODO:cdn的资源不是最新的
-  const baseurl = `${process.env.NEXT_PUBLIC_APP_BASE_URL}/assets/resume/`
-
-  const resumePath = `${baseurl}${locale === 'zh' ? 'CZ-10yrsExp-WebDeveloper-CV.md' : 'CZ-10yrsExp-WebDeveloper-CV.md'}`
-  // console.log(resumePath)
-  const res = await fetch(resumePath)
-  if (!res.ok) throw new Error('无法获取远程简历文件')
-  const resume = await res.text()
+  const resumePath = join(process.cwd(), 'public', 'assets', 'resume', 'CZ-10yrsExp-WebDeveloper-CV.md')
+  const resume = await readFile(resumePath, 'utf8')
 
   return (
     <div className="page-wrapper py-6">
