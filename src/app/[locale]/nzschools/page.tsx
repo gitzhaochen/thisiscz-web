@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Link } from '@/i18n/navigation'
 import { type GetApiSchoolsParams, useGetApiSchools, useGetApiSchoolsEnums } from '@/lib/api/generated'
+import { createNzSchoolEnumLabelHelpers } from '@/lib/nzSchoolEnumLabels'
 import { useTranslations } from 'next-intl'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormEvent, useEffect, useMemo, useState } from 'react'
@@ -52,6 +53,9 @@ function buildListUrl(pathname: string, filters: FiltersState, page: number): st
 
 export default function PageNzSchools() {
   const t = useTranslations('PageNzSchools')
+  const tEnum = useTranslations('NzSchoolEnums')
+  const { getRegionLabel, getAuthorityClassLabel, getCoEdStatusLabel, getOrgTypeLabel } =
+    createNzSchoolEnumLabelHelpers(tEnum)
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -151,7 +155,7 @@ export default function PageNzSchools() {
                   <SelectItem value="all">{t('all')}</SelectItem>
                   {(enumsQuery.data?.region ?? []).map((item) => (
                     <SelectItem key={item} value={item}>
-                      {item}
+                      {getRegionLabel(item)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -176,7 +180,7 @@ export default function PageNzSchools() {
                   <SelectItem value="all">{t('all')}</SelectItem>
                   {(enumsQuery.data?.authorityClass ?? []).map((item) => (
                     <SelectItem key={item} value={item}>
-                      {item}
+                      {getAuthorityClassLabel(item)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -198,7 +202,7 @@ export default function PageNzSchools() {
                   <SelectItem value="all">{t('all')}</SelectItem>
                   {(enumsQuery.data?.coEdStatus ?? []).map((item) => (
                     <SelectItem key={item} value={item}>
-                      {item}
+                      {getCoEdStatusLabel(item)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -238,7 +242,7 @@ export default function PageNzSchools() {
                     checked={draftFilters.orgType.includes(item)}
                     onChange={() => toggleOrgType(item)}
                   />
-                  <span>{item}</span>
+                  <span>{getOrgTypeLabel(item)}</span>
                 </label>
               ))}
             </div>
@@ -270,7 +274,8 @@ export default function PageNzSchools() {
           >
             <div className="text-base font-semibold">{school.name}</div>
             <div className="text-foreground mt-1 text-sm">
-              {school.region || '-'} · {school.authorityClass} · {school.orgType || '-'} · {school.coEdStatus || '-'}
+              {getRegionLabel(school.region)} · {getAuthorityClassLabel(school.authorityClass)} ·{' '}
+              {getOrgTypeLabel(school.orgType)} · {getCoEdStatusLabel(school.coEdStatus)}
             </div>
             <div className="text-foreground mt-1 text-xs">
               EQI: {school.eqiIndex ?? '-'} · {t('totalStudents')}: {school.totalStudents ?? '-'}

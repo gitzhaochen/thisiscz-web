@@ -1,8 +1,9 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { apiFetchServer } from '@/lib/apiFetch'
 import type { SchoolDetailDTO } from '@/lib/api/generated'
+import { createNzSchoolEnumLabelHelpers } from '@/lib/nzSchoolEnumLabels'
 import { Locale } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
 type Props = {
@@ -12,6 +13,9 @@ type Props = {
 export default async function PageNzSchoolDetail({ params }: Props) {
   const { locale, schoolId } = await params
   setRequestLocale(locale)
+  const tEnum = await getTranslations({ locale, namespace: 'NzSchoolEnums' })
+  const { getRegionLabel, getAuthorityClassLabel, getCoEdStatusLabel, getOrgTypeLabel } =
+    createNzSchoolEnumLabelHelpers(tEnum)
 
   let detail: SchoolDetailDTO | null = null
   try {
@@ -39,13 +43,14 @@ export default async function PageNzSchoolDetail({ params }: Props) {
         <div className="rounded-lg border p-4 md:p-5">
           <div className="text-xl font-bold">{detail.name}</div>
           <div className="text-foreground mt-1 text-sm">
-            School ID: {detail.schoolId} · {detail.region || '-'} · {detail.authorityClass} · {detail.orgType || '-'}
+            School ID: {detail.schoolId} · {getRegionLabel(detail.region)} ·{' '}
+            {getAuthorityClassLabel(detail.authorityClass)} · {getOrgTypeLabel(detail.orgType)}
           </div>
 
           <div className="mt-4 grid gap-3 text-sm md:grid-cols-2 lg:grid-cols-3">
             <div>
               <div className="text-muted-foreground">CoEd Status</div>
-              <div className="text-foreground/85 font-medium">{detail.coEdStatus || '-'}</div>
+              <div className="text-foreground/85 font-medium">{getCoEdStatusLabel(detail.coEdStatus)}</div>
             </div>
             <div>
               <div className="text-muted-foreground">EQI Index</div>

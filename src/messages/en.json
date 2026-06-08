@@ -36,6 +36,56 @@
     "totalStudents": "Total students",
     "loadError": "Failed to load school list."
   },
+  "NzSchoolEnums": {
+    "authorityClass": {
+      "state": "State",
+      "state_integrated": "State Integrated",
+      "private": "Private",
+      "charter": "Charter",
+      "other": "Other"
+    },
+    "coEdStatus": {
+      "co_educational": "Co-Educational",
+      "girls_school": "Girls School",
+      "boys_school": "Boys School",
+      "primary_coed_secondary_girls": "Primary Co-Ed / Secondary Girls",
+      "primary_coed_secondary_boys": "Primary Co-Ed / Secondary Boys",
+      "boys_senior_coed": "Boys / Senior Co-Ed",
+      "girls": "Girls",
+      "boys": "Boys",
+      "not_applicable": "Not Applicable"
+    },
+    "orgType": {
+      "full_primary": "Full Primary",
+      "contributing": "Contributing",
+      "secondary_9_15": "Secondary (Year 9-15)",
+      "composite": "Composite",
+      "secondary_7_15": "Secondary (Year 7-15)",
+      "intermediate": "Intermediate",
+      "specialist_school": "Specialist School",
+      "teen_parent_unit": "Teen Parent Unit",
+      "activity_centre": "Activity Centre",
+      "composite_1_10": "Composite (Year 1-10)",
+      "restricted_composite_7_10": "Restricted Composite (Year 7-10)",
+      "secondary_7_10": "Secondary (Year 7-10)",
+      "secondary_11_15": "Secondary (Year 11-15)",
+      "correspondence_school": "Correspondence School"
+    },
+    "region": {
+      "bay_of_plenty_waiariki": "Bay of Plenty, Waiariki",
+      "canterbury_chatham_islands": "Canterbury, Chatham Islands",
+      "hawkes_bay_tairawhiti": "Hawke's Bay, Tairāwhiti",
+      "nelson_marlborough_west_coast": "Nelson, Marlborough, West Coast",
+      "otago_southland": "Otago, Southland",
+      "tai_tokerau": "Tai Tokerau",
+      "taranaki_whanganui_manawatu": "Taranaki, Whanganui, Manawatū",
+      "tamaki_herenga_manawa": "Tāmaki Herenga Manawa",
+      "tamaki_herenga_tangata": "Tāmaki Herenga Tāngata",
+      "tamaki_herenga_waka": "Tāmaki Herenga Waka",
+      "waikato": "Waikato",
+      "wellington": "Wellington"
+    }
+  },
 
   "PageAiTalk": {
     "title": "AI Talk",

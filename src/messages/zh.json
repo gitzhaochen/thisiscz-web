@@ -36,6 +36,56 @@
     "totalStudents": "在校人数",
     "loadError": "学校列表加载失败"
   },
+  "NzSchoolEnums": {
+    "authorityClass": {
+      "state": "公立",
+      "state_integrated": "公立融合校",
+      "private": "私立",
+      "charter": "特许学校",
+      "other": "其他"
+    },
+    "coEdStatus": {
+      "co_educational": "男女混校",
+      "girls_school": "女子学校",
+      "boys_school": "男子学校",
+      "primary_coed_secondary_girls": "小学混校/中学女校",
+      "primary_coed_secondary_boys": "小学混校/中学男校",
+      "boys_senior_coed": "男校/高年级混校",
+      "girls": "女校",
+      "boys": "男校",
+      "not_applicable": "不适用"
+    },
+    "orgType": {
+      "full_primary": "完全小学",
+      "contributing": "贡献小学",
+      "secondary_9_15": "中学（9-15年级）",
+      "composite": "综合学校",
+      "secondary_7_15": "中学（7-15年级）",
+      "intermediate": "初中学校",
+      "specialist_school": "特殊学校",
+      "teen_parent_unit": "青少年父母单元",
+      "activity_centre": "活动中心",
+      "composite_1_10": "综合学校（1-10年级）",
+      "restricted_composite_7_10": "限制性综合学校（7-10年级）",
+      "secondary_7_10": "中学（7-10年级）",
+      "secondary_11_15": "中学（11-15年级）",
+      "correspondence_school": "远程学校"
+    },
+    "region": {
+      "bay_of_plenty_waiariki": "丰盛湾，怀阿里基",
+      "canterbury_chatham_islands": "坎特伯雷，查塔姆群岛",
+      "hawkes_bay_tairawhiti": "霍克斯湾，东海岸",
+      "nelson_marlborough_west_coast": "尼尔森，马尔堡，西海岸",
+      "otago_southland": "奥塔哥，南地",
+      "tai_tokerau": "北地（Tai Tokerau）",
+      "taranaki_whanganui_manawatu": "塔拉纳基，旺格努伊，马纳瓦图",
+      "tamaki_herenga_manawa": "塔玛基・赫伦加・马纳瓦",
+      "tamaki_herenga_tangata": "塔玛基・赫伦加・唐加塔",
+      "tamaki_herenga_waka": "塔玛基・赫伦加・瓦卡",
+      "waikato": "怀卡托",
+      "wellington": "惠灵顿"
+    }
+  },
 
   "PageAiTalk": {
     "title": "AI聊天助手",
