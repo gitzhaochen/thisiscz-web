@@ -16,8 +16,25 @@
     "home": "Home",
     "bookmarks": "Bookmarks",
     "posts": "Posts",
+    "nzSchools": "NZ Schools",
     "resume": "Resume",
     "aiTalk": "AiTalk"
+  },
+  "PageNzSchools": {
+    "filtersTitle": "Filters",
+    "namePlaceholder": "School name (fuzzy)",
+    "region": "Region",
+    "authorityClass": "Authority",
+    "orgType": "Org Type (multi-select)",
+    "coEdStatus": "CoEd Status",
+    "eqiIndexSortOrder": "EQI sort",
+    "sortAsc": "EQI Asc (null last)",
+    "sortDesc": "EQI Desc (null first)",
+    "all": "All",
+    "applyFilters": "Apply",
+    "resetFilters": "Reset",
+    "totalStudents": "Total students",
+    "loadError": "Failed to load school list."
   },
 
   "PageAiTalk": {

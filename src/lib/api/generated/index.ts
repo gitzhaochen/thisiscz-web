@@ -11,6 +11,7 @@ export * from './links/links'
 export * from './posts/posts'
 export * from './comments/comments'
 export * from './users/users'
+export * from './schools/schools'
 
 // Export mutator
 export { customInstance } from './mutator'

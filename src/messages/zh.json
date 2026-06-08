@@ -16,8 +16,25 @@
     "home": "首页",
     "bookmarks": "书签",
     "posts": "帖子",
+    "nzSchools": "NZ学校",
     "resume": "简历",
     "aiTalk": "AI聊天"
+  },
+  "PageNzSchools": {
+    "filtersTitle": "筛选条件",
+    "namePlaceholder": "学校名称（模糊匹配）",
+    "region": "地区",
+    "authorityClass": "学校性质",
+    "orgType": "学校类型（多选）",
+    "coEdStatus": "性别类型",
+    "eqiIndexSortOrder": "EQI 排序",
+    "sortAsc": "EQI 升序（空值最后）",
+    "sortDesc": "EQI 降序（空值最前）",
+    "all": "全部",
+    "applyFilters": "应用筛选",
+    "resetFilters": "重置",
+    "totalStudents": "在校人数",
+    "loadError": "学校列表加载失败"
   },
 
   "PageAiTalk": {
