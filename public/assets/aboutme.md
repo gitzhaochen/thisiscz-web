@@ -4,7 +4,7 @@
 
 I am CZ, a frontend-focused full-stack developer based in Auckland, New Zealand, with about 10 years of experience building web products, SaaS platforms, e-commerce systems, and Web3 applications.
 
-I mainly work with React, Next.js, Vue, TypeScript, ASP.NET Core, Node.js, SQL databases, and the practical details that make a website useful in the real world: responsive UI, performance, SEO, and maintainable code. This website's code is open source on Github, and I plan to build some interesting web applications in the future, hoping to bring a little help to everyone's daily life.
+I mainly work with React, Next.js, Vue, TypeScript, ASP.NET Core, Node.js, SQL databases, and the practical details that make a website useful in the real world: responsive UI, performance, SEO, and maintainable code. This website's code is open source on Github, and I plan to build some interesting web applications in the future, hoping to bring a little help to those who need it.
 
 I was born in Wuhu, China, spent 10 years working in Shanghai, and moved to Auckland in April 2026. I now live here with my family and am slowly getting to know life in New Zealand.
 
