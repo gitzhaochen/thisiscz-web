@@ -53,7 +53,12 @@
     "mapTitle": "School Location",
     "mapNoCoordinates": "No coordinates available for this school.",
     "mapMissingApiKey": "Map is unavailable. Set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY.",
-    "mapLoadError": "Failed to load Google Maps."
+    "mapLoadError": "Failed to load Google Maps.",
+    "streetViewTitle": "Street View",
+    "streetViewNoCoordinates": "No coordinates available for this school.",
+    "streetViewMissingApiKey": "Street View is unavailable. Set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY.",
+    "streetViewLoadError": "Failed to load Google Street View.",
+    "streetViewNotAvailable": "Street View is not available for this location."
   },
   "NzSchoolEnums": {
     "authorityClass": {

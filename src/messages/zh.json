@@ -53,7 +53,12 @@
     "mapTitle": "学校位置",
     "mapNoCoordinates": "该学校暂无坐标，无法展示地图。",
     "mapMissingApiKey": "地图不可用，请配置 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY。",
-    "mapLoadError": "Google 地图加载失败。"
+    "mapLoadError": "Google 地图加载失败。",
+    "streetViewTitle": "街景",
+    "streetViewNoCoordinates": "该学校暂无坐标，无法展示街景。",
+    "streetViewMissingApiKey": "街景不可用，请配置 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY。",
+    "streetViewLoadError": "Google 街景加载失败。",
+    "streetViewNotAvailable": "该位置暂无可用街景。"
   },
   "NzSchoolEnums": {
     "authorityClass": {

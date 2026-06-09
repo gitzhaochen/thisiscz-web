@@ -1,4 +1,5 @@
 import { GoogleSchoolMap } from '@/components/NzSchools/GoogleSchoolMap'
+import { GoogleStreetView } from '@/components/NzSchools/GoogleStreetView'
 import { SchoolMetaLine } from '@/components/NzSchools/SchoolMetaLine'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { apiFetchServer } from '@/lib/apiFetch'
@@ -138,17 +139,6 @@ export default async function PageNzSchoolDetail({ params }: Props) {
               )}
             </div>
           </div>
-
-          <div className="mt-5 space-y-2">
-            <div className="text-base font-semibold">{tDetail('mapTitle')}</div>
-            <GoogleSchoolMap
-              markers={detailMapMarkers}
-              heightClassName="h-[400px]"
-              noCoordinatesText={tDetail('mapNoCoordinates')}
-              missingApiKeyText={tDetail('mapMissingApiKey')}
-              loadErrorText={tDetail('mapLoadError')}
-            />
-          </div>
         </div>
 
         <div className="rounded-lg border p-4 md:p-5">
@@ -186,6 +176,32 @@ export default async function PageNzSchoolDetail({ params }: Props) {
               </TableRow>
             </TableBody>
           </Table>
+        </div>
+
+        <div className="rounded-lg border p-4 md:p-5">
+          <div className="space-y-2">
+            <div className="text-base font-semibold">{tDetail('mapTitle')}</div>
+            <GoogleSchoolMap
+              markers={detailMapMarkers}
+              heightClassName="h-[400px]"
+              noCoordinatesText={tDetail('mapNoCoordinates')}
+              missingApiKeyText={tDetail('mapMissingApiKey')}
+              loadErrorText={tDetail('mapLoadError')}
+            />
+          </div>
+
+          <div className="mt-5 space-y-2">
+            <div className="text-base font-semibold">{tDetail('streetViewTitle')}</div>
+            <GoogleStreetView
+              lat={detail.latitude}
+              lng={detail.longitude}
+              heightClassName="h-[700px]"
+              noCoordinatesText={tDetail('streetViewNoCoordinates')}
+              missingApiKeyText={tDetail('streetViewMissingApiKey')}
+              loadErrorText={tDetail('streetViewLoadError')}
+              noStreetViewText={tDetail('streetViewNotAvailable')}
+            />
+          </div>
         </div>
       </div>
     </div>
