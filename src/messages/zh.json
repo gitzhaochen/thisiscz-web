@@ -31,6 +31,8 @@
     "sortAsc": "EQI 升序（空值最后）",
     "sortDesc": "EQI 降序（空值最前）",
     "all": "全部",
+    "moreFilters": "更多筛选",
+    "lessFilters": "收起筛选",
     "applyFilters": "应用筛选",
     "resetFilters": "重置",
     "totalStudents": "在校人数",

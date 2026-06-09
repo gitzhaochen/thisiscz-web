@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Link } from '@/i18n/navigation'
 import { type GetApiSchoolsParams, useGetApiSchools, useGetApiSchoolsEnums } from '@/lib/api/generated'
 import { createNzSchoolEnumLabelHelpers } from '@/lib/nzSchoolEnumLabels'
+import Head from 'next/head'
 import { useTranslations } from 'next-intl'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormEvent, useEffect, useMemo, useState } from 'react'
@@ -79,6 +80,7 @@ export default function PageNzSchools() {
   const currentPage = Number(searchParams.get('page')) || 1
   const activeFilters = useMemo(() => parseFilters(new URLSearchParams(searchParams.toString())), [searchParams])
   const [draftFilters, setDraftFilters] = useState<FiltersState>(activeFilters)
+  const [showMobileMoreFilters, setShowMobileMoreFilters] = useState(false)
 
   const params = useMemo<GetApiSchoolsParams>(
     () => ({
@@ -150,8 +152,24 @@ export default function PageNzSchools() {
 
   return (
     <div className="page-wrapper py-6">
+      <Head>
+        <meta
+          name="keywords"
+          content="NZ schools, New Zealand schools, school map, Auckland schools, school ethnicity data, 新西兰学校, 学校地图, 奥克兰学校"
+        />
+      </Head>
       <div className="mb-6 space-y-4 rounded-lg border p-4">
-        <div className="text-lg font-semibold">{t('filtersTitle')}</div>
+        <div className="flex items-center justify-between gap-2">
+          <div className="text-lg font-semibold">{t('filtersTitle')}</div>
+          <Button
+            type="button"
+            variant="outline"
+            className="md:hidden"
+            onClick={() => setShowMobileMoreFilters((prev) => !prev)}
+          >
+            {showMobileMoreFilters ? t('lessFilters') : t('moreFilters')}
+          </Button>
+        </div>
         <form className="space-y-4" onSubmit={onSubmit}>
           <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-6">
             <div className="space-y-1">
@@ -163,7 +181,7 @@ export default function PageNzSchools() {
               />
             </div>
 
-            <div className="space-y-1">
+            <div className={showMobileMoreFilters ? 'space-y-1' : 'hidden space-y-1 md:block'}>
               <div className="text-muted-foreground text-xs">{t('city')}</div>
               <Select
                 value={draftFilters.city || 'all'}
@@ -182,7 +200,7 @@ export default function PageNzSchools() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-1">
+            <div className={showMobileMoreFilters ? 'space-y-1' : 'hidden space-y-1 md:block'}>
               <div className="text-muted-foreground text-xs">{t('levelClass')}</div>
               <Select
                 value={draftFilters.levelClass || 'all'}
@@ -203,7 +221,7 @@ export default function PageNzSchools() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-1">
+            <div className={showMobileMoreFilters ? 'space-y-1' : 'hidden space-y-1 md:block'}>
               <div className="text-muted-foreground text-xs">{t('authorityClass')}</div>
               <Select
                 value={draftFilters.authorityClass || 'all'}
@@ -228,7 +246,7 @@ export default function PageNzSchools() {
               </Select>
             </div>
 
-            <div className="space-y-1">
+            <div className={showMobileMoreFilters ? 'space-y-1' : 'hidden space-y-1 md:block'}>
               <div className="text-muted-foreground text-xs">{t('coEdStatus')}</div>
               <Select
                 value={draftFilters.coEdStatus || 'all'}
@@ -250,7 +268,7 @@ export default function PageNzSchools() {
               </Select>
             </div>
 
-            <div className="space-y-1">
+            <div className={showMobileMoreFilters ? 'space-y-1' : 'hidden space-y-1 md:block'}>
               <div className="text-muted-foreground text-xs">{t('eqiIndexSortOrder')}</div>
               <Select
                 value={draftFilters.eqiIndexSortOrder}
@@ -273,8 +291,10 @@ export default function PageNzSchools() {
           </div>
 
           <div className="flex gap-2">
-            <Button type="submit">{t('applyFilters')}</Button>
-            <Button type="button" variant="outline" onClick={onReset}>
+            <Button type="submit" className="flex-1 md:flex-none">
+              {t('applyFilters')}
+            </Button>
+            <Button type="button" variant="outline" className="flex-1 md:flex-none" onClick={onReset}>
               {t('resetFilters')}
             </Button>
           </div>

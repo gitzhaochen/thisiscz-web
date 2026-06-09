@@ -183,7 +183,7 @@ export default async function PageNzSchoolDetail({ params }: Props) {
             <div className="text-base font-semibold">{tDetail('mapTitle')}</div>
             <GoogleSchoolMap
               markers={detailMapMarkers}
-              heightClassName="h-[400px]"
+              heightClassName="h-[300px] md:h-[400px]"
               noCoordinatesText={tDetail('mapNoCoordinates')}
               missingApiKeyText={tDetail('mapMissingApiKey')}
               loadErrorText={tDetail('mapLoadError')}
@@ -195,7 +195,7 @@ export default async function PageNzSchoolDetail({ params }: Props) {
             <GoogleStreetView
               lat={detail.latitude}
               lng={detail.longitude}
-              heightClassName="h-[700px]"
+              heightClassName="h-[400px] md:h-[600px]"
               noCoordinatesText={tDetail('streetViewNoCoordinates')}
               missingApiKeyText={tDetail('streetViewMissingApiKey')}
               loadErrorText={tDetail('streetViewLoadError')}

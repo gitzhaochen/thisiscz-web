@@ -31,6 +31,8 @@
     "sortAsc": "EQI Asc (null last)",
     "sortDesc": "EQI Desc (null first)",
     "all": "All",
+    "moreFilters": "More filters",
+    "lessFilters": "Less filters",
     "applyFilters": "Apply",
     "resetFilters": "Reset",
     "totalStudents": "Total students",
