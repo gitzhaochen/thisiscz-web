@@ -142,7 +142,7 @@ export default async function PageNzSchoolDetail({ params }: Props) {
         </div>
 
         <div className="rounded-lg border p-4 md:p-5">
-          <div className="mb-3 text-lg font-semibold">{tDetail('ethnicityByYearLevel2025')}</div>
+          <div className="mb-3 text-base font-semibold">{tDetail('ethnicityByYearLevel2025')}</div>
           <Table>
             <TableHeader>
               <TableRow>
@@ -178,7 +178,7 @@ export default async function PageNzSchoolDetail({ params }: Props) {
           </Table>
         </div>
 
-        <div className="rounded-lg border p-4 md:p-5">
+        <div className="">
           <div className="space-y-2">
             <div className="text-base font-semibold">{tDetail('mapTitle')}</div>
             <GoogleSchoolMap
