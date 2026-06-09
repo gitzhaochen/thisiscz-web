@@ -34,7 +34,11 @@
     "applyFilters": "Apply",
     "resetFilters": "Reset",
     "totalStudents": "Total students",
-    "loadError": "Failed to load school list."
+    "loadError": "Failed to load school list.",
+    "mapTitle": "School Map",
+    "mapNoCoordinates": "No map data available for current schools.",
+    "mapMissingApiKey": "Map is unavailable. Set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY.",
+    "mapLoadError": "Failed to load Google Maps."
   },
   "PageNzSchoolDetail": {
     "schoolId": "School ID",
@@ -45,7 +49,11 @@
     "website": "Website",
     "ethnicityByYearLevel2025": "Ethnicity Counts by Year Level (2025)",
     "yearLevel": "Year Level",
-    "total": "Total"
+    "total": "Total",
+    "mapTitle": "School Location",
+    "mapNoCoordinates": "No coordinates available for this school.",
+    "mapMissingApiKey": "Map is unavailable. Set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY.",
+    "mapLoadError": "Failed to load Google Maps."
   },
   "NzSchoolEnums": {
     "authorityClass": {

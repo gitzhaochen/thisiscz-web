@@ -1,3 +1,4 @@
+import { GoogleSchoolMap } from '@/components/NzSchools/GoogleSchoolMap'
 import { SchoolMetaLine } from '@/components/NzSchools/SchoolMetaLine'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { apiFetchServer } from '@/lib/apiFetch'
@@ -9,6 +10,21 @@ import { notFound } from 'next/navigation'
 
 type Props = {
   params: Promise<{ locale: Locale; schoolId: string }>
+}
+
+function getAuthorityMarkerColor(authorityClass?: string | null) {
+  switch ((authorityClass ?? '').toLowerCase()) {
+    case 'state':
+      return '#2563eb'
+    case 'state_integrated':
+      return '#16a34a'
+    case 'private':
+      return '#f97316'
+    case 'charter':
+      return '#a855f7'
+    default:
+      return '#6b7280'
+  }
 }
 
 export default async function PageNzSchoolDetail({ params }: Props) {
@@ -53,6 +69,23 @@ export default async function PageNzSchoolDetail({ params }: Props) {
       ethnicityTotals[item.ethnicity] += item.studentCount ?? 0
     }
   }
+
+  const detailMapMarkers =
+    typeof detail.latitude === 'number' && typeof detail.longitude === 'number'
+      ? [
+          {
+            id: detail.schoolId ?? detail.id ?? detail.name ?? 'school',
+            lat: detail.latitude,
+            lng: detail.longitude,
+            title: detail.name ?? undefined,
+            metaLine: `${detail.city || '-'} · ${getAuthorityClassLabel(detail.authorityClass)} · ${getLevelClassLabel(
+              detail.levelClass,
+            )} · ${getCoEdStatusLabel(detail.coEdStatus)}`,
+            statsLine: `${tDetail('eqiIndex')}: ${detail.eqiIndex ?? '-'} · ${tDetail('totalStudents2025')}: ${detail.totalStudents2025 ?? '-'}`,
+            markerColor: getAuthorityMarkerColor(detail.authorityClass),
+          },
+        ]
+      : []
 
   return (
     <div className="page-wrapper py-6">
@@ -104,6 +137,17 @@ export default async function PageNzSchoolDetail({ params }: Props) {
                 <div className="text-foreground font-medium">-</div>
               )}
             </div>
+          </div>
+
+          <div className="mt-5 space-y-2">
+            <div className="text-base font-semibold">{tDetail('mapTitle')}</div>
+            <GoogleSchoolMap
+              markers={detailMapMarkers}
+              heightClassName="h-[400px]"
+              noCoordinatesText={tDetail('mapNoCoordinates')}
+              missingApiKeyText={tDetail('mapMissingApiKey')}
+              loadErrorText={tDetail('mapLoadError')}
+            />
           </div>
         </div>
 

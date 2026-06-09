@@ -1,6 +1,7 @@
 'use client'
 
 import { Pagination } from '@/components/Pagination'
+import { GoogleSchoolMap } from '@/components/NzSchools/GoogleSchoolMap'
 import { SchoolMetaLine } from '@/components/NzSchools/SchoolMetaLine'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -13,6 +14,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormEvent, useEffect, useMemo, useState } from 'react'
 
 const pageSize = 20
+const defaultCity = 'Auckland'
 
 type FiltersState = {
   name: string
@@ -23,11 +25,26 @@ type FiltersState = {
   eqiIndexSortOrder: 'asc' | 'desc'
 }
 
+function getAuthorityMarkerColor(authorityClass?: string | null) {
+  switch ((authorityClass ?? '').toLowerCase()) {
+    case 'state':
+      return '#2563eb'
+    case 'state_integrated':
+      return '#16a34a'
+    case 'private':
+      return '#f97316'
+    case 'charter':
+      return '#a855f7'
+    default:
+      return '#6b7280'
+  }
+}
+
 function parseFilters(searchParams: URLSearchParams): FiltersState {
   const sortOrder = searchParams.get('eqiIndexSortOrder') === 'desc' ? 'desc' : 'asc'
   return {
     name: searchParams.get('name') ?? '',
-    city: searchParams.get('city') ?? '',
+    city: searchParams.get('city') ?? defaultCity,
     authorityClass: searchParams.get('authorityClass') ?? '',
     levelClass: searchParams.get('levelClass') ?? '',
     coEdStatus: searchParams.get('coEdStatus') ?? '',
@@ -53,7 +70,8 @@ function buildListUrl(pathname: string, filters: FiltersState, page: number): st
 export default function PageNzSchools() {
   const t = useTranslations('PageNzSchools')
   const tEnum = useTranslations('NzSchoolEnums')
-  const { getAuthorityClassLabel, getLevelClassLabel, getCoEdStatusLabel } = createNzSchoolEnumLabelHelpers(tEnum)
+  const enumLabels = useMemo(() => createNzSchoolEnumLabelHelpers(tEnum), [tEnum])
+  const { getAuthorityClassLabel, getLevelClassLabel, getCoEdStatusLabel } = enumLabels
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -94,6 +112,23 @@ export default function PageNzSchools() {
   })
 
   const totalPages = Math.max(1, Math.ceil((schoolsQuery.data?.totalCount ?? 0) / pageSize))
+  const listMapMarkers = useMemo(
+    () =>
+      (schoolsQuery.data?.items ?? [])
+        .filter((school) => typeof school.latitude === 'number' && typeof school.longitude === 'number')
+        .map((school) => ({
+          id: `${school.schoolId ?? school.id ?? school.name ?? 'school'}-${school.latitude}-${school.longitude}`,
+          lat: school.latitude as number,
+          lng: school.longitude as number,
+          title: school.name ?? undefined,
+          metaLine: `${school.city || '-'} · ${getAuthorityClassLabel(school.authorityClass)} · ${getLevelClassLabel(
+            school.levelClass,
+          )} · ${getCoEdStatusLabel(school.coEdStatus)}`,
+          statsLine: `EQI: ${school.eqiIndex ?? '-'} · ${t('totalStudents')}: ${school.totalStudents ?? '-'}`,
+          markerColor: getAuthorityMarkerColor(school.authorityClass),
+        })),
+    [schoolsQuery.data?.items, getAuthorityClassLabel, getLevelClassLabel, getCoEdStatusLabel, t],
+  )
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -103,7 +138,7 @@ export default function PageNzSchools() {
   const onReset = () => {
     const resetFilters: FiltersState = {
       name: '',
-      city: '',
+      city: defaultCity,
       authorityClass: '',
       levelClass: '',
       coEdStatus: '',
@@ -147,7 +182,27 @@ export default function PageNzSchools() {
                 </SelectContent>
               </Select>
             </div>
-
+            <div className="space-y-1">
+              <div className="text-muted-foreground text-xs">{t('levelClass')}</div>
+              <Select
+                value={draftFilters.levelClass || 'all'}
+                onValueChange={(value) =>
+                  setDraftFilters((prev) => ({ ...prev, levelClass: value === 'all' ? '' : value }))
+                }
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder={t('levelClass')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t('all')}</SelectItem>
+                  {(enumsQuery.data?.levelClass ?? []).map((item) => (
+                    <SelectItem key={item} value={item}>
+                      {getLevelClassLabel(item)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             <div className="space-y-1">
               <div className="text-muted-foreground text-xs">{t('authorityClass')}</div>
               <Select
@@ -167,28 +222,6 @@ export default function PageNzSchools() {
                   {(enumsQuery.data?.authorityClass ?? []).map((item) => (
                     <SelectItem key={item} value={item}>
                       {getAuthorityClassLabel(item)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1">
-              <div className="text-muted-foreground text-xs">{t('levelClass')}</div>
-              <Select
-                value={draftFilters.levelClass || 'all'}
-                onValueChange={(value) =>
-                  setDraftFilters((prev) => ({ ...prev, levelClass: value === 'all' ? '' : value }))
-                }
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder={t('levelClass')} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{t('all')}</SelectItem>
-                  {(enumsQuery.data?.levelClass ?? []).map((item) => (
-                    <SelectItem key={item} value={item}>
-                      {getLevelClassLabel(item)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -256,33 +289,46 @@ export default function PageNzSchools() {
 
       {schoolsQuery.isError && <div className="text-destructive text-sm">{t('loadError')}</div>}
 
-      <div className="space-y-3">
-        {(schoolsQuery.data?.items ?? []).map((school) => (
-          <Link
-            key={school.schoolId}
-            href={`/nzschools/${school.schoolId}`}
-            className="hover:bg-muted/40 block rounded-lg border p-4 transition-colors"
-          >
-            <div className="text-base font-semibold">{school.name}</div>
-            <SchoolMetaLine
-              city={school.city}
-              authorityClassLabel={getAuthorityClassLabel(school.authorityClass)}
-              levelClassLabel={getLevelClassLabel(school.levelClass)}
-              coEdStatusLabel={getCoEdStatusLabel(school.coEdStatus)}
-              className="mt-2"
-            />
-            <div className="text-foreground mt-2 text-xs">
-              EQI: {school.eqiIndex ?? '-'} · {t('totalStudents')}: {school.totalStudents ?? '-'}
-            </div>
-          </Link>
-        ))}
-      </div>
-
-      {totalPages > 1 && (
-        <div className="mt-8 flex justify-center">
-          <Pagination currentPage={currentPage} totalPages={totalPages} />
+      <div className="grid gap-5 lg:grid-cols-2 lg:items-start">
+        <div className="space-y-2 lg:order-2 lg:sticky lg:top-4">
+          <GoogleSchoolMap
+            markers={listMapMarkers}
+            heightClassName="h-[460px] lg:h-[680px]"
+            noCoordinatesText={t('mapNoCoordinates')}
+            missingApiKeyText={t('mapMissingApiKey')}
+            loadErrorText={t('mapLoadError')}
+          />
         </div>
-      )}
+        <div className="lg:order-1">
+          <div className="space-y-3">
+            {(schoolsQuery.data?.items ?? []).map((school) => (
+              <Link
+                key={school.schoolId}
+                href={`/nzschools/${school.schoolId}`}
+                className="hover:bg-muted/40 block rounded-lg border p-4 transition-colors"
+              >
+                <div className="text-base font-semibold">{school.name}</div>
+                <SchoolMetaLine
+                  city={school.city}
+                  authorityClassLabel={getAuthorityClassLabel(school.authorityClass)}
+                  levelClassLabel={getLevelClassLabel(school.levelClass)}
+                  coEdStatusLabel={getCoEdStatusLabel(school.coEdStatus)}
+                  className="mt-2"
+                />
+                <div className="text-foreground mt-2 text-xs">
+                  EQI: {school.eqiIndex ?? '-'} · {t('totalStudents')}: {school.totalStudents ?? '-'}
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <div className="mt-8 flex justify-center">
+              <Pagination currentPage={currentPage} totalPages={totalPages} />
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

@@ -34,7 +34,11 @@
     "applyFilters": "应用筛选",
     "resetFilters": "重置",
     "totalStudents": "在校人数",
-    "loadError": "学校列表加载失败"
+    "loadError": "学校列表加载失败",
+    "mapTitle": "学校地图",
+    "mapNoCoordinates": "当前学校暂无可用坐标，无法展示地图。",
+    "mapMissingApiKey": "地图不可用，请配置 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY。",
+    "mapLoadError": "Google 地图加载失败。"
   },
   "PageNzSchoolDetail": {
     "schoolId": "学校ID",
@@ -45,7 +49,11 @@
     "website": "学校网站",
     "ethnicityByYearLevel2025": "2025年各年级种族人数",
     "yearLevel": "年级",
-    "total": "合计"
+    "total": "合计",
+    "mapTitle": "学校位置",
+    "mapNoCoordinates": "该学校暂无坐标，无法展示地图。",
+    "mapMissingApiKey": "地图不可用，请配置 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY。",
+    "mapLoadError": "Google 地图加载失败。"
   },
   "NzSchoolEnums": {
     "authorityClass": {
