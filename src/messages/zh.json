@@ -36,6 +36,17 @@
     "totalStudents": "在校人数",
     "loadError": "学校列表加载失败"
   },
+  "PageNzSchoolDetail": {
+    "schoolId": "学校ID",
+    "eqiIndex": "EQI指数",
+    "totalStudents2025": "2025在校总人数",
+    "address": "地址",
+    "orgType": "学校类型",
+    "website": "学校网站",
+    "ethnicityByYearLevel2025": "2025年各年级种族人数",
+    "yearLevel": "年级",
+    "total": "合计"
+  },
   "NzSchoolEnums": {
     "authorityClass": {
       "state": "公立",

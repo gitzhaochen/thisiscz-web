@@ -14,6 +14,7 @@ type Props = {
 export default async function PageNzSchoolDetail({ params }: Props) {
   const { locale, schoolId } = await params
   setRequestLocale(locale)
+  const tDetail = await getTranslations({ locale, namespace: 'PageNzSchoolDetail' })
   const tEnum = await getTranslations({ locale, namespace: 'NzSchoolEnums' })
   const { getAuthorityClassLabel, getLevelClassLabel, getCoEdStatusLabel, getOrgTypeLabel } =
     createNzSchoolEnumLabelHelpers(tEnum)
@@ -67,29 +68,29 @@ export default async function PageNzSchoolDetail({ params }: Props) {
 
           <div className="mt-4 grid gap-3 text-sm md:grid-cols-2 lg:grid-cols-3">
             <div>
-              <div className="text-muted-foreground">学校ID</div>
+              <div className="text-muted-foreground">{tDetail('schoolId')}</div>
               <div className="text-foreground font-medium">{detail.schoolId}</div>
             </div>
             <div>
-              <div className="text-muted-foreground">EQI指数</div>
+              <div className="text-muted-foreground">{tDetail('eqiIndex')}</div>
               <div className="text-foreground font-medium">{detail.eqiIndex ?? '-'}</div>
             </div>
             <div>
-              <div className="text-muted-foreground">2025在校总人数</div>
+              <div className="text-muted-foreground">{tDetail('totalStudents2025')}</div>
               <div className="text-foreground font-medium">{detail.totalStudents2025 ?? '-'}</div>
             </div>
             <div>
-              <div className="text-muted-foreground">地址</div>
+              <div className="text-muted-foreground">{tDetail('address')}</div>
               <div className="text-foreground font-medium">
                 {[detail.addressLine1, detail.addressSuburb, detail.city].filter(Boolean).join(', ') || '-'}
               </div>
             </div>
             <div>
-              <div className="text-muted-foreground">学校类型</div>
+              <div className="text-muted-foreground">{tDetail('orgType')}</div>
               <div className="text-foreground font-medium">{getOrgTypeLabel(detail.orgType)}</div>
             </div>
             <div>
-              <div className="text-muted-foreground">学校网站</div>
+              <div className="text-muted-foreground">{tDetail('website')}</div>
               {detail.url ? (
                 <a
                   href={detail.url}
@@ -107,11 +108,11 @@ export default async function PageNzSchoolDetail({ params }: Props) {
         </div>
 
         <div className="rounded-lg border p-4 md:p-5">
-          <div className="mb-3 text-lg font-semibold">2025年各年级种族人数</div>
+          <div className="mb-3 text-lg font-semibold">{tDetail('ethnicityByYearLevel2025')}</div>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>年级</TableHead>
+                <TableHead>{tDetail('yearLevel')}</TableHead>
                 {ethnicityColumns.map((col) => (
                   <TableHead key={col}>{col}</TableHead>
                 ))}
@@ -132,7 +133,7 @@ export default async function PageNzSchoolDetail({ params }: Props) {
                 )
               })}
               <TableRow>
-                <TableCell className="font-semibold">合计</TableCell>
+                <TableCell className="font-semibold">{tDetail('total')}</TableCell>
                 {ethnicityColumns.map((col) => (
                   <TableCell key={col} className="font-semibold">
                     {ethnicityTotals[col] ?? 0}

@@ -36,6 +36,17 @@
     "totalStudents": "Total students",
     "loadError": "Failed to load school list."
   },
+  "PageNzSchoolDetail": {
+    "schoolId": "School ID",
+    "eqiIndex": "EQI Index",
+    "totalStudents2025": "Total Students (2025)",
+    "address": "Address",
+    "orgType": "School Type",
+    "website": "Website",
+    "ethnicityByYearLevel2025": "Ethnicity Counts by Year Level (2025)",
+    "yearLevel": "Year Level",
+    "total": "Total"
+  },
   "NzSchoolEnums": {
     "authorityClass": {
       "state": "State",
