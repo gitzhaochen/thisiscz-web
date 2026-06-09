@@ -8,9 +8,9 @@
 
 export type GetApiSchoolsParams = {
   name?: string
-  region?: string
+  city?: string
   authorityClass?: string
-  orgType?: string[]
+  levelClass?: string
   coEdStatus?: string
   eqiIndexSortOrder?: string
   page?: number

@@ -1,6 +1,7 @@
 'use client'
 
 import { Pagination } from '@/components/Pagination'
+import { SchoolMetaLine } from '@/components/NzSchools/SchoolMetaLine'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -15,22 +16,22 @@ const pageSize = 20
 
 type FiltersState = {
   name: string
-  region: string
+  city: string
   authorityClass: string
+  levelClass: string
   coEdStatus: string
   eqiIndexSortOrder: 'asc' | 'desc'
-  orgType: string[]
 }
 
 function parseFilters(searchParams: URLSearchParams): FiltersState {
   const sortOrder = searchParams.get('eqiIndexSortOrder') === 'desc' ? 'desc' : 'asc'
   return {
     name: searchParams.get('name') ?? '',
-    region: searchParams.get('region') ?? '',
+    city: searchParams.get('city') ?? '',
     authorityClass: searchParams.get('authorityClass') ?? '',
+    levelClass: searchParams.get('levelClass') ?? '',
     coEdStatus: searchParams.get('coEdStatus') ?? '',
     eqiIndexSortOrder: sortOrder,
-    orgType: searchParams.getAll('orgType').filter(Boolean),
   }
 }
 
@@ -38,13 +39,11 @@ function buildListUrl(pathname: string, filters: FiltersState, page: number): st
   const params = new URLSearchParams()
 
   if (filters.name.trim()) params.set('name', filters.name.trim())
-  if (filters.region) params.set('region', filters.region)
+  if (filters.city) params.set('city', filters.city)
   if (filters.authorityClass) params.set('authorityClass', filters.authorityClass)
+  if (filters.levelClass) params.set('levelClass', filters.levelClass)
   if (filters.coEdStatus) params.set('coEdStatus', filters.coEdStatus)
   if (filters.eqiIndexSortOrder !== 'asc') params.set('eqiIndexSortOrder', filters.eqiIndexSortOrder)
-  for (const orgType of filters.orgType) {
-    params.append('orgType', orgType)
-  }
 
   params.set('page', String(page))
   params.set('pageSize', String(pageSize))
@@ -54,8 +53,7 @@ function buildListUrl(pathname: string, filters: FiltersState, page: number): st
 export default function PageNzSchools() {
   const t = useTranslations('PageNzSchools')
   const tEnum = useTranslations('NzSchoolEnums')
-  const { getRegionLabel, getAuthorityClassLabel, getCoEdStatusLabel, getOrgTypeLabel } =
-    createNzSchoolEnumLabelHelpers(tEnum)
+  const { getAuthorityClassLabel, getLevelClassLabel, getCoEdStatusLabel } = createNzSchoolEnumLabelHelpers(tEnum)
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -69,11 +67,11 @@ export default function PageNzSchools() {
       page: currentPage,
       pageSize,
       name: activeFilters.name || undefined,
-      region: activeFilters.region || undefined,
+      city: activeFilters.city || undefined,
       authorityClass: activeFilters.authorityClass || undefined,
+      levelClass: activeFilters.levelClass || undefined,
       coEdStatus: activeFilters.coEdStatus || undefined,
       eqiIndexSortOrder: activeFilters.eqiIndexSortOrder || undefined,
-      orgType: activeFilters.orgType.length > 0 ? activeFilters.orgType : undefined,
     }),
     [currentPage, activeFilters],
   )
@@ -105,24 +103,14 @@ export default function PageNzSchools() {
   const onReset = () => {
     const resetFilters: FiltersState = {
       name: '',
-      region: '',
+      city: '',
       authorityClass: '',
+      levelClass: '',
       coEdStatus: '',
       eqiIndexSortOrder: 'asc',
-      orgType: [],
     }
     setDraftFilters(resetFilters)
     router.push(buildListUrl(pathname, resetFilters, 1))
-  }
-
-  const toggleOrgType = (value: string) => {
-    setDraftFilters((prev) => {
-      const exists = prev.orgType.includes(value)
-      return {
-        ...prev,
-        orgType: exists ? prev.orgType.filter((x) => x !== value) : [...prev.orgType, value],
-      }
-    })
   }
 
   return (
@@ -130,7 +118,7 @@ export default function PageNzSchools() {
       <div className="mb-6 space-y-4 rounded-lg border p-4">
         <div className="text-lg font-semibold">{t('filtersTitle')}</div>
         <form className="space-y-4" onSubmit={onSubmit}>
-          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-5">
+          <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-6">
             <div className="space-y-1">
               <div className="text-muted-foreground text-xs">{t('namePlaceholder')}</div>
               <Input
@@ -141,21 +129,19 @@ export default function PageNzSchools() {
             </div>
 
             <div className="space-y-1">
-              <div className="text-muted-foreground text-xs">{t('region')}</div>
+              <div className="text-muted-foreground text-xs">{t('city')}</div>
               <Select
-                value={draftFilters.region || 'all'}
-                onValueChange={(value) =>
-                  setDraftFilters((prev) => ({ ...prev, region: value === 'all' ? '' : value }))
-                }
+                value={draftFilters.city || 'all'}
+                onValueChange={(value) => setDraftFilters((prev) => ({ ...prev, city: value === 'all' ? '' : value }))}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder={t('region')} />
+                  <SelectValue placeholder={t('city')} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">{t('all')}</SelectItem>
-                  {(enumsQuery.data?.region ?? []).map((item) => (
+                  {(enumsQuery.data?.city ?? []).map((item) => (
                     <SelectItem key={item} value={item}>
-                      {getRegionLabel(item)}
+                      {item}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -181,6 +167,28 @@ export default function PageNzSchools() {
                   {(enumsQuery.data?.authorityClass ?? []).map((item) => (
                     <SelectItem key={item} value={item}>
                       {getAuthorityClassLabel(item)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-1">
+              <div className="text-muted-foreground text-xs">{t('levelClass')}</div>
+              <Select
+                value={draftFilters.levelClass || 'all'}
+                onValueChange={(value) =>
+                  setDraftFilters((prev) => ({ ...prev, levelClass: value === 'all' ? '' : value }))
+                }
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder={t('levelClass')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t('all')}</SelectItem>
+                  {(enumsQuery.data?.levelClass ?? []).map((item) => (
+                    <SelectItem key={item} value={item}>
+                      {getLevelClassLabel(item)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -231,23 +239,6 @@ export default function PageNzSchools() {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <div className="text-sm font-medium">{t('orgType')}</div>
-            <div className="grid gap-2 rounded-md border p-3 md:grid-cols-2 lg:grid-cols-3">
-              {(enumsQuery.data?.orgType ?? []).map((item) => (
-                <label key={item} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    className="size-4"
-                    checked={draftFilters.orgType.includes(item)}
-                    onChange={() => toggleOrgType(item)}
-                  />
-                  <span>{getOrgTypeLabel(item)}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
           <div className="flex gap-2">
             <Button type="submit">{t('applyFilters')}</Button>
             <Button type="button" variant="outline" onClick={onReset}>
@@ -273,11 +264,14 @@ export default function PageNzSchools() {
             className="hover:bg-muted/40 block rounded-lg border p-4 transition-colors"
           >
             <div className="text-base font-semibold">{school.name}</div>
-            <div className="text-foreground mt-1 text-sm">
-              {getRegionLabel(school.region)} · {getAuthorityClassLabel(school.authorityClass)} ·{' '}
-              {getOrgTypeLabel(school.orgType)} · {getCoEdStatusLabel(school.coEdStatus)}
-            </div>
-            <div className="text-foreground mt-1 text-xs">
+            <SchoolMetaLine
+              city={school.city}
+              authorityClassLabel={getAuthorityClassLabel(school.authorityClass)}
+              levelClassLabel={getLevelClassLabel(school.levelClass)}
+              coEdStatusLabel={getCoEdStatusLabel(school.coEdStatus)}
+              className="mt-2"
+            />
+            <div className="text-foreground mt-2 text-xs">
               EQI: {school.eqiIndex ?? '-'} · {t('totalStudents')}: {school.totalStudents ?? '-'}
             </div>
           </Link>

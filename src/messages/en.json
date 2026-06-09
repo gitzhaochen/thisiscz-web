@@ -23,9 +23,9 @@
   "PageNzSchools": {
     "filtersTitle": "Filters",
     "namePlaceholder": "School name (fuzzy)",
-    "region": "Region",
+    "city": "City",
     "authorityClass": "Authority",
-    "orgType": "Org Type (multi-select)",
+    "levelClass": "Level Class",
     "coEdStatus": "CoEd Status",
     "eqiIndexSortOrder": "EQI sort",
     "sortAsc": "EQI Asc (null last)",
@@ -54,6 +54,13 @@
       "girls": "Girls",
       "boys": "Boys",
       "not_applicable": "Not Applicable"
+    },
+    "levelClass": {
+      "primary": "Primary",
+      "secondary": "Secondary",
+      "composite": "Composite",
+      "specialist": "Specialist",
+      "other": "Other"
     },
     "orgType": {
       "full_primary": "Full Primary",

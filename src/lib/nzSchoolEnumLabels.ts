@@ -37,6 +37,14 @@ const orgTypeLabelKeyMap: Record<string, string> = {
   'Correspondence School': 'orgType.correspondence_school',
 }
 
+const levelClassLabelKeyMap: Record<string, string> = {
+  primary: 'levelClass.primary',
+  secondary: 'levelClass.secondary',
+  composite: 'levelClass.composite',
+  specialist: 'levelClass.specialist',
+  other: 'levelClass.other',
+}
+
 const regionLabelKeyMap: Record<string, string> = {
   'Bay of Plenty, Waiariki': 'region.bay_of_plenty_waiariki',
   'Canterbury, Chatham Islands': 'region.canterbury_chatham_islands',
@@ -67,6 +75,8 @@ export function createNzSchoolEnumLabelHelpers(tEnum: LabelTranslator) {
     getRegionLabel: (value?: string | null) => translateWithMap(value, regionLabelKeyMap, tEnum),
     getAuthorityClassLabel: (value?: string | null) =>
       translateWithMap(value, authorityClassLabelKeyMap, tEnum),
+    getLevelClassLabel: (value?: string | null) =>
+      translateWithMap(value, levelClassLabelKeyMap, tEnum),
     getCoEdStatusLabel: (value?: string | null) =>
       translateWithMap(value, coEdStatusLabelKeyMap, tEnum),
     getOrgTypeLabel: (value?: string | null) => translateWithMap(value, orgTypeLabelKeyMap, tEnum),

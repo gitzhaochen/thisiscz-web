@@ -23,9 +23,9 @@
   "PageNzSchools": {
     "filtersTitle": "筛选条件",
     "namePlaceholder": "学校名称（模糊匹配）",
-    "region": "地区",
+    "city": "城市",
     "authorityClass": "学校性质",
-    "orgType": "学校类型（多选）",
+    "levelClass": "学段类型",
     "coEdStatus": "性别类型",
     "eqiIndexSortOrder": "EQI 排序",
     "sortAsc": "EQI 升序（空值最后）",
@@ -54,6 +54,13 @@
       "girls": "女校",
       "boys": "男校",
       "not_applicable": "不适用"
+    },
+    "levelClass": {
+      "primary": "小学",
+      "secondary": "中学",
+      "composite": "综合学校",
+      "specialist": "特殊学校",
+      "other": "其他"
     },
     "orgType": {
       "full_primary": "完全小学",

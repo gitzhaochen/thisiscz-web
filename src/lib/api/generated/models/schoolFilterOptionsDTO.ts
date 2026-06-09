@@ -7,8 +7,8 @@
  */
 
 export interface SchoolFilterOptionsDTO {
-  region?: string[]
+  city?: string[]
   authorityClass?: string[]
-  orgType?: string[]
+  levelClass?: string[]
   coEdStatus?: string[]
 }
