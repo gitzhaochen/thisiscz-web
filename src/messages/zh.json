@@ -83,7 +83,8 @@
     },
     "levelClass": {
       "primary": "小学",
-      "secondary": "中学",
+      "intermediate": "初中",
+      "secondary": "高中",
       "composite": "综合学校",
       "specialist": "特殊学校",
       "other": "其他"

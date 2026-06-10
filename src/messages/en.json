@@ -83,6 +83,7 @@
     },
     "levelClass": {
       "primary": "Primary",
+      "intermediate": "Intermediate",
       "secondary": "Secondary",
       "composite": "Composite",
       "specialist": "Specialist",

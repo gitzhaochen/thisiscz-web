@@ -39,6 +39,7 @@ const orgTypeLabelKeyMap: Record<string, string> = {
 
 const levelClassLabelKeyMap: Record<string, string> = {
   primary: 'levelClass.primary',
+  intermediate: 'levelClass.intermediate',
   secondary: 'levelClass.secondary',
   composite: 'levelClass.composite',
   specialist: 'levelClass.specialist',
