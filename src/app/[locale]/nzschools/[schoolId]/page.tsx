@@ -33,7 +33,7 @@ export default async function PageNzSchoolDetail({ params }: Props) {
   setRequestLocale(locale)
   const tDetail = await getTranslations({ locale, namespace: 'PageNzSchoolDetail' })
   const tEnum = await getTranslations({ locale, namespace: 'NzSchoolEnums' })
-  const { getAuthorityClassLabel, getLevelClassLabel, getCoEdStatusLabel, getOrgTypeLabel } =
+  const { getAuthorityClassLabel, getLevelClassLabel, getCoEdStatusLabel, getOrgTypeLabel, getEthnicityLabel } =
     createNzSchoolEnumLabelHelpers(tEnum)
 
   let detail: SchoolDetailDTO | null = null
@@ -148,7 +148,7 @@ export default async function PageNzSchoolDetail({ params }: Props) {
               <TableRow>
                 <TableHead>{tDetail('yearLevel')}</TableHead>
                 {ethnicityColumns.map((col) => (
-                  <TableHead key={col}>{col}</TableHead>
+                  <TableHead key={col}>{getEthnicityLabel(col)}</TableHead>
                 ))}
               </TableRow>
             </TableHeader>

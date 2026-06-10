@@ -105,6 +105,15 @@
       "secondary_11_15": "Secondary (Year 11-15)",
       "correspondence_school": "Correspondence School"
     },
+    "ethnicity": {
+      "asian": "Asian",
+      "european_pakeha": "European / Pākehā",
+      "international_fee_paying": "International fee paying",
+      "maori": "Māori",
+      "melaa": "MELAA",
+      "other": "Other",
+      "pacific": "Pacific"
+    },
     "region": {
       "bay_of_plenty_waiariki": "Bay of Plenty, Waiariki",
       "canterbury_chatham_islands": "Canterbury, Chatham Islands",

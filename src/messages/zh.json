@@ -105,6 +105,15 @@
       "secondary_11_15": "中学（11-15年级）",
       "correspondence_school": "远程学校"
     },
+    "ethnicity": {
+      "asian": "亚裔",
+      "european_pakeha": "欧裔",
+      "international_fee_paying": "国际生",
+      "maori": "毛利裔",
+      "melaa": "中东/拉丁美洲/非洲裔",
+      "other": "其他",
+      "pacific": "太平洋岛裔"
+    },
     "region": {
       "bay_of_plenty_waiariki": "丰盛湾，怀阿里基",
       "canterbury_chatham_islands": "坎特伯雷，查塔姆群岛",

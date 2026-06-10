@@ -46,6 +46,17 @@ const levelClassLabelKeyMap: Record<string, string> = {
   other: 'levelClass.other',
 }
 
+const ethnicityLabelKeyMap: Record<string, string> = {
+  Asian: 'ethnicity.asian',
+  'European/Pākehā': 'ethnicity.european_pakeha',
+  'European\\Pākehā': 'ethnicity.european_pakeha',
+  'International fee paying': 'ethnicity.international_fee_paying',
+  Māori: 'ethnicity.maori',
+  MELAA: 'ethnicity.melaa',
+  Other: 'ethnicity.other',
+  Pacific: 'ethnicity.pacific',
+}
+
 const regionLabelKeyMap: Record<string, string> = {
   'Bay of Plenty, Waiariki': 'region.bay_of_plenty_waiariki',
   'Canterbury, Chatham Islands': 'region.canterbury_chatham_islands',
@@ -81,5 +92,6 @@ export function createNzSchoolEnumLabelHelpers(tEnum: LabelTranslator) {
     getCoEdStatusLabel: (value?: string | null) =>
       translateWithMap(value, coEdStatusLabelKeyMap, tEnum),
     getOrgTypeLabel: (value?: string | null) => translateWithMap(value, orgTypeLabelKeyMap, tEnum),
+    getEthnicityLabel: (value?: string | null) => translateWithMap(value, ethnicityLabelKeyMap, tEnum),
   }
 }
