@@ -159,7 +159,7 @@ export function GoogleSchoolMap({
             title: marker.title,
             icon: {
               path: window.google.maps.SymbolPath.CIRCLE,
-              scale: 6,
+              scale: validMarkers.length === 1 ? 10 : 6,
               fillColor: marker.markerColor ?? '#2563eb',
               fillOpacity: 1,
               strokeColor: '#ffffff',

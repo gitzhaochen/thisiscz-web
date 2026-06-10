@@ -161,7 +161,7 @@ export default async function PageNzSchoolDetail({ params }: Props) {
                   <TableRow key={row.yearLevel}>
                     <TableCell className="font-medium">{row.yearLevel}</TableCell>
                     {ethnicityColumns.map((col) => (
-                      <TableCell key={col}>{countMap.get(col) ?? '-'}</TableCell>
+                      <TableCell key={col}>{countMap.get(col) ?? 0}</TableCell>
                     ))}
                   </TableRow>
                 )
