@@ -24,6 +24,18 @@ type FiltersState = {
   levelClass: string
   coEdStatus: string
   eqiIndexSortOrder: 'asc' | 'desc'
+  ueRateSortOrder?: 'asc' | 'desc'
+}
+
+function isSecondaryLevelClass(levelClass: string) {
+  return levelClass.trim().toLowerCase() === 'secondary'
+}
+
+function formatUeRate(ueRate?: number | null) {
+  if (typeof ueRate !== 'number' || Number.isNaN(ueRate)) {
+    return '-'
+  }
+  return `${(ueRate * 100).toFixed(1)}%`
 }
 
 function getAuthorityMarkerColor(authorityClass?: string | null) {
@@ -42,14 +54,19 @@ function getAuthorityMarkerColor(authorityClass?: string | null) {
 }
 
 function parseFilters(searchParams: URLSearchParams): FiltersState {
+  const levelClass = searchParams.get('levelClass') ?? ''
   const sortOrder = searchParams.get('eqiIndexSortOrder') === 'desc' ? 'desc' : 'asc'
+  const ueRateSortParam = searchParams.get('ueRateSortOrder')
+  const ueRateSortOrder = isSecondaryLevelClass(levelClass) ? (ueRateSortParam === 'asc' ? 'asc' : 'desc') : undefined
+
   return {
     name: searchParams.get('name') ?? '',
     city: searchParams.get('city') ?? defaultCity,
     authorityClass: searchParams.get('authorityClass') ?? '',
-    levelClass: searchParams.get('levelClass') ?? '',
+    levelClass,
     coEdStatus: searchParams.get('coEdStatus') ?? '',
     eqiIndexSortOrder: sortOrder,
+    ueRateSortOrder,
   }
 }
 
@@ -61,7 +78,13 @@ function buildListUrl(pathname: string, filters: FiltersState, page: number): st
   if (filters.authorityClass) params.set('authorityClass', filters.authorityClass)
   if (filters.levelClass) params.set('levelClass', filters.levelClass)
   if (filters.coEdStatus) params.set('coEdStatus', filters.coEdStatus)
-  if (filters.eqiIndexSortOrder !== 'asc') params.set('eqiIndexSortOrder', filters.eqiIndexSortOrder)
+  if (isSecondaryLevelClass(filters.levelClass) && filters.ueRateSortOrder) {
+    if (filters.ueRateSortOrder !== 'desc') {
+      params.set('ueRateSortOrder', filters.ueRateSortOrder)
+    }
+  } else if (filters.eqiIndexSortOrder !== 'asc') {
+    params.set('eqiIndexSortOrder', filters.eqiIndexSortOrder)
+  }
 
   params.set('page', String(page))
   params.set('pageSize', String(pageSize))
@@ -91,7 +114,12 @@ export default function PageNzSchools() {
       authorityClass: activeFilters.authorityClass || undefined,
       levelClass: activeFilters.levelClass || undefined,
       coEdStatus: activeFilters.coEdStatus || undefined,
-      eqiIndexSortOrder: activeFilters.eqiIndexSortOrder || undefined,
+      eqiIndexSortOrder: isSecondaryLevelClass(activeFilters.levelClass)
+        ? undefined
+        : activeFilters.eqiIndexSortOrder || undefined,
+      ueRateSortOrder: isSecondaryLevelClass(activeFilters.levelClass)
+        ? activeFilters.ueRateSortOrder || 'desc'
+        : undefined,
     }),
     [currentPage, activeFilters],
   )
@@ -126,10 +154,19 @@ export default function PageNzSchools() {
           metaLine: `${school.city || '-'} · ${getAuthorityClassLabel(school.authorityClass)} · ${getLevelClassLabel(
             school.levelClass,
           )} · ${getCoEdStatusLabel(school.coEdStatus)}`,
-          statsLine: `EQI: ${school.eqiIndex ?? '-'} · ${t('totalStudents')}: ${school.totalStudents ?? '-'}`,
+          statsLine: isSecondaryLevelClass(activeFilters.levelClass)
+            ? `${t('ueRate')}: ${formatUeRate(school.ueRate)} · EQI: ${school.eqiIndex ?? '-'}`
+            : `EQI: ${school.eqiIndex ?? '-'} · ${t('totalStudents')}: ${school.totalStudents ?? '-'}`,
           markerColor: getAuthorityMarkerColor(school.authorityClass),
         })),
-    [schoolsQuery.data?.items, getAuthorityClassLabel, getLevelClassLabel, getCoEdStatusLabel, t],
+    [
+      schoolsQuery.data?.items,
+      activeFilters.levelClass,
+      getAuthorityClassLabel,
+      getLevelClassLabel,
+      getCoEdStatusLabel,
+      t,
+    ],
   )
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -204,9 +241,14 @@ export default function PageNzSchools() {
               <div className="text-muted-foreground text-xs">{t('levelClass')}</div>
               <Select
                 value={draftFilters.levelClass || 'all'}
-                onValueChange={(value) =>
-                  setDraftFilters((prev) => ({ ...prev, levelClass: value === 'all' ? '' : value }))
-                }
+                onValueChange={(value) => {
+                  const levelClass = value === 'all' ? '' : value
+                  setDraftFilters((prev) => ({
+                    ...prev,
+                    levelClass,
+                    ueRateSortOrder: isSecondaryLevelClass(levelClass) ? 'desc' : undefined,
+                  }))
+                }}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder={t('levelClass')} />
@@ -269,24 +311,46 @@ export default function PageNzSchools() {
             </div>
 
             <div className={showMobileMoreFilters ? 'space-y-1' : 'hidden space-y-1 md:block'}>
-              <div className="text-muted-foreground text-xs">{t('eqiIndexSortOrder')}</div>
-              <Select
-                value={draftFilters.eqiIndexSortOrder}
-                onValueChange={(value) =>
-                  setDraftFilters((prev) => ({
-                    ...prev,
-                    eqiIndexSortOrder: value === 'desc' ? 'desc' : 'asc',
-                  }))
-                }
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder={t('eqiIndexSortOrder')} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="asc">{t('sortAsc')}</SelectItem>
-                  <SelectItem value="desc">{t('sortDesc')}</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="text-muted-foreground text-xs">
+                {isSecondaryLevelClass(draftFilters.levelClass) ? t('ueRateSortOrder') : t('eqiIndexSortOrder')}
+              </div>
+              {isSecondaryLevelClass(draftFilters.levelClass) ? (
+                <Select
+                  value={draftFilters.ueRateSortOrder ?? 'desc'}
+                  onValueChange={(value) =>
+                    setDraftFilters((prev) => ({
+                      ...prev,
+                      ueRateSortOrder: value === 'asc' ? 'asc' : 'desc',
+                    }))
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder={t('ueRateSortOrder')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="desc">{t('ueRateSortDesc')}</SelectItem>
+                    <SelectItem value="asc">{t('ueRateSortAsc')}</SelectItem>
+                  </SelectContent>
+                </Select>
+              ) : (
+                <Select
+                  value={draftFilters.eqiIndexSortOrder}
+                  onValueChange={(value) =>
+                    setDraftFilters((prev) => ({
+                      ...prev,
+                      eqiIndexSortOrder: value === 'desc' ? 'desc' : 'asc',
+                    }))
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder={t('eqiIndexSortOrder')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="asc">{t('sortAsc')}</SelectItem>
+                    <SelectItem value="desc">{t('sortDesc')}</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
             </div>
           </div>
 
@@ -310,7 +374,7 @@ export default function PageNzSchools() {
       {schoolsQuery.isError && <div className="text-destructive text-sm">{t('loadError')}</div>}
 
       <div className="grid gap-5 lg:grid-cols-2 lg:items-start">
-        <div className="space-y-2 lg:order-2 lg:sticky lg:top-4">
+        <div className="space-y-2 lg:sticky lg:top-4 lg:order-2">
           <GoogleSchoolMap
             markers={listMapMarkers}
             heightClassName="h-[460px] lg:h-[680px]"
@@ -336,7 +400,14 @@ export default function PageNzSchools() {
                   className="mt-2"
                 />
                 <div className="text-foreground mt-2 text-xs">
-                  EQI: {school.eqiIndex ?? '-'} · {t('totalStudents')}: {school.totalStudents ?? '-'}
+                  <>
+                    {t('totalStudents')}: {school.totalStudents ?? '-'} · EQI: {school.eqiIndex ?? '-'}
+                  </>
+                  {isSecondaryLevelClass(activeFilters.levelClass) ? (
+                    <>
+                      {' · '} {t('ueRate')}: <span className="text-[#f97316]">{formatUeRate(school.ueRate)}</span>
+                    </>
+                  ) : null}
                 </div>
               </Link>
             ))}

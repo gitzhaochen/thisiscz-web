@@ -13,6 +13,7 @@ export type GetApiSchoolsParams = {
   levelClass?: string
   coEdStatus?: string
   eqiIndexSortOrder?: string
+  ueRateSortOrder?: string
   page?: number
   pageSize?: number
 }

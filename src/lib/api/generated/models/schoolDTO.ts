@@ -38,4 +38,24 @@ export interface SchoolDTO {
   territorialAuthority?: string | null
   /** @nullable */
   city?: string | null
+  /** @nullable */
+  totalLeavers2023?: number | null
+  /** @nullable */
+  totalUniversity2023?: number | null
+  /** @nullable */
+  asianUniversity2023?: number | null
+  /** @nullable */
+  europeanPakehaUniversity2023?: number | null
+  /** @nullable */
+  maoriUniversity2023?: number | null
+  /** @nullable */
+  pacificUniversity2023?: number | null
+  /** @nullable */
+  melaaUniversity2023?: number | null
+  /** @nullable */
+  otherUniversity2023?: number | null
+  /** @nullable */
+  internationalFeePayingUniversity2023?: number | null
+  /** @nullable */
+  ueRate?: number | null
 }
