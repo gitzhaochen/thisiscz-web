@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { apiFetchServer } from '@/lib/apiFetch'
 import type { SchoolDetailDTO } from '@/lib/api/generated'
 import { createNzSchoolEnumLabelHelpers } from '@/lib/nzSchoolEnumLabels'
+import { buildUeRate2023Rows, formatUeRatePercent } from '@/lib/nzSchoolUeRate2023'
 import { Locale } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
@@ -70,6 +71,10 @@ export default async function PageNzSchoolDetail({ params }: Props) {
       ethnicityTotals[item.ethnicity] += item.studentCount ?? 0
     }
   }
+
+  const ueRate2023Rows = buildUeRate2023Rows(detail)
+  const ueRate2023EthnicityColumns = ueRate2023Rows.filter((row) => row.ethnicityKey !== 'Total')
+  const ueRate2023TotalColumn = ueRate2023Rows.find((row) => row.ethnicityKey === 'Total')
 
   const detailMapMarkers =
     typeof detail.latitude === 'number' && typeof detail.longitude === 'number'
@@ -140,6 +145,62 @@ export default async function PageNzSchoolDetail({ params }: Props) {
             </div>
           </div>
         </div>
+
+        {ueRate2023Rows.length > 0 ? (
+          <div className="rounded-lg border p-4 md:p-5">
+            <div className="mb-3 text-base font-semibold">{tDetail('ueRateByEthnicity2023')}</div>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-32" />
+                    {ueRate2023EthnicityColumns.map((col) => (
+                      <TableHead key={col.ethnicityKey} className="min-w-24 text-center">
+                        {getEthnicityLabel(col.ethnicityKey)}
+                      </TableHead>
+                    ))}
+                    <TableHead className="min-w-24 text-center font-semibold">{tDetail('total')}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="font-medium">{tDetail('universityEnrolments2023')}</TableCell>
+                    {ueRate2023EthnicityColumns.map((col) => (
+                      <TableCell key={col.ethnicityKey} className="text-center">
+                        {col.universityCount ?? '-'}
+                      </TableCell>
+                    ))}
+                    <TableCell className="text-center font-semibold">
+                      {ueRate2023TotalColumn?.universityCount ?? '-'}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium">{tDetail('totalLeavers2023')}</TableCell>
+                    {ueRate2023EthnicityColumns.map((col) => (
+                      <TableCell key={col.ethnicityKey} className="text-center">
+                        {col.totalLeavers ?? '-'}
+                      </TableCell>
+                    ))}
+                    <TableCell className="text-center font-semibold">
+                      {ueRate2023TotalColumn?.totalLeavers ?? '-'}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium">{tDetail('ueRate')}</TableCell>
+                    {ueRate2023EthnicityColumns.map((col) => (
+                      <TableCell key={col.ethnicityKey} className="text-center">
+                        {formatUeRatePercent(col.ueRate)}
+                      </TableCell>
+                    ))}
+                    <TableCell className="text-center font-semibold">
+                      {formatUeRatePercent(ueRate2023TotalColumn?.ueRate)}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        ) : null}
 
         <div className="rounded-lg border p-4 md:p-5">
           <div className="mb-3 text-base font-semibold">{tDetail('ethnicityByYearLevel2025')}</div>
