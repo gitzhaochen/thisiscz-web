@@ -57,5 +57,19 @@ export interface SchoolDTO {
   /** @nullable */
   internationalFeePayingUniversity2023?: number | null
   /** @nullable */
+  asianTotalLeavers2023?: number | null
+  /** @nullable */
+  europeanPakehaTotalLeavers2023?: number | null
+  /** @nullable */
+  maoriTotalLeavers2023?: number | null
+  /** @nullable */
+  pacificTotalLeavers2023?: number | null
+  /** @nullable */
+  melaaTotalLeavers2023?: number | null
+  /** @nullable */
+  otherTotalLeavers2023?: number | null
+  /** @nullable */
+  internationalFeePayingTotalLeavers2023?: number | null
+  /** @nullable */
   ueRate?: number | null
 }

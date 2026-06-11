@@ -7,17 +7,46 @@ export type UeRate2023Row = {
   ueRate: number | null
 }
 
-const ethnicityUniversityFieldMap: Array<{
+const ethnicityFieldMap: Array<{
   ethnicityKey: string
-  field: keyof SchoolDetailDTO
+  universityField: keyof SchoolDetailDTO
+  leaversField: keyof SchoolDetailDTO
 }> = [
-  { ethnicityKey: 'Asian', field: 'asianUniversity2023' },
-  { ethnicityKey: 'European/Pākehā', field: 'europeanPakehaUniversity2023' },
-  { ethnicityKey: 'Māori', field: 'maoriUniversity2023' },
-  { ethnicityKey: 'Pacific', field: 'pacificUniversity2023' },
-  { ethnicityKey: 'MELAA', field: 'melaaUniversity2023' },
-  { ethnicityKey: 'Other', field: 'otherUniversity2023' },
-  { ethnicityKey: 'International fee paying', field: 'internationalFeePayingUniversity2023' },
+  {
+    ethnicityKey: 'Asian',
+    universityField: 'asianUniversity2023',
+    leaversField: 'asianTotalLeavers2023',
+  },
+  {
+    ethnicityKey: 'European/Pākehā',
+    universityField: 'europeanPakehaUniversity2023',
+    leaversField: 'europeanPakehaTotalLeavers2023',
+  },
+  {
+    ethnicityKey: 'Māori',
+    universityField: 'maoriUniversity2023',
+    leaversField: 'maoriTotalLeavers2023',
+  },
+  {
+    ethnicityKey: 'Pacific',
+    universityField: 'pacificUniversity2023',
+    leaversField: 'pacificTotalLeavers2023',
+  },
+  {
+    ethnicityKey: 'MELAA',
+    universityField: 'melaaUniversity2023',
+    leaversField: 'melaaTotalLeavers2023',
+  },
+  {
+    ethnicityKey: 'Other',
+    universityField: 'otherUniversity2023',
+    leaversField: 'otherTotalLeavers2023',
+  },
+  {
+    ethnicityKey: 'International fee paying',
+    universityField: 'internationalFeePayingUniversity2023',
+    leaversField: 'internationalFeePayingTotalLeavers2023',
+  },
 ]
 
 function toNullableNumber(value: unknown): number | null {
@@ -41,17 +70,20 @@ export function formatUeRatePercent(ueRate: number | null | undefined) {
 export function buildUeRate2023Rows(detail: SchoolDetailDTO): UeRate2023Row[] {
   const schoolTotalLeavers = toNullableNumber(detail.totalLeavers2023)
 
-  const ethnicityRows = ethnicityUniversityFieldMap.map(({ ethnicityKey, field }) => {
-    const universityCount = toNullableNumber(detail[field])
+  const ethnicityRows = ethnicityFieldMap.map(({ ethnicityKey, universityField, leaversField }) => {
+    const universityCount = toNullableNumber(detail[universityField])
+    const totalLeavers = toNullableNumber(detail[leaversField])
     return {
       ethnicityKey,
       universityCount,
-      totalLeavers: schoolTotalLeavers,
-      ueRate: calculateUeRate(universityCount, schoolTotalLeavers),
+      totalLeavers,
+      ueRate: calculateUeRate(universityCount, totalLeavers),
     }
   })
 
-  const visibleEthnicityRows = ethnicityRows.filter((row) => row.universityCount !== null)
+  const visibleEthnicityRows = ethnicityRows.filter(
+    (row) => row.universityCount !== null || row.totalLeavers !== null,
+  )
 
   const totalRow: UeRate2023Row = {
     ethnicityKey: 'Total',
@@ -60,10 +92,7 @@ export function buildUeRate2023Rows(detail: SchoolDetailDTO): UeRate2023Row[] {
     ueRate:
       typeof detail.ueRate === 'number'
         ? detail.ueRate
-        : calculateUeRate(
-            toNullableNumber(detail.totalUniversity2023),
-            schoolTotalLeavers,
-          ),
+        : calculateUeRate(toNullableNumber(detail.totalUniversity2023), schoolTotalLeavers),
   }
 
   if (
