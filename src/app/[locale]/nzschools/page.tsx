@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Link } from '@/i18n/navigation'
 import { type GetApiSchoolsParams, useGetApiSchools, useGetApiSchoolsEnums } from '@/lib/api/generated'
 import { createNzSchoolEnumLabelHelpers } from '@/lib/nzSchoolEnumLabels'
-import Head from 'next/head'
 import { useTranslations } from 'next-intl'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormEvent, useEffect, useMemo, useState } from 'react'
@@ -188,12 +187,6 @@ export default function PageNzSchools() {
 
   return (
     <div className="page-wrapper py-6">
-      <Head>
-        <meta
-          name="keywords"
-          content="NZ schools, New Zealand schools, school map, Auckland schools, school ethnicity data, 新西兰学校, 学校地图, 奥克兰学校"
-        />
-      </Head>
       <div className="mb-6 space-y-4 rounded-lg border p-4">
         <div className="flex items-center justify-between gap-2">
           <div className="text-lg font-semibold">{t('filtersTitle')}</div>

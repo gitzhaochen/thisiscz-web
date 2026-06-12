@@ -1,7 +1,7 @@
 {
   "Common": {
     "siteTitle": "ThisIsCZ",
-    "description": "Here, you will embark on a journey filled with exploration and discovery. Life is an adventure, filled with unknown challenges and unexpected opportunities. I hope to record these precious moments through文字, and share them with everyone.",
+    "description": "CZ's personal website, covering Web development technical thinking, practical tools, and New Zealand learning and life information sharing.",
     "category": "Category"
   },
   "LocaleSwitcher": {
@@ -21,6 +21,9 @@
     "aiTalk": "AiTalk"
   },
   "PageNzSchools": {
+    "seoTitle": "New Zealand Schools Directory",
+    "seoDescription": "Search NZ schools by city, level, EQI and UE rate. Explore locations on the map with ethnicity and tertiary progression data.",
+    "seoKeywords": "NZ schools,New Zealand schools,Auckland schools,school map,EQI index,UE rate,ethnicity,school directory,education in New Zealand,state school,private school",
     "filtersTitle": "Filters",
     "namePlaceholder": "School name (fuzzy)",
     "city": "City",
@@ -47,6 +50,11 @@
     "mapLoadError": "Failed to load Google Maps."
   },
   "PageNzSchoolDetail": {
+    "seoTitle": "{name} | {city} School",
+    "seoTitleFallback": "School Details",
+    "seoDescription": "{name} in {city} is a {authorityClass} {levelClass} school. EQI {eqi}, {students} students in 2025{ueRatePart}. View address, ethnicity breakdown, 2023 UE rate and map.",
+    "seoUeRatePart": ", UE rate {ueRate}",
+    "seoKeywordsBase": "NZ schools,EQI index,UE rate,ethnicity,school directory,school map",
     "schoolId": "School ID",
     "eqiIndex": "EQI Index",
     "totalStudents2025": "Total Students (2025)",

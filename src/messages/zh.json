@@ -1,7 +1,7 @@
 {
   "Common": {
     "siteTitle": "CZ的世界",
-    "description": "在这里，你将踏上一段充满探索与发现的旅程。生活如同一场冒险，充满了未知的挑战和意想不到的机遇。我希望通过文字，将这些珍贵的瞬间记录下来，与大家一同分享",
+    "description": "CZ 的个人站点，涵盖 Web 开发技术思考、实用工具，以及新西兰学习和生活信息分享等内容。",
     "category": "分类"
   },
   "LocaleSwitcher": {
@@ -21,6 +21,9 @@
     "aiTalk": "AI聊天"
   },
   "PageNzSchools": {
+    "seoTitle": "新西兰学校查询",
+    "seoDescription": "按城市、学段、EQI 与 UE 率筛选新西兰学校，地图查看学校位置、族裔分布与升学数据。",
+    "seoKeywords": "新西兰学校,新西兰中学,奥克兰学校,学校地图,EQI指数,UE率,族裔比例,选校,新西兰留学,公立学校,私立学校,State school",
     "filtersTitle": "筛选条件",
     "namePlaceholder": "学校名称（模糊匹配）",
     "city": "城市",
@@ -47,6 +50,11 @@
     "mapLoadError": "Google 地图加载失败。"
   },
   "PageNzSchoolDetail": {
+    "seoTitle": "{name} | {city}学校",
+    "seoTitleFallback": "学校详情",
+    "seoDescription": "{name}（{city}）为{authorityClass}{levelClass}，EQI {eqi}，2025在校 {students} 人{ueRatePart}。提供地址、族裔分布、2023 UE率与地图信息。",
+    "seoUeRatePart": "，UE率 {ueRate}",
+    "seoKeywordsBase": "新西兰学校,EQI指数,UE率,族裔比例,选校,学校地图",
     "schoolId": "学校ID",
     "eqiIndex": "EQI指数",
     "totalStudents2025": "2025在校总人数",

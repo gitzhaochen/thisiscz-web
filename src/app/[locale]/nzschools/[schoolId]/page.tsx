@@ -8,10 +8,71 @@ import { createNzSchoolEnumLabelHelpers } from '@/lib/nzSchoolEnumLabels'
 import { buildUeRate2023Rows, formatUeRatePercent } from '@/lib/nzSchoolUeRate2023'
 import { Locale } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { cache } from 'react'
 
 type Props = {
   params: Promise<{ locale: Locale; schoolId: string }>
+}
+
+const fetchSchoolDetail = cache(async (schoolId: string): Promise<SchoolDetailDTO | null> => {
+  try {
+    return await apiFetchServer(`/api/schools/${schoolId}`)
+  } catch {
+    return null
+  }
+})
+
+function formatUeRateForSeo(ueRate?: number | null) {
+  if (typeof ueRate !== 'number' || Number.isNaN(ueRate)) {
+    return null
+  }
+  return `${(ueRate * 100).toFixed(1)}%`
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, schoolId } = await params
+  const tDetail = await getTranslations({ locale, namespace: 'PageNzSchoolDetail' })
+  const tEnum = await getTranslations({ locale, namespace: 'NzSchoolEnums' })
+  const { getAuthorityClassLabel, getLevelClassLabel } = createNzSchoolEnumLabelHelpers(tEnum)
+
+  const detail = await fetchSchoolDetail(schoolId)
+  if (!detail?.name) {
+    return { title: tDetail('seoTitleFallback') }
+  }
+
+  const city = detail.city?.trim() || '-'
+  const authorityClass = getAuthorityClassLabel(detail.authorityClass)
+  const levelClass = getLevelClassLabel(detail.levelClass)
+  const ueRate = formatUeRateForSeo(detail.ueRate)
+  const ueRatePart = ueRate ? tDetail('seoUeRatePart', { ueRate }) : ''
+
+  const keywords = [
+    detail.name,
+    city,
+    `${city} ${levelClass}`.trim(),
+    `${detail.name} ${city}`.trim(),
+    authorityClass,
+    levelClass,
+    ...tDetail('seoKeywordsBase')
+      .split(',')
+      .map((keyword) => keyword.trim()),
+  ].filter(Boolean)
+
+  return {
+    title: tDetail('seoTitle', { name: detail.name, city }),
+    description: tDetail('seoDescription', {
+      name: detail.name,
+      city,
+      authorityClass,
+      levelClass,
+      eqi: detail.eqiIndex ?? '-',
+      students: detail.totalStudents2025 ?? detail.totalStudents ?? '-',
+      ueRatePart,
+    }),
+    keywords: [...new Set(keywords)],
+  }
 }
 
 function getAuthorityMarkerColor(authorityClass?: string | null) {
@@ -37,12 +98,7 @@ export default async function PageNzSchoolDetail({ params }: Props) {
   const { getAuthorityClassLabel, getLevelClassLabel, getCoEdStatusLabel, getOrgTypeLabel, getEthnicityLabel } =
     createNzSchoolEnumLabelHelpers(tEnum)
 
-  let detail: SchoolDetailDTO | null = null
-  try {
-    detail = await apiFetchServer(`/api/schools/${schoolId}`)
-  } catch {
-    notFound()
-  }
+  let detail = await fetchSchoolDetail(schoolId)
 
   if (!detail) {
     notFound()
