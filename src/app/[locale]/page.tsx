@@ -1,5 +1,4 @@
 import MarkdownView from '@/components/MarkdownView'
-import RenderWakeupOnMount from '@/components/RenderWakeupOnMount'
 import { routing } from '@/i18n/routing'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
@@ -29,7 +28,6 @@ export default async function ResumePage({ params }: Props) {
 
   return (
     <div className="page-wrapper py-6">
-      <RenderWakeupOnMount />
       <div className="mx-auto max-w-[800px]">
         <MarkdownView content={resume} />
       </div>

@@ -14,6 +14,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormEvent, useEffect, useMemo, useState } from 'react'
 
 const pageSize = 20
+const defaultCity = 'Auckland'
 
 type FiltersState = {
   name: string
@@ -59,7 +60,7 @@ function parseFilters(searchParams: URLSearchParams): FiltersState {
 
   return {
     name: searchParams.get('name') ?? '',
-    city: searchParams.get('city') ?? '',
+    city: searchParams.has('city') ? (searchParams.get('city') ?? '') : defaultCity,
     authorityClass: searchParams.get('authorityClass') ?? '',
     levelClass,
     coEdStatus: searchParams.get('coEdStatus') ?? '',
@@ -72,7 +73,11 @@ function buildListUrl(pathname: string, filters: FiltersState, page: number): st
   const params = new URLSearchParams()
 
   if (filters.name.trim()) params.set('name', filters.name.trim())
-  if (filters.city) params.set('city', filters.city)
+  if (!filters.city) {
+    params.set('city', '')
+  } else if (filters.city !== defaultCity) {
+    params.set('city', filters.city)
+  }
   if (filters.authorityClass) params.set('authorityClass', filters.authorityClass)
   if (filters.levelClass) params.set('levelClass', filters.levelClass)
   if (filters.coEdStatus) params.set('coEdStatus', filters.coEdStatus)
@@ -175,7 +180,7 @@ export default function PageNzSchools() {
   const onReset = () => {
     const resetFilters: FiltersState = {
       name: '',
-      city: '',
+      city: defaultCity,
       authorityClass: '',
       levelClass: '',
       coEdStatus: '',
