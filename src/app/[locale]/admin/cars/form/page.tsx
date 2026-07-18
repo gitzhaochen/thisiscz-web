@@ -20,7 +20,7 @@ import type { CarCreationDTO } from '@/lib/api/generated'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -86,6 +86,8 @@ export default function AdminCarsFormPage() {
   const actionType = searchParams.get('actionType') || 'add'
   const id = Number(searchParams.get('id') || 0)
   const isEdit = actionType === 'edit' && id > 0
+  const [xhsUrl, setXhsUrl] = useState('')
+  const [isExtracting, setIsExtracting] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -208,6 +210,50 @@ export default function AdminCarsFormPage() {
     form.reset()
   }
 
+  const handleExtractFromXhs = async () => {
+    if (!xhsUrl.trim()) {
+      toast.error('Please paste a Xiaohongshu URL first')
+      return
+    }
+
+    setIsExtracting(true)
+    try {
+      const response = await fetch(`/api/xiaohongshu/parse?url=${encodeURIComponent(xhsUrl.trim())}`)
+      const result = await response.json()
+
+      if (!response.ok) {
+        toast.error(result?.error || 'Parse failed')
+        return
+      }
+
+      if (result.sourceUrl) {
+        form.setValue('sourceUrl', result.sourceUrl, { shouldDirty: true, shouldValidate: true })
+      }
+      if (result.postTitle) {
+        form.setValue('postTitle', result.postTitle, { shouldDirty: true, shouldValidate: true })
+      }
+      if (result.postContent) {
+        form.setValue('postContent', result.postContent, { shouldDirty: true, shouldValidate: true })
+      }
+      if (Array.isArray(result.imageUrls) && result.imageUrls.length > 0) {
+        form.setValue('imageUrlsText', result.imageUrls.join('\n'), {
+          shouldDirty: true,
+          shouldValidate: false,
+        })
+      }
+
+      form.setValue('sourcePlatform', SourcePlatformType.xiaohongshu, {
+        shouldDirty: true,
+        shouldValidate: true,
+      })
+      toast.success('Xiaohongshu data filled')
+    } catch {
+      toast.error('Parse failed')
+    } finally {
+      setIsExtracting(false)
+    }
+  }
+
   return (
     <div className="space-y-4 rounded-md border p-4">
       <div className="flex items-center justify-between">
@@ -215,6 +261,19 @@ export default function AdminCarsFormPage() {
         <Link href="/admin/cars">
           <Button variant="outline">Back to list</Button>
         </Link>
+      </div>
+      <div className="rounded-md border border-dashed p-3">
+        <p className="mb-2 text-sm font-medium">Import from Xiaohongshu URL</p>
+        <div className="flex flex-col gap-2 md:flex-row">
+          <Input
+            placeholder="https://www.xiaohongshu.com/..."
+            value={xhsUrl}
+            onChange={(e) => setXhsUrl(e.target.value)}
+          />
+          <Button type="button" onClick={handleExtractFromXhs} disabled={isExtracting}>
+            {isExtracting ? 'Parsing...' : 'Parse & Fill'}
+          </Button>
+        </div>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 gap-4 md:grid-cols-2">
