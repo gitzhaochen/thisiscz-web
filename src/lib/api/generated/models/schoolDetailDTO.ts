@@ -40,6 +40,8 @@ export interface SchoolDetailDTO {
   /** @nullable */
   city?: string | null
   /** @nullable */
+  ueRate?: number | null
+  /** @nullable */
   totalLeavers2023?: number | null
   /** @nullable */
   totalUniversity2023?: number | null
@@ -71,8 +73,6 @@ export interface SchoolDetailDTO {
   otherTotalLeavers2023?: number | null
   /** @nullable */
   internationalFeePayingTotalLeavers2023?: number | null
-  /** @nullable */
-  ueRate?: number | null
   /** @nullable */
   totalStudents2025?: number | null
   yearLevelEthnicityCounts2025?: SchoolYearLevelEthnicityDTO[]

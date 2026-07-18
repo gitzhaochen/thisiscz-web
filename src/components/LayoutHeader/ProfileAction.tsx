@@ -26,6 +26,9 @@ export default function ProfileAction() {
             <DropdownMenuItem>
               <Link href="/admin/addBookmarks">Add bookmarks</Link>
             </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href="/admin/cars">Car sources</Link>
+            </DropdownMenuItem>
           </>
         )}
         <DropdownMenuItem>

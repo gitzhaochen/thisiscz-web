@@ -39,37 +39,5 @@ export interface SchoolDTO {
   /** @nullable */
   city?: string | null
   /** @nullable */
-  totalLeavers2023?: number | null
-  /** @nullable */
-  totalUniversity2023?: number | null
-  /** @nullable */
-  asianUniversity2023?: number | null
-  /** @nullable */
-  europeanPakehaUniversity2023?: number | null
-  /** @nullable */
-  maoriUniversity2023?: number | null
-  /** @nullable */
-  pacificUniversity2023?: number | null
-  /** @nullable */
-  melaaUniversity2023?: number | null
-  /** @nullable */
-  otherUniversity2023?: number | null
-  /** @nullable */
-  internationalFeePayingUniversity2023?: number | null
-  /** @nullable */
-  asianTotalLeavers2023?: number | null
-  /** @nullable */
-  europeanPakehaTotalLeavers2023?: number | null
-  /** @nullable */
-  maoriTotalLeavers2023?: number | null
-  /** @nullable */
-  pacificTotalLeavers2023?: number | null
-  /** @nullable */
-  melaaTotalLeavers2023?: number | null
-  /** @nullable */
-  otherTotalLeavers2023?: number | null
-  /** @nullable */
-  internationalFeePayingTotalLeavers2023?: number | null
-  /** @nullable */
   ueRate?: number | null
 }
