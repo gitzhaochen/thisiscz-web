@@ -21,3 +21,7 @@ declare class SpeechRecognition extends EventTarget {
   start(): void
   stop(): void
 }
+declare module '*.css' {
+  const content: { [className: string]: string }
+  export default content
+}
