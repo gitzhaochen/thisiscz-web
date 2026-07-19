@@ -1,5 +1,6 @@
 'use client'
 
+import ContactAdminNotice from '@/components/ContactAdminNotice'
 import { Pagination } from '@/components/Pagination'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -249,6 +250,8 @@ export default function PageCarsClient() {
           )
         })}
       </div>
+
+      <ContactAdminNotice />
 
       {totalPages > 1 && (
         <div className="mt-8 flex justify-center">

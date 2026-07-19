@@ -19,6 +19,7 @@ import 'swiper/css'
 import 'swiper/css/free-mode'
 import 'swiper/css/navigation'
 import 'swiper/css/thumbs'
+import ContactAdminNotice from '@/components/ContactAdminNotice'
 
 export default function CarDetailClient({ publicId }: { publicId: string }) {
   const t = useTranslations('PageCars')
@@ -188,20 +189,19 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
               {formatDateTime(car.createdAt)}
             </p>
             <p>
-              <span className="font-medium">来源平台：</span>
-              {getSourcePlatformLabel(car.sourcePlatform)}
+              <span className="font-medium">数据来源：</span>
+              {car.sourceUrl && (
+                <a
+                  href={car.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm underline"
+                >
+                  <LinkIcon className="h-3 w-3" />
+                  跳转小红书查看原文
+                </a>
+              )}
             </p>
-            {car.sourceUrl && (
-              <a
-                href={car.sourceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm underline"
-              >
-                <LinkIcon className="h-3 w-3" />
-                {t('sourceLink')}
-              </a>
-            )}
           </div>
         </div>
 
@@ -209,6 +209,7 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
           <div className="text-muted-foreground">帖子内容</div>
           <p>{car.postContent}</p>
         </div>
+        <ContactAdminNotice />
       </div>
       <style jsx global>{`
         .car-detail-swiper .swiper-button-prev,
