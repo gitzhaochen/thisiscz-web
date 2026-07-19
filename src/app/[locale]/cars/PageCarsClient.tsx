@@ -22,6 +22,17 @@ const fuelTypeOptions = [
   FuelType.ev,
   FuelType.other,
 ] as const
+const cityOptions = [
+  'Auckland',
+  // 'Wellington',
+  // 'Christchurch',
+  // 'Hamilton',
+  // 'Tauranga',
+  // 'Dunedin',
+  // 'Palmerston North',
+  // 'Napier',
+  // 'Nelson',
+] as const
 const sortOptions = ['latest', 'priceLow'] as const
 
 export default function PageCarsClient() {
@@ -36,6 +47,7 @@ export default function PageCarsClient() {
   const maxPrice = searchParams.get('maxPrice') || ''
   const minYear = searchParams.get('minYear') || ''
   const maxYear = searchParams.get('maxYear') || ''
+  const city = searchParams.get('city') || 'Auckland'
   const fuelType = searchParams.get('fuelType') || 'all'
   const sortType = (searchParams.get('sortType') || 'latest') as (typeof sortOptions)[number]
 
@@ -48,6 +60,7 @@ export default function PageCarsClient() {
     maxPrice: maxPrice ? Number(maxPrice) : undefined,
     minYear: minYear ? Number(minYear) : undefined,
     maxYear: maxYear ? Number(maxYear) : undefined,
+    city: city || undefined,
     fuelType: fuelType === 'all' ? undefined : (fuelType as FuelType),
   })
 
@@ -112,9 +125,24 @@ export default function PageCarsClient() {
     router.push(`${pathname}?${params.toString()}`)
   }
 
+  const handleCityChange = (cityValue: string) => {
+    const params = new URLSearchParams(searchParams)
+
+    if (cityValue && cityValue !== 'Auckland') {
+      params.set('city', cityValue)
+    } else {
+      params.delete('city')
+    }
+
+    params.set('page', '1')
+    router.push(`${pathname}?${params.toString()}`)
+  }
+
   const handleFilterReset = () => {
     const params = new URLSearchParams(searchParams)
-    ;['manufacturer', 'minPrice', 'maxPrice', 'minYear', 'maxYear', 'fuelType'].forEach((key) => params.delete(key))
+    ;['manufacturer', 'minPrice', 'maxPrice', 'minYear', 'maxYear', 'city', 'fuelType'].forEach((key) =>
+      params.delete(key),
+    )
     params.set('page', '1')
     router.push(`${pathname}?${params.toString()}`)
   }
@@ -140,8 +168,20 @@ export default function PageCarsClient() {
     <div className="page-wrapper py-4">
       <div className="mb-4 rounded-md">
         <div className="flex items-center gap-2">
+          <Select value={city} onValueChange={handleCityChange}>
+            <SelectTrigger className="w-[120px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {cityOptions.map((option) => (
+                <SelectItem key={option} value={option}>
+                  {option}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Select value={sortType} onValueChange={handleSortChange}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[120px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

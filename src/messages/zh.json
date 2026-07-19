@@ -32,6 +32,7 @@
     "offShelf": "下架",
     "manufacturer": "品牌",
     "manufacturerPlaceholder": "例如 Toyota",
+    "city": "城市",
     "fuelType": "燃油类型",
     "minPrice": "最低价格",
     "maxPrice": "最高价格",
