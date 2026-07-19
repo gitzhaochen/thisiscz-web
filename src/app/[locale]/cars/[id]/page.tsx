@@ -31,14 +31,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!car) {
     return {
-      title: t('title'),
-      description: t('loadError'),
+      title: t('seoTitle'),
+      description: t('seoDescription'),
     }
   }
 
   return {
-    title: car.postTitle || t('title'),
-    description: buildDesc(car.postContent) || t('description'),
+    title: car.postTitle,
+    description: buildDesc(car.postContent),
   }
 }
 

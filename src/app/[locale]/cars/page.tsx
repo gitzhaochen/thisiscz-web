@@ -12,9 +12,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'PageCars' })
 
   return {
-    title: t('title'),
-    description: t('description'),
-    keywords: t('keywords')
+    title: t('seoTitle'),
+    description: t('seoDescription'),
+    keywords: t('seoKeywords')
       .split(',')
       .map((keyword) => keyword.trim())
       .filter(Boolean),
