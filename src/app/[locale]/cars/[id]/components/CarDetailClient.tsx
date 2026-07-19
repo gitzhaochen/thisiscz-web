@@ -67,7 +67,7 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
             modules={[Navigation, Thumbs]}
             navigation={images.length > 1}
             thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
-            className="car-detail-swiper relative aspect-[12/16] w-full"
+            className="car-detail-swiper relative aspect-square w-full"
           >
             {images.length > 0 ? (
               images.map((url, index) => (

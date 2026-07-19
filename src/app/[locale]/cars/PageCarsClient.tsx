@@ -212,7 +212,7 @@ export default function PageCarsClient() {
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {items.map((car) => {
           const carPublicId = car.publicId
           if (!carPublicId) return null
@@ -223,7 +223,7 @@ export default function PageCarsClient() {
               href={`/cars/${carPublicId}`}
               className="flex flex-col rounded-sm border transition-shadow hover:shadow-md"
             >
-              <div className="relative aspect-[12/16] w-full overflow-hidden rounded-t-sm">
+              <div className="relative aspect-square w-full overflow-hidden rounded-t-sm">
                 {imageUrl ? (
                   <Image
                     src={imageUrl}
