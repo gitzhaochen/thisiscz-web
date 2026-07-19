@@ -80,6 +80,33 @@ const parseOptionalNumber = (value: string | undefined) => {
   return Number.isNaN(parsed) ? null : parsed
 }
 
+type ParsedXhsCarFields = {
+  price?: number | null
+  currency?: string | null
+  year?: number | null
+  mileageKm?: number | null
+  manufacturer?: string | null
+  model?: string | null
+  transmission?: string | null
+  engineDisplacementL?: number | null
+  fuelType?: string | null
+  contactPhone?: string | null
+  contactWechat?: string | null
+  contactEmail?: string | null
+  sellerType?: string | null
+  country?: string | null
+  city?: string | null
+}
+
+type XhsParseResponse = {
+  error?: string
+  sourceUrl?: string
+  postTitle?: string
+  postContent?: string
+  imageUrls?: string[]
+  parsedFields?: ParsedXhsCarFields
+}
+
 export default function AdminCarsFormPage() {
   const queryClient = useQueryClient()
   const searchParams = useSearchParams()
@@ -93,7 +120,7 @@ export default function AdminCarsFormPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       price: '',
-      currency: 'CNY',
+      currency: 'NZD',
       year: '',
       manufacturer: '',
       model: '',
@@ -126,25 +153,25 @@ export default function AdminCarsFormPage() {
 
     form.reset({
       price: String(carDetail.price ?? ''),
-      currency: carDetail.currency || 'CNY',
+      currency: carDetail.currency || 'NZD',
       year: String(carDetail.year ?? ''),
       manufacturer: carDetail.manufacturer || '',
       model: carDetail.model || '',
       mileageKm: String(carDetail.mileageKm ?? ''),
-      transmission: (carDetail.transmission as typeof transmissionOptions[number]) || TransmissionType.automatic,
+      transmission: (carDetail.transmission as (typeof transmissionOptions)[number]) || TransmissionType.automatic,
       engineDisplacementL:
         carDetail.engineDisplacementL === null || carDetail.engineDisplacementL === undefined
           ? ''
           : String(carDetail.engineDisplacementL),
-      fuelType: (carDetail.fuelType as typeof fuelTypeOptions[number]) || FuelType.gasoline,
+      fuelType: (carDetail.fuelType as (typeof fuelTypeOptions)[number]) || FuelType.gasoline,
       contactPhone: carDetail.contactPhone || '',
       contactWechat: carDetail.contactWechat || '',
       contactEmail: carDetail.contactEmail || '',
       country: carDetail.country || '',
       city: carDetail.city || '',
-      sellerType: (carDetail.sellerType as typeof sellerTypeOptions[number]) || SellerType.individual,
+      sellerType: (carDetail.sellerType as (typeof sellerTypeOptions)[number]) || SellerType.individual,
       sourcePlatform:
-        (carDetail.sourcePlatform as typeof sourcePlatformOptions[number]) || SourcePlatformType.xiaohongshu,
+        (carDetail.sourcePlatform as (typeof sourcePlatformOptions)[number]) || SourcePlatformType.xiaohongshu,
       sourceUrl: carDetail.sourceUrl || '',
       postTitle: carDetail.postTitle || '',
       postContent: carDetail.postContent || '',
@@ -219,7 +246,7 @@ export default function AdminCarsFormPage() {
     setIsExtracting(true)
     try {
       const response = await fetch(`/api/xiaohongshu/parse?url=${encodeURIComponent(xhsUrl.trim())}`)
-      const result = await response.json()
+      const result = (await response.json()) as XhsParseResponse
 
       if (!response.ok) {
         toast.error(result?.error || 'Parse failed')
@@ -240,6 +267,75 @@ export default function AdminCarsFormPage() {
           shouldDirty: true,
           shouldValidate: false,
         })
+      }
+      const parsed = result.parsedFields
+      if (parsed) {
+        if (typeof parsed.price === 'number') {
+          form.setValue('price', String(parsed.price), { shouldDirty: true, shouldValidate: true })
+        }
+        if (typeof parsed.currency === 'string' && parsed.currency.trim()) {
+          form.setValue('currency', parsed.currency.trim(), { shouldDirty: true, shouldValidate: true })
+        }
+        if (typeof parsed.year === 'number') {
+          form.setValue('year', String(parsed.year), { shouldDirty: true, shouldValidate: true })
+        }
+        if (typeof parsed.mileageKm === 'number') {
+          form.setValue('mileageKm', String(parsed.mileageKm), { shouldDirty: true, shouldValidate: true })
+        }
+        if (typeof parsed.manufacturer === 'string' && parsed.manufacturer.trim()) {
+          form.setValue('manufacturer', parsed.manufacturer.trim(), { shouldDirty: true, shouldValidate: true })
+        }
+        if (typeof parsed.model === 'string' && parsed.model.trim()) {
+          form.setValue('model', parsed.model.trim(), { shouldDirty: true, shouldValidate: true })
+        }
+        if (
+          typeof parsed.transmission === 'string' &&
+          transmissionOptions.includes(parsed.transmission as (typeof transmissionOptions)[number])
+        ) {
+          form.setValue('transmission', parsed.transmission as (typeof transmissionOptions)[number], {
+            shouldDirty: true,
+            shouldValidate: true,
+          })
+        }
+        if (typeof parsed.engineDisplacementL === 'number') {
+          form.setValue('engineDisplacementL', String(parsed.engineDisplacementL), {
+            shouldDirty: true,
+            shouldValidate: true,
+          })
+        }
+        if (
+          typeof parsed.fuelType === 'string' &&
+          fuelTypeOptions.includes(parsed.fuelType as (typeof fuelTypeOptions)[number])
+        ) {
+          form.setValue('fuelType', parsed.fuelType as (typeof fuelTypeOptions)[number], {
+            shouldDirty: true,
+            shouldValidate: true,
+          })
+        }
+        if (typeof parsed.contactPhone === 'string' && parsed.contactPhone.trim()) {
+          form.setValue('contactPhone', parsed.contactPhone.trim(), { shouldDirty: true, shouldValidate: true })
+        }
+        if (typeof parsed.contactWechat === 'string' && parsed.contactWechat.trim()) {
+          form.setValue('contactWechat', parsed.contactWechat.trim(), { shouldDirty: true, shouldValidate: true })
+        }
+        if (typeof parsed.contactEmail === 'string' && parsed.contactEmail.trim()) {
+          form.setValue('contactEmail', parsed.contactEmail.trim(), { shouldDirty: true, shouldValidate: true })
+        }
+        if (typeof parsed.country === 'string' && parsed.country.trim()) {
+          form.setValue('country', parsed.country.trim(), { shouldDirty: true, shouldValidate: true })
+        }
+        if (typeof parsed.city === 'string' && parsed.city.trim()) {
+          form.setValue('city', parsed.city.trim(), { shouldDirty: true, shouldValidate: true })
+        }
+        if (
+          typeof parsed.sellerType === 'string' &&
+          sellerTypeOptions.includes(parsed.sellerType as (typeof sellerTypeOptions)[number])
+        ) {
+          form.setValue('sellerType', parsed.sellerType as (typeof sellerTypeOptions)[number], {
+            shouldDirty: true,
+            shouldValidate: true,
+          })
+        }
       }
 
       form.setValue('sourcePlatform', SourcePlatformType.xiaohongshu, {
