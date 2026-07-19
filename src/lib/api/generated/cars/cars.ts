@@ -310,57 +310,61 @@ export function useGetApiCars<TData = Awaited<ReturnType<typeof getApiCars>>, TE
   return query
 }
 
-export const getApiCarsId = (id: number, options?: SecondParameter<typeof customInstance>, signal?: AbortSignal) => {
-  return customInstance<CarDTO>({ url: `/api/cars/${id}`, method: 'GET', signal }, options)
+export const getApiCarsPublicId = (
+  publicId: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<CarDTO>({ url: `/api/cars/${publicId}`, method: 'GET', signal }, options)
 }
 
-export const getGetApiCarsIdInfiniteQueryKey = (id?: number) => {
-  return ['infinite', `/api/cars/${id}`] as const
+export const getGetApiCarsPublicIdInfiniteQueryKey = (publicId?: string) => {
+  return ['infinite', `/api/cars/${publicId}`] as const
 }
 
-export const getGetApiCarsIdQueryKey = (id?: number) => {
-  return [`/api/cars/${id}`] as const
+export const getGetApiCarsPublicIdQueryKey = (publicId?: string) => {
+  return [`/api/cars/${publicId}`] as const
 }
 
-export const getGetApiCarsIdInfiniteQueryOptions = <
-  TData = InfiniteData<Awaited<ReturnType<typeof getApiCarsId>>>,
+export const getGetApiCarsPublicIdInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getApiCarsPublicId>>>,
   TError = unknown,
 >(
-  id: number,
+  publicId: string,
   options?: {
-    query?: Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getApiCarsId>>, TError, TData>>
+    query?: Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getApiCarsPublicId>>, TError, TData>>
     request?: SecondParameter<typeof customInstance>
   },
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiCarsIdInfiniteQueryKey(id)
+  const queryKey = queryOptions?.queryKey ?? getGetApiCarsPublicIdInfiniteQueryKey(publicId)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiCarsId>>> = ({ signal }) =>
-    getApiCarsId(id, requestOptions, signal)
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiCarsPublicId>>> = ({ signal }) =>
+    getApiCarsPublicId(publicId, requestOptions, signal)
 
-  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseInfiniteQueryOptions<
-    Awaited<ReturnType<typeof getApiCarsId>>,
+  return { queryKey, queryFn, enabled: !!publicId, ...queryOptions } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getApiCarsPublicId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiCarsIdInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getApiCarsId>>>
-export type GetApiCarsIdInfiniteQueryError = unknown
+export type GetApiCarsPublicIdInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getApiCarsPublicId>>>
+export type GetApiCarsPublicIdInfiniteQueryError = unknown
 
-export function useGetApiCarsIdInfinite<
-  TData = InfiniteData<Awaited<ReturnType<typeof getApiCarsId>>>,
+export function useGetApiCarsPublicIdInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getApiCarsPublicId>>>,
   TError = unknown,
 >(
-  id: number,
+  publicId: string,
   options: {
-    query: Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getApiCarsId>>, TError, TData>> &
+    query: Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getApiCarsPublicId>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiCarsId>>,
+          Awaited<ReturnType<typeof getApiCarsPublicId>>,
           TError,
-          Awaited<ReturnType<typeof getApiCarsId>>
+          Awaited<ReturnType<typeof getApiCarsPublicId>>
         >,
         'initialData'
       >
@@ -368,18 +372,18 @@ export function useGetApiCarsIdInfinite<
   },
   queryClient?: QueryClient,
 ): DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiCarsIdInfinite<
-  TData = InfiniteData<Awaited<ReturnType<typeof getApiCarsId>>>,
+export function useGetApiCarsPublicIdInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getApiCarsPublicId>>>,
   TError = unknown,
 >(
-  id: number,
+  publicId: string,
   options?: {
-    query?: Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getApiCarsId>>, TError, TData>> &
+    query?: Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getApiCarsPublicId>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiCarsId>>,
+          Awaited<ReturnType<typeof getApiCarsPublicId>>,
           TError,
-          Awaited<ReturnType<typeof getApiCarsId>>
+          Awaited<ReturnType<typeof getApiCarsPublicId>>
         >,
         'initialData'
       >
@@ -387,30 +391,30 @@ export function useGetApiCarsIdInfinite<
   },
   queryClient?: QueryClient,
 ): UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiCarsIdInfinite<
-  TData = InfiniteData<Awaited<ReturnType<typeof getApiCarsId>>>,
+export function useGetApiCarsPublicIdInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getApiCarsPublicId>>>,
   TError = unknown,
 >(
-  id: number,
+  publicId: string,
   options?: {
-    query?: Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getApiCarsId>>, TError, TData>>
+    query?: Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getApiCarsPublicId>>, TError, TData>>
     request?: SecondParameter<typeof customInstance>
   },
   queryClient?: QueryClient,
 ): UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiCarsIdInfinite<
-  TData = InfiniteData<Awaited<ReturnType<typeof getApiCarsId>>>,
+export function useGetApiCarsPublicIdInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getApiCarsPublicId>>>,
   TError = unknown,
 >(
-  id: number,
+  publicId: string,
   options?: {
-    query?: Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getApiCarsId>>, TError, TData>>
+    query?: Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getApiCarsPublicId>>, TError, TData>>
     request?: SecondParameter<typeof customInstance>
   },
   queryClient?: QueryClient,
 ): UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiCarsIdInfiniteQueryOptions(id, options)
+  const queryOptions = getGetApiCarsPublicIdInfiniteQueryOptions(publicId, options)
 
   const query = useInfiniteQuery(queryOptions, queryClient) as UseInfiniteQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -421,39 +425,42 @@ export function useGetApiCarsIdInfinite<
   return query
 }
 
-export const getGetApiCarsIdQueryOptions = <TData = Awaited<ReturnType<typeof getApiCarsId>>, TError = unknown>(
-  id: number,
+export const getGetApiCarsPublicIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiCarsPublicId>>,
+  TError = unknown,
+>(
+  publicId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCarsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCarsPublicId>>, TError, TData>>
     request?: SecondParameter<typeof customInstance>
   },
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiCarsIdQueryKey(id)
+  const queryKey = queryOptions?.queryKey ?? getGetApiCarsPublicIdQueryKey(publicId)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiCarsId>>> = ({ signal }) =>
-    getApiCarsId(id, requestOptions, signal)
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiCarsPublicId>>> = ({ signal }) =>
+    getApiCarsPublicId(publicId, requestOptions, signal)
 
-  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiCarsId>>,
+  return { queryKey, queryFn, enabled: !!publicId, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiCarsPublicId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiCarsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiCarsId>>>
-export type GetApiCarsIdQueryError = unknown
+export type GetApiCarsPublicIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiCarsPublicId>>>
+export type GetApiCarsPublicIdQueryError = unknown
 
-export function useGetApiCarsId<TData = Awaited<ReturnType<typeof getApiCarsId>>, TError = unknown>(
-  id: number,
+export function useGetApiCarsPublicId<TData = Awaited<ReturnType<typeof getApiCarsPublicId>>, TError = unknown>(
+  publicId: string,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCarsId>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCarsPublicId>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiCarsId>>,
+          Awaited<ReturnType<typeof getApiCarsPublicId>>,
           TError,
-          Awaited<ReturnType<typeof getApiCarsId>>
+          Awaited<ReturnType<typeof getApiCarsPublicId>>
         >,
         'initialData'
       >
@@ -461,15 +468,15 @@ export function useGetApiCarsId<TData = Awaited<ReturnType<typeof getApiCarsId>>
   },
   queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiCarsId<TData = Awaited<ReturnType<typeof getApiCarsId>>, TError = unknown>(
-  id: number,
+export function useGetApiCarsPublicId<TData = Awaited<ReturnType<typeof getApiCarsPublicId>>, TError = unknown>(
+  publicId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCarsId>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCarsPublicId>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiCarsId>>,
+          Awaited<ReturnType<typeof getApiCarsPublicId>>,
           TError,
-          Awaited<ReturnType<typeof getApiCarsId>>
+          Awaited<ReturnType<typeof getApiCarsPublicId>>
         >,
         'initialData'
       >
@@ -477,24 +484,24 @@ export function useGetApiCarsId<TData = Awaited<ReturnType<typeof getApiCarsId>>
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiCarsId<TData = Awaited<ReturnType<typeof getApiCarsId>>, TError = unknown>(
-  id: number,
+export function useGetApiCarsPublicId<TData = Awaited<ReturnType<typeof getApiCarsPublicId>>, TError = unknown>(
+  publicId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCarsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCarsPublicId>>, TError, TData>>
     request?: SecondParameter<typeof customInstance>
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiCarsId<TData = Awaited<ReturnType<typeof getApiCarsId>>, TError = unknown>(
-  id: number,
+export function useGetApiCarsPublicId<TData = Awaited<ReturnType<typeof getApiCarsPublicId>>, TError = unknown>(
+  publicId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCarsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiCarsPublicId>>, TError, TData>>
     request?: SecondParameter<typeof customInstance>
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiCarsIdQueryOptions(id, options)
+  const queryOptions = getGetApiCarsPublicIdQueryOptions(publicId, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -505,82 +512,139 @@ export function useGetApiCarsId<TData = Awaited<ReturnType<typeof getApiCarsId>>
   return query
 }
 
-export const putApiCarsId = (
-  id: number,
+export const putApiCarsPublicId = (
+  publicId: string,
   carCreationDTO: CarCreationDTO,
   options?: SecondParameter<typeof customInstance>,
 ) => {
   return customInstance<void>(
-    { url: `/api/cars/${id}`, method: 'PUT', headers: { 'Content-Type': 'application/json' }, data: carCreationDTO },
+    {
+      url: `/api/cars/${publicId}`,
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      data: carCreationDTO,
+    },
     options,
   )
 }
 
-export const getPutApiCarsIdMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+export const getPutApiCarsPublicIdMutationOptions = <TError = unknown, TContext = unknown>(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putApiCarsId>>,
+    Awaited<ReturnType<typeof putApiCarsPublicId>>,
     TError,
-    { id: number; data: CarCreationDTO },
+    { publicId: string; data: CarCreationDTO },
     TContext
   >
   request?: SecondParameter<typeof customInstance>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof putApiCarsId>>,
+  Awaited<ReturnType<typeof putApiCarsPublicId>>,
   TError,
-  { id: number; data: CarCreationDTO },
+  { publicId: string; data: CarCreationDTO },
   TContext
 > => {
-  const mutationKey = ['putApiCarsId']
+  const mutationKey = ['putApiCarsPublicId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
     : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof putApiCarsId>>, { id: number; data: CarCreationDTO }> = (
-    props,
-  ) => {
-    const { id, data } = props ?? {}
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof putApiCarsPublicId>>,
+    { publicId: string; data: CarCreationDTO }
+  > = (props) => {
+    const { publicId, data } = props ?? {}
 
-    return putApiCarsId(id, data, requestOptions)
+    return putApiCarsPublicId(publicId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PutApiCarsIdMutationResult = NonNullable<Awaited<ReturnType<typeof putApiCarsId>>>
-export type PutApiCarsIdMutationBody = CarCreationDTO
-export type PutApiCarsIdMutationError = unknown
+export type PutApiCarsPublicIdMutationResult = NonNullable<Awaited<ReturnType<typeof putApiCarsPublicId>>>
+export type PutApiCarsPublicIdMutationBody = CarCreationDTO
+export type PutApiCarsPublicIdMutationError = unknown
 
-export const usePutApiCarsId = <TError = unknown, TContext = unknown>(
+export const usePutApiCarsPublicId = <TError = unknown, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putApiCarsId>>,
+      Awaited<ReturnType<typeof putApiCarsPublicId>>,
       TError,
-      { id: number; data: CarCreationDTO },
+      { publicId: string; data: CarCreationDTO },
       TContext
     >
     request?: SecondParameter<typeof customInstance>
   },
   queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof putApiCarsId>>,
+  Awaited<ReturnType<typeof putApiCarsPublicId>>,
   TError,
-  { id: number; data: CarCreationDTO },
+  { publicId: string; data: CarCreationDTO },
   TContext
 > => {
-  const mutationOptions = getPutApiCarsIdMutationOptions(options)
+  const mutationOptions = getPutApiCarsPublicIdMutationOptions(options)
 
   return useMutation(mutationOptions, queryClient)
 }
-export const patchApiCarsIdStatus = (
-  id: number,
+export const deleteApiCarsPublicId = (publicId: string, options?: SecondParameter<typeof customInstance>) => {
+  return customInstance<void>({ url: `/api/cars/${publicId}`, method: 'DELETE' }, options)
+}
+
+export const getDeleteApiCarsPublicIdMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteApiCarsPublicId>>,
+    TError,
+    { publicId: string },
+    TContext
+  >
+  request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<Awaited<ReturnType<typeof deleteApiCarsPublicId>>, TError, { publicId: string }, TContext> => {
+  const mutationKey = ['deleteApiCarsPublicId']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiCarsPublicId>>, { publicId: string }> = (
+    props,
+  ) => {
+    const { publicId } = props ?? {}
+
+    return deleteApiCarsPublicId(publicId, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type DeleteApiCarsPublicIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiCarsPublicId>>>
+
+export type DeleteApiCarsPublicIdMutationError = unknown
+
+export const useDeleteApiCarsPublicId = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteApiCarsPublicId>>,
+      TError,
+      { publicId: string },
+      TContext
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<Awaited<ReturnType<typeof deleteApiCarsPublicId>>, TError, { publicId: string }, TContext> => {
+  const mutationOptions = getDeleteApiCarsPublicIdMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+export const patchApiCarsPublicIdStatus = (
+  publicId: string,
   carStatusUpdateDTO: CarStatusUpdateDTO,
   options?: SecondParameter<typeof customInstance>,
 ) => {
   return customInstance<void>(
     {
-      url: `/api/cars/${id}/status`,
+      url: `/api/cars/${publicId}/status`,
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       data: carStatusUpdateDTO,
@@ -589,21 +653,21 @@ export const patchApiCarsIdStatus = (
   )
 }
 
-export const getPatchApiCarsIdStatusMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+export const getPatchApiCarsPublicIdStatusMutationOptions = <TError = unknown, TContext = unknown>(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchApiCarsIdStatus>>,
+    Awaited<ReturnType<typeof patchApiCarsPublicIdStatus>>,
     TError,
-    { id: number; data: CarStatusUpdateDTO },
+    { publicId: string; data: CarStatusUpdateDTO },
     TContext
   >
   request?: SecondParameter<typeof customInstance>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof patchApiCarsIdStatus>>,
+  Awaited<ReturnType<typeof patchApiCarsPublicIdStatus>>,
   TError,
-  { id: number; data: CarStatusUpdateDTO },
+  { publicId: string; data: CarStatusUpdateDTO },
   TContext
 > => {
-  const mutationKey = ['patchApiCarsIdStatus']
+  const mutationKey = ['patchApiCarsPublicIdStatus']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -611,39 +675,41 @@ export const getPatchApiCarsIdStatusMutationOptions = <TError = unknown, TContex
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchApiCarsIdStatus>>,
-    { id: number; data: CarStatusUpdateDTO }
+    Awaited<ReturnType<typeof patchApiCarsPublicIdStatus>>,
+    { publicId: string; data: CarStatusUpdateDTO }
   > = (props) => {
-    const { id, data } = props ?? {}
+    const { publicId, data } = props ?? {}
 
-    return patchApiCarsIdStatus(id, data, requestOptions)
+    return patchApiCarsPublicIdStatus(publicId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PatchApiCarsIdStatusMutationResult = NonNullable<Awaited<ReturnType<typeof patchApiCarsIdStatus>>>
-export type PatchApiCarsIdStatusMutationBody = CarStatusUpdateDTO
-export type PatchApiCarsIdStatusMutationError = unknown
+export type PatchApiCarsPublicIdStatusMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchApiCarsPublicIdStatus>>
+>
+export type PatchApiCarsPublicIdStatusMutationBody = CarStatusUpdateDTO
+export type PatchApiCarsPublicIdStatusMutationError = unknown
 
-export const usePatchApiCarsIdStatus = <TError = unknown, TContext = unknown>(
+export const usePatchApiCarsPublicIdStatus = <TError = unknown, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchApiCarsIdStatus>>,
+      Awaited<ReturnType<typeof patchApiCarsPublicIdStatus>>,
       TError,
-      { id: number; data: CarStatusUpdateDTO },
+      { publicId: string; data: CarStatusUpdateDTO },
       TContext
     >
     request?: SecondParameter<typeof customInstance>
   },
   queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof patchApiCarsIdStatus>>,
+  Awaited<ReturnType<typeof patchApiCarsPublicIdStatus>>,
   TError,
-  { id: number; data: CarStatusUpdateDTO },
+  { publicId: string; data: CarStatusUpdateDTO },
   TContext
 > => {
-  const mutationOptions = getPatchApiCarsIdStatusMutationOptions(options)
+  const mutationOptions = getPatchApiCarsPublicIdStatusMutationOptions(options)
 
   return useMutation(mutationOptions, queryClient)
 }

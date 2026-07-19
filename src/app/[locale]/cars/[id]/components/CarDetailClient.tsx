@@ -2,16 +2,16 @@
 
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
-import { useGetApiCarsId } from '@/lib/api/generated'
+import { useGetApiCarsPublicId } from '@/lib/api/generated'
 import { ChevronLeft, ChevronRight, LinkIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useState } from 'react'
 
-export default function CarDetailClient({ id }: { id: number }) {
+export default function CarDetailClient({ publicId }: { publicId: string }) {
   const t = useTranslations('PageCars')
-  const { data: car, isPending } = useGetApiCarsId(id, {
-    query: { enabled: !!id },
+  const { data: car, isPending } = useGetApiCarsPublicId(publicId, {
+    query: { enabled: !!publicId },
   })
   const [currentIndex, setCurrentIndex] = useState(0)
 

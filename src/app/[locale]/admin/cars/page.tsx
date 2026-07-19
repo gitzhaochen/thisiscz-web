@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
-import { CarStatus, useGetApiCars, usePatchApiCarsIdStatus } from '@/lib/api/generated'
+import { CarStatus, useDeleteApiCarsPublicId, useGetApiCars, usePatchApiCarsPublicIdStatus } from '@/lib/api/generated'
 import type { CarStatusUpdateDTO } from '@/lib/api/generated'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
@@ -16,7 +16,7 @@ export default function AdminCarsPage() {
     { query: { staleTime: 0 } },
   )
 
-  const { mutate: updateStatus, isPending: updateStatusPending } = usePatchApiCarsIdStatus({
+  const { mutate: updateStatus, isPending: updateStatusPending } = usePatchApiCarsPublicIdStatus({
     mutation: {
       onSuccess: async () => {
         toast.success('Status updated')
@@ -29,13 +29,32 @@ export default function AdminCarsPage() {
     },
   })
 
-  const onChangeStatus = (carId: number, status: CarStatusUpdateDTO['status']) => {
+  const { mutate: deleteCar, isPending: deleteCarPending } = useDeleteApiCarsPublicId({
+    mutation: {
+      onSuccess: async () => {
+        toast.success('Car deleted')
+        await queryClient.invalidateQueries({ queryKey: ['/api/cars'] })
+        await refetchCars()
+      },
+      onError: () => {
+        toast.error('Delete failed')
+      },
+    },
+  })
+
+  const onChangeStatus = (publicId: string, status: CarStatusUpdateDTO['status']) => {
     updateStatus({
-      id: carId,
+      publicId,
       data: {
         status,
       },
     })
+  }
+
+  const onDeleteCar = (publicId: string, title?: string) => {
+    const confirmed = window.confirm(`确定删除车源吗？\n${title || ''}`)
+    if (!confirmed) return
+    deleteCar({ publicId })
   }
 
   return (
@@ -47,8 +66,10 @@ export default function AdminCarsPage() {
             <Button>Add car source</Button>
           </Link>
         </div>
-        {(carsData?.items || []).map((car) => (
-          <div key={car.id} className="flex flex-col gap-3 rounded-md border p-3 md:flex-row md:items-center md:justify-between">
+        {(carsData?.items || [])
+          .filter((car) => !!car.publicId)
+          .map((car) => (
+          <div key={car.publicId} className="flex flex-col gap-3 rounded-md border p-3 md:flex-row md:items-center md:justify-between">
             <div className="space-y-1">
               <p className="font-medium">
                 {car.postTitle} ({car.year}) - {car.manufacturer} {car.model}
@@ -58,18 +79,26 @@ export default function AdminCarsPage() {
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Link href={`/admin/cars/form?actionType=edit&id=${car.id}`}>
+              <Link href={`/admin/cars/form?actionType=edit&id=${car.publicId}`}>
                 <Button size="sm" variant="outline">
                   Edit
                 </Button>
               </Link>
+              <Button
+                size="sm"
+                variant="destructive"
+                disabled={deleteCarPending || updateStatusPending}
+                onClick={() => onDeleteCar(car.publicId!, car.postTitle)}
+              >
+                Delete
+              </Button>
               {statusOptions.map((status) => (
                 <Button
                   key={status}
                   size="sm"
                   variant={car.status === status ? 'default' : 'outline'}
-                  disabled={updateStatusPending}
-                  onClick={() => onChangeStatus(car.id!, status)}
+                  disabled={updateStatusPending || deleteCarPending}
+                  onClick={() => onChangeStatus(car.publicId!, status)}
                 >
                   {status}
                 </Button>

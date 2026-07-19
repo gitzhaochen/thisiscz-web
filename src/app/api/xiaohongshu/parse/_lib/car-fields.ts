@@ -222,7 +222,7 @@ const stripLeadingManufacturerAlias = (text: string, manufacturer: string) => {
   return output
 }
 
-const extractManufacturerAndModel = (title: string): Pick<ParsedCarFields, 'manufacturer' | 'model'> => {
+const extractManufacturerAndModel = (mergedText: string): Pick<ParsedCarFields, 'manufacturer' | 'model'> => {
   const manufacturerMatchers = [
     { value: 'Toyota', pattern: /(toyota|丰田)/i },
     { value: 'Honda', pattern: /(honda|本田)/i },
@@ -242,10 +242,13 @@ const extractManufacturerAndModel = (title: string): Pick<ParsedCarFields, 'manu
   ] as const
 
   for (const item of manufacturerMatchers) {
-    const match = item.pattern.exec(title)
+    const match = item.pattern.exec(mergedText)
     if (!match) continue
-    const afterManufacturer = title.slice(match.index + match[0].length).trim()
-    const cleanedModel = afterManufacturer.replace(/^[\s\-:：|]+/, '').replace(/(?:\$|￥|¥).*$/, '').trim()
+    const afterManufacturer = mergedText.slice(match.index + match[0].length).trim()
+    const cleanedModel = afterManufacturer
+      .replace(/^[\s\-:：|]+/, '')
+      .replace(/(?:\$|￥|¥).*$/, '')
+      .trim()
     const modelWithoutBrandPrefix = stripLeadingManufacturerAlias(cleanedModel, item.value)
     const candidateModel = modelWithoutBrandPrefix || cleanedModel
     const coreModel = extractCoreModel(candidateModel)
@@ -261,7 +264,7 @@ const extractManufacturerAndModel = (title: string): Pick<ParsedCarFields, 'manu
 
 export const extractParsedCarFields = (title: string, content: string): ParsedCarFields => {
   const mergedText = `${title}\n${content}`
-  const manufacturerAndModel = extractManufacturerAndModel(title)
+  const manufacturerAndModel = extractManufacturerAndModel(mergedText)
 
   return {
     price: extractPrice(mergedText),

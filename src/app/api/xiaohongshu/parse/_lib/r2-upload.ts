@@ -51,7 +51,7 @@ const createR2Client = () => {
 const MAX_IMAGE_BYTES = Number(process.env.XHS_PARSE_MAX_IMAGE_BYTES || 10 * 1024 * 1024)
 const MAX_UPLOAD_IMAGES = 5
 
-export const uploadImagesToR2 = async (imageUrls: string[], sourceUrl: string) => {
+export const uploadImagesToR2 = async (imageUrls: string[], sourceUrl: string, targetUrl: string) => {
   if (!imageUrls.length) return imageUrls
   const limitedImageUrls = imageUrls.slice(0, MAX_UPLOAD_IMAGES)
 
@@ -91,7 +91,7 @@ export const uploadImagesToR2 = async (imageUrls: string[], sourceUrl: string) =
 
         const contentType = response.headers.get('content-type') || 'application/octet-stream'
         const extension = inferExtension(url, contentType)
-        const hash = crypto.createHash('sha1').update(`${sourceUrl}`).digest('hex').slice(0, 16)
+        const hash = crypto.createHash('sha1').update(`${targetUrl}`).digest('hex').slice(0, 16)
         const key = `web/uploads/cars/xiaohongshu/${hash}_${index + 1}.${extension}`
 
         await r2Client.send(

@@ -11,10 +11,10 @@ import {
   SellerType,
   SourcePlatformType,
   TransmissionType,
-  getGetApiCarsIdQueryKey,
-  useGetApiCarsId,
+  getGetApiCarsPublicIdQueryKey,
+  useGetApiCarsPublicId,
   usePostApiCarsCreate,
-  usePutApiCarsId,
+  usePutApiCarsPublicId,
 } from '@/lib/api/generated'
 import type { CarCreationDTO } from '@/lib/api/generated'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -54,6 +54,7 @@ const formSchema = z.object({
   city: z.string().min(1, { message: 'city is required' }),
   sellerType: z.enum(sellerTypeOptions),
   sourcePlatform: z.enum(sourcePlatformOptions),
+  parseSourceUrl: z.string().optional(),
   sourceUrl: z.string().min(1, { message: 'sourceUrl is required' }),
   postTitle: z.string().min(1, { message: 'postTitle is required' }),
   postContent: z.string().min(1, { message: 'postContent is required' }),
@@ -111,8 +112,8 @@ export default function AdminCarsFormPage() {
   const queryClient = useQueryClient()
   const searchParams = useSearchParams()
   const actionType = searchParams.get('actionType') || 'add'
-  const id = Number(searchParams.get('id') || 0)
-  const isEdit = actionType === 'edit' && id > 0
+  const publicId = searchParams.get('id') || ''
+  const isEdit = actionType === 'edit' && !!publicId
   const [xhsUrl, setXhsUrl] = useState('')
   const [isExtracting, setIsExtracting] = useState(false)
 
@@ -135,6 +136,7 @@ export default function AdminCarsFormPage() {
       city: '',
       sellerType: SellerType.individual,
       sourcePlatform: SourcePlatformType.xiaohongshu,
+      parseSourceUrl: '',
       sourceUrl: '',
       postTitle: '',
       postContent: '',
@@ -142,7 +144,7 @@ export default function AdminCarsFormPage() {
     },
   })
 
-  const { data: carDetail } = useGetApiCarsId(id, {
+  const { data: carDetail } = useGetApiCarsPublicId(publicId, {
     query: { enabled: isEdit },
   })
 
@@ -172,6 +174,7 @@ export default function AdminCarsFormPage() {
       sellerType: (carDetail.sellerType as (typeof sellerTypeOptions)[number]) || SellerType.individual,
       sourcePlatform:
         (carDetail.sourcePlatform as (typeof sourcePlatformOptions)[number]) || SourcePlatformType.xiaohongshu,
+      parseSourceUrl: carDetail.parseSourceUrl || '',
       sourceUrl: carDetail.sourceUrl || '',
       postTitle: carDetail.postTitle || '',
       postContent: carDetail.postContent || '',
@@ -191,12 +194,12 @@ export default function AdminCarsFormPage() {
     },
   })
 
-  const { mutate: updateCar, isPending: updatePending } = usePutApiCarsId({
+  const { mutate: updateCar, isPending: updatePending } = usePutApiCarsPublicId({
     mutation: {
       onSuccess: async () => {
         toast.success('Car updated')
         await queryClient.invalidateQueries({ queryKey: ['/api/cars'] })
-        await queryClient.invalidateQueries({ queryKey: getGetApiCarsIdQueryKey(id) })
+        await queryClient.invalidateQueries({ queryKey: getGetApiCarsPublicIdQueryKey(publicId) })
       },
       onError: () => {
         toast.error('Update failed')
@@ -222,6 +225,7 @@ export default function AdminCarsFormPage() {
       city: values.city.trim(),
       sellerType: values.sellerType,
       sourcePlatform: values.sourcePlatform,
+      parseSourceUrl: values.parseSourceUrl?.trim() || null,
       sourceUrl: values.sourceUrl.trim(),
       postTitle: values.postTitle.trim(),
       postContent: values.postContent.trim(),
@@ -229,7 +233,7 @@ export default function AdminCarsFormPage() {
     }
 
     if (isEdit) {
-      updateCar({ id, data: payload })
+      updateCar({ publicId, data: payload })
       return
     }
 
@@ -256,6 +260,7 @@ export default function AdminCarsFormPage() {
       if (result.sourceUrl) {
         form.setValue('sourceUrl', result.sourceUrl, { shouldDirty: true, shouldValidate: true })
       }
+      form.setValue('parseSourceUrl', xhsUrl.trim(), { shouldDirty: true, shouldValidate: false })
       if (result.postTitle) {
         form.setValue('postTitle', result.postTitle, { shouldDirty: true, shouldValidate: true })
       }
@@ -588,6 +593,19 @@ export default function AdminCarsFormPage() {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="parseSourceUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Parse source URL</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="sourceUrl"

@@ -216,10 +216,12 @@ export default function PageCars() {
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {items.map((car) => {
+          const carPublicId = car.publicId
+          if (!carPublicId) return null
           const imageUrl = car.imageUrls?.[0] || ''
           return (
-            <div key={car.id} className="flex flex-col rounded-md border">
-              <Link href={`/cars/${car.id}`} className="relative aspect-[16/10] w-full overflow-hidden rounded-t-md">
+            <div key={carPublicId} className="flex flex-col rounded-md border">
+              <Link href={`/cars/${carPublicId}`} className="relative aspect-[16/10] w-full overflow-hidden rounded-t-md">
                 {imageUrl ? (
                   <Image
                     src={imageUrl}
@@ -232,7 +234,7 @@ export default function PageCars() {
                 )}
               </Link>
               <div className="space-y-2 p-3">
-                <Link href={`/cars/${car.id}`} className="line-clamp-1 font-semibold hover:underline">
+                <Link href={`/cars/${carPublicId}`} className="line-clamp-1 font-semibold hover:underline">
                   {car.postTitle}
                 </Link>
                 <p className="text-muted-foreground text-sm">

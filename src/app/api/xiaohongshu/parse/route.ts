@@ -68,9 +68,8 @@ export async function GET(request: NextRequest) {
     const finalUrl = response.url || parsed.toString()
     const title = getTitle(html)
     const content = getContent(html)
-
     const extractedImageUrls = extractImages(html)
-    const imageUrls = await uploadImagesToR2(extractedImageUrls, finalUrl)
+    const imageUrls = await uploadImagesToR2(extractedImageUrls, finalUrl, targetUrl)
     const parsedFields = extractParsedCarFields(title, content)
 
     return NextResponse.json({

@@ -31,6 +31,8 @@ export interface CarCreationDTO {
   city?: string
   sellerType?: SellerType
   sourcePlatform?: SourcePlatformType
+  /** @nullable */
+  parseSourceUrl?: string | null
   sourceUrl?: string
   postTitle?: string
   postContent?: string

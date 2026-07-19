@@ -8,7 +8,7 @@ const decodeHtmlEntities = (input: string) => {
 }
 
 export const extractMeta = (html: string, key: string) => {
-  const reg = new RegExp(`<meta[^>]+(?:property|name)=["']${key}["'][^>]+content=["']([^"']+)["'][^>]*>`, 'i')
+  const reg = new RegExp(`<meta[^>]+(?:property)=["']${key}["'][^>]+content=["']([^"']+)["'][^>]*>`, 'i')
   return reg.exec(html)?.[1]?.trim() || ''
 }
 

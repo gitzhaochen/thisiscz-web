@@ -6,5 +6,5 @@ type Props = {
 
 export default async function PageCarDetail({ params }: Props) {
   const { id } = await params
-  return <CarDetailClient id={Number(id)} />
+  return <CarDetailClient publicId={id} />
 }

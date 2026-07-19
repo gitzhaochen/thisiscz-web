@@ -12,7 +12,7 @@ import type { CarStatus } from './carStatus'
 import type { SourcePlatformType } from './sourcePlatformType'
 
 export interface CarDTO {
-  id?: number
+  publicId?: string
   price?: number
   currency?: string
   year?: number
@@ -34,6 +34,8 @@ export interface CarDTO {
   sellerType?: SellerType
   status?: CarStatus
   sourcePlatform?: SourcePlatformType
+  /** @nullable */
+  parseSourceUrl?: string | null
   sourceUrl?: string
   postTitle?: string
   postContent?: string
