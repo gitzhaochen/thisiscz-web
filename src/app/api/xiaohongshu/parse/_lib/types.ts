@@ -7,7 +7,7 @@ export type ParsedCarFields = {
   model: string | null
   transmission: 'automatic' | 'manual' | null
   engineDisplacementL: number | null
-  fuelType: 'gasoline' | 'diesel' | 'hybrid' | 'phev' | 'ev' | 'other' | null
+  fuelType: 'petrol' | 'diesel' | 'hybrid' | 'phev' | 'ev' | 'other' | null
   contactPhone: string | null
   contactWechat: string | null
   contactEmail: string | null

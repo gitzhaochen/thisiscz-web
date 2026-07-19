@@ -23,6 +23,9 @@
   },
   "PageCars": {
     "title": "NZ RedNote Cars",
+    "seoTitle": "NZ RedNote Cars",
+    "seoDescription": "Discover personal used-car listings from RedNote in New Zealand.",
+    "seoKeywords": "NZ RedNote cars,RedNote used cars,used cars New Zealand,Auckland used cars,car listings",
     "all": "All",
     "active": "Active",
     "sold": "Sold",

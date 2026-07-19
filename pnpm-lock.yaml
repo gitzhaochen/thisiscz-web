@@ -114,6 +114,9 @@ importers:
       sonner:
         specifier: ^2.0.3
         version: 2.0.7(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      swiper:
+        specifier: ^14.0.5
+        version: 14.0.5
       tailwind-merge:
         specifier: ^3.3.0
         version: 3.3.1
@@ -5240,6 +5243,10 @@ packages:
   swagger2openapi@7.0.8:
     resolution: {integrity: sha512-upi/0ZGkYgEcLeGieoz8gT74oWHA0E7JivX7aN9mAf+Tc7BQoRBvnIGHoPDw+f9TXTW4s6kGYCZJtauP6OYp7g==, tarball: https://registry.npmjs.org/swagger2openapi/-/swagger2openapi-7.0.8.tgz}
     hasBin: true
+
+  swiper@14.0.5:
+    resolution: {integrity: sha512-SMSKS0sj+lPIFzngfIKb5cyBtzmAuJw7rXgXdyYiDReb+pSpJXuNljHYgT4DXa5Stnl2Ew2/Lam5ipv4PIqZ7A==, tarball: https://registry.npmjs.org/swiper/-/swiper-14.0.5.tgz}
+    engines: {node: '>= 4.7.0'}
 
   symbol-observable@1.2.0:
     resolution: {integrity: sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==, tarball: https://registry.npmjs.org/symbol-observable/-/symbol-observable-1.2.0.tgz}
@@ -11632,6 +11639,8 @@ snapshots:
       yargs: 17.7.2
     transitivePeerDependencies:
       - encoding
+
+  swiper@14.0.5: {}
 
   symbol-observable@1.2.0: {}
 

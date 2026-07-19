@@ -10,7 +10,7 @@ export type FuelType = (typeof FuelType)[keyof typeof FuelType]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const FuelType = {
-  gasoline: 'gasoline',
+  petrol: 'petrol',
   diesel: 'diesel',
   hybrid: 'hybrid',
   phev: 'phev',

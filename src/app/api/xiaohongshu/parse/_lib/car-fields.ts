@@ -111,7 +111,7 @@ const extractFuelType = (text: string): ParsedCarFields['fuelType'] => {
   if (/(插混|phev)/i.test(text)) return 'phev'
   if (/(混动|hybrid)/i.test(text)) return 'hybrid'
   if (/(柴油|diesel)/i.test(text)) return 'diesel'
-  if (/(汽油|petrol|gasoline)/i.test(text)) return 'gasoline'
+  if (/(汽油|petrol|gasoline)/i.test(text)) return 'petrol'
   return null
 }
 

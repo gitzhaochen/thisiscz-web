@@ -27,7 +27,7 @@ import { z } from 'zod'
 
 const transmissionOptions = [TransmissionType.automatic, TransmissionType.manual] as const
 const fuelTypeOptions = [
-  FuelType.gasoline,
+  FuelType.petrol,
   FuelType.diesel,
   FuelType.hybrid,
   FuelType.phev,
@@ -128,12 +128,12 @@ export default function AdminCarsFormPage() {
       mileageKm: '',
       transmission: TransmissionType.automatic,
       engineDisplacementL: '',
-      fuelType: FuelType.gasoline,
+      fuelType: FuelType.petrol,
       contactPhone: '',
       contactWechat: '',
       contactEmail: '',
-      country: '',
-      city: '',
+      country: 'New Zealand',
+      city: 'Auckland',
       sellerType: SellerType.individual,
       sourcePlatform: SourcePlatformType.xiaohongshu,
       parseSourceUrl: '',
@@ -165,7 +165,7 @@ export default function AdminCarsFormPage() {
         carDetail.engineDisplacementL === null || carDetail.engineDisplacementL === undefined
           ? ''
           : String(carDetail.engineDisplacementL),
-      fuelType: (carDetail.fuelType as (typeof fuelTypeOptions)[number]) || FuelType.gasoline,
+      fuelType: (carDetail.fuelType as (typeof fuelTypeOptions)[number]) || FuelType.petrol,
       contactPhone: carDetail.contactPhone || '',
       contactWechat: carDetail.contactWechat || '',
       contactEmail: carDetail.contactEmail || '',

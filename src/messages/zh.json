@@ -17,12 +17,15 @@
     "bookmarks": "书签",
     "posts": "帖子",
     "nzSchools": "NZ学校",
-    "nzRedNoteCars": "NZ红书车源",
+    "nzRedNoteCars": "NZ小红书二手车",
     "resume": "简历",
     "aiTalk": "AI聊天"
   },
   "PageCars": {
-    "title": "NZ RedNote Cars",
+    "title": "小红书个人二手车",
+    "seoTitle": "小红书个人二手车",
+    "seoDescription": "小红书个人二手车，欢迎查看。",
+    "seoKeywords": "小红书个人二手车,小红书二手车,小红书二手车源,NZ二手车,奥克兰二手车",
     "all": "全部",
     "active": "在售",
     "sold": "已售",
@@ -44,8 +47,8 @@
     "sortAsc": "升序",
     "applySort": "应用排序",
     "onlyActiveNotice": "仅展示在售车源",
-    "showAdvancedFilters": "展开高级筛选",
-    "hideAdvancedFilters": "收起高级筛选",
+    "showAdvancedFilters": "更多筛选",
+    "hideAdvancedFilters": "收起筛选",
     "applyFilters": "应用筛选",
     "resetFilters": "重置",
     "loadError": "车源列表加载失败",
@@ -57,7 +60,7 @@
     "backToList": "返回列表"
   },
   "PageNzSchools": {
-    "seoTitle": "新西兰学校查询",
+    "seoTitle": "新西兰中小学校查询",
     "seoDescription": "按城市、学段、EQI 与 UE 率筛选新西兰学校，地图查看学校位置、族裔分布与升学数据。",
     "seoKeywords": "新西兰学校,新西兰中学,奥克兰学校,学校地图,EQI指数,UE率,族裔比例,选校,新西兰留学,公立学校,私立学校,State school",
     "filtersTitle": "筛选条件",
