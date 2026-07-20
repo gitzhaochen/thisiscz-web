@@ -13,10 +13,11 @@ import Image from 'next/image'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
-const statusOptions = [CarStatus.active, CarStatus.sold, CarStatus.offShelf] as const
+const statusOptions = [CarStatus.active, CarStatus.pending, CarStatus.sold, CarStatus.offShelf] as const
 const pageSize = 20
 const statusTabLabels: Record<CarStatus, string> = {
   [CarStatus.active]: '在售',
+  [CarStatus.pending]: '待售',
   [CarStatus.sold]: '已售',
   [CarStatus.offShelf]: '下架',
 }
@@ -88,8 +89,8 @@ export default function AdminCarsPage() {
       <div className="space-y-3 rounded-md border p-4">
         <div className="flex items-center justify-between">
           <h1 className="text-lg font-semibold">Car source list</h1>
-          <Link href="/admin/cars/form?actionType=add">
-            <Button>Add car source</Button>
+          <Link href="/admin/cars/parse">
+            <Button>Parse car source</Button>
           </Link>
         </div>
         <Tabs value={selectedStatus} onValueChange={handleStatusChange}>
@@ -172,7 +173,7 @@ export default function AdminCarsPage() {
                       <TableCell>{createdAt}</TableCell>
                       <TableCell className="w-[340px]">
                         <div className="flex flex-nowrap gap-2 whitespace-nowrap">
-                          <Link href={`/admin/cars/form?actionType=edit&id=${car.publicId}`}>
+                          <Link href={`/admin/cars/form?id=${car.publicId}`}>
                             <Button size="xs" variant="outline" className="inline-flex items-center gap-1">
                               <Pencil className="h-3.5 w-3.5" />
                             </Button>

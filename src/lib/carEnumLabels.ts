@@ -23,6 +23,7 @@ const carStatusLabelMap: Record<CarStatus, string> = {
   active: '在售',
   sold: '已售',
   offShelf: '下架',
+  pending: '待售',
 }
 
 const sourcePlatformLabelMap: Record<SourcePlatformType, string> = {

@@ -34,9 +34,15 @@ const menuGroups = [
         isActive: (pathname: string) => pathname === '/admin/cars',
       },
       {
-        key: 'carAdd',
-        label: 'Add car source',
-        href: '/admin/cars/form?actionType=add',
+        key: 'carParse',
+        label: 'Parse car source',
+        href: '/admin/cars/parse',
+        isActive: (pathname: string) => pathname.startsWith('/admin/cars/parse'),
+      },
+      {
+        key: 'carEdit',
+        label: 'Edit car source',
+        href: '/admin/cars/form',
         isActive: (pathname: string) => pathname.startsWith('/admin/cars/form'),
       },
     ],

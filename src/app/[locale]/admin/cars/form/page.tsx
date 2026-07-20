@@ -122,12 +122,15 @@ type XhsParseResponse = {
   parsedFields?: ParsedXhsCarFields
 }
 
-export default function AdminCarsFormPage() {
+type AdminCarsFormPageProps = {
+  mode?: 'edit' | 'parse'
+}
+
+export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
   const queryClient = useQueryClient()
   const searchParams = useSearchParams()
-  const actionType = searchParams.get('actionType') || 'add'
   const publicId = searchParams.get('id') || ''
-  const isEdit = actionType === 'edit' && !!publicId
+  const isEdit = mode === 'edit' && !!publicId
   const [xhsUrl, setXhsUrl] = useState('')
   const [isExtracting, setIsExtracting] = useState(false)
 
@@ -373,35 +376,37 @@ export default function AdminCarsFormPage() {
   return (
     <div className="space-y-4 rounded-md border p-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-lg font-semibold">{isEdit ? 'Edit car source' : 'Add car source'}</h1>
+        <h1 className="text-lg font-semibold">{isEdit ? 'Edit car source' : 'Parse car source'}</h1>
         <Link href="/admin/cars">
           <Button variant="outline">Back to list</Button>
         </Link>
       </div>
-      <div className="rounded-md border border-dashed p-3">
-        <p className="mb-2 text-sm font-medium">Import from Xiaohongshu URL</p>
-        <div className="flex flex-col gap-2 md:flex-row">
-          <Input
-            placeholder="https://www.xiaohongshu.com/..."
-            value={xhsUrl}
-            onPaste={(e) => {
-              let text = e.clipboardData.getData('text')
-              text = text.trim()
-              // 使用正则提取以 http/https 开头的链接
-              const match = text.match(/https?:\/\/[^\s]+/)
-              if (match) {
-                setXhsUrl(match[0])
-              } else {
-                toast.error('请粘贴包含有效的小红书链接（以 http/https 开头）')
-                setXhsUrl('')
-              }
-            }}
-          />
-          <Button type="button" onClick={handleExtractFromXhs} disabled={isExtracting}>
-            {isExtracting ? 'Parsing...' : 'Parse & Fill'}
-          </Button>
+      {mode === 'parse' && (
+        <div className="rounded-md border border-dashed p-3">
+          <p className="mb-2 text-sm font-medium">Import from Xiaohongshu URL</p>
+          <div className="flex flex-col gap-2 md:flex-row">
+            <Input
+              placeholder="https://www.xiaohongshu.com/..."
+              value={xhsUrl}
+              onPaste={(e) => {
+                let text = e.clipboardData.getData('text')
+                text = text.trim()
+                // 使用正则提取以 http/https 开头的链接
+                const match = text.match(/https?:\/\/[^\s]+/)
+                if (match) {
+                  setXhsUrl(match[0])
+                } else {
+                  toast.error('请粘贴包含有效的小红书链接（以 http/https 开头）')
+                  setXhsUrl('')
+                }
+              }}
+            />
+            <Button type="button" onClick={handleExtractFromXhs} disabled={isExtracting}>
+              {isExtracting ? 'Parsing...' : 'Parse & Fill'}
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <FormField
@@ -731,11 +736,15 @@ export default function AdminCarsFormPage() {
 
           <div className="md:col-span-2">
             <Button type="submit" disabled={createPending || updatePending}>
-              {createPending || updatePending ? 'Saving...' : isEdit ? 'Update car source' : 'Create car source'}
+              {createPending || updatePending ? 'Saving...' : isEdit ? 'Update car source' : 'Create parsed car source'}
             </Button>
           </div>
         </form>
       </Form>
     </div>
   )
+}
+
+export default function PageAdminCarsEditForm() {
+  return <AdminCarsFormPage mode="edit" />
 }

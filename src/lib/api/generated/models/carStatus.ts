@@ -13,4 +13,5 @@ export const CarStatus = {
   active: 'active',
   sold: 'sold',
   offShelf: 'offShelf',
+  pending: 'pending',
 } as const
