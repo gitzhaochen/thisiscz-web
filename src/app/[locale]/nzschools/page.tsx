@@ -191,7 +191,7 @@ export default function PageNzSchools() {
   }
 
   return (
-    <div className="page-wrapper py-6">
+    <div className="page-wrapper pt-3 pb-6">
       <div className="mb-6 space-y-4 rounded-lg border p-3">
         <form className="space-y-4" onSubmit={onSubmit}>
           <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-6">
