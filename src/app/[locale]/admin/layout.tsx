@@ -14,7 +14,7 @@ export default async function AdminLayout({ children, params }: Props) {
   setRequestLocale(locale)
 
   return (
-    <div className="page-wrapper py-6">
+    <div className="px-4 py-6">
       <div className="grid gap-6 md:grid-cols-[220px_minmax(0,1fr)]">
         <AdminSidebar />
         <div className="min-w-0">{children}</div>

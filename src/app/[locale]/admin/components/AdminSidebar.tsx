@@ -53,9 +53,7 @@ export default function AdminSidebar() {
   const [openedKeys, setOpenedKeys] = useState<string[]>(activeGroupKeys)
 
   const toggleGroup = (groupKey: string) => {
-    setOpenedKeys((prev) =>
-      prev.includes(groupKey) ? prev.filter((key) => key !== groupKey) : [...prev, groupKey],
-    )
+    setOpenedKeys((prev) => (prev.includes(groupKey) ? prev.filter((key) => key !== groupKey) : [...prev, groupKey]))
   }
 
   return (
@@ -87,7 +85,7 @@ export default function AdminSidebar() {
                         key={child.key}
                         href={child.href}
                         className={`rounded-md px-3 py-2 text-sm transition-colors ${
-                          active ? 'bg-primary text-primary-foreground font-medium' : 'hover:bg-muted'
+                          active ? 'font-semibold' : 'hover:bg-muted'
                         }`}
                       >
                         {child.label}
