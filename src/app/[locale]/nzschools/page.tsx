@@ -192,29 +192,28 @@ export default function PageNzSchools() {
 
   return (
     <div className="page-wrapper py-6">
-      <div className="mb-6 space-y-4 rounded-lg border p-4">
-        <div className="flex items-center justify-between gap-2">
-          <div className="text-lg font-semibold">{t('filtersTitle')}</div>
-          <Button
-            type="button"
-            variant="outline"
-            className="md:hidden"
-            onClick={() => setShowMobileMoreFilters((prev) => !prev)}
-          >
-            {showMobileMoreFilters ? t('lessFilters') : t('moreFilters')}
-          </Button>
-        </div>
+      <div className="mb-6 space-y-4 rounded-lg border p-3">
         <form className="space-y-4" onSubmit={onSubmit}>
           <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-6">
-            <div className="space-y-1">
-              <div className="text-muted-foreground text-xs">{t('namePlaceholder')}</div>
-              <Input
-                value={draftFilters.name}
-                onChange={(e) => setDraftFilters((prev) => ({ ...prev, name: e.target.value }))}
-                placeholder={t('namePlaceholder')}
-              />
-            </div>
+            <div className="flex items-center justify-between gap-1">
+              <div className="flex-1 space-y-1">
+                <div className="text-muted-foreground hidden text-xs md:block">{t('namePlaceholder')}</div>
 
+                <Input
+                  value={draftFilters.name}
+                  onChange={(e) => setDraftFilters((prev) => ({ ...prev, name: e.target.value }))}
+                  placeholder={t('namePlaceholder')}
+                />
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                className="md:hidden"
+                onClick={() => setShowMobileMoreFilters((prev) => !prev)}
+              >
+                {showMobileMoreFilters ? t('lessFilters') : t('moreFilters')}
+              </Button>
+            </div>
             <div className={showMobileMoreFilters ? 'space-y-1' : 'hidden space-y-1 md:block'}>
               <div className="text-muted-foreground text-xs">{t('city')}</div>
               <Select

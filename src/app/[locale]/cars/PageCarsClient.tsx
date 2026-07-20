@@ -169,7 +169,7 @@ export default function PageCarsClient() {
       <div className="mb-4 rounded-md">
         <div className="flex items-center gap-2">
           <Select value={city} onValueChange={handleCityChange}>
-            <SelectTrigger className="w-[120px]">
+            <SelectTrigger className="flex-1">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -181,7 +181,7 @@ export default function PageCarsClient() {
             </SelectContent>
           </Select>
           <Select value={sortType} onValueChange={handleSortChange}>
-            <SelectTrigger className="w-[120px]">
+            <SelectTrigger className="flex-1">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

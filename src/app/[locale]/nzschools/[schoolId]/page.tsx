@@ -36,10 +36,41 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tDetail = await getTranslations({ locale, namespace: 'PageNzSchoolDetail' })
   const tEnum = await getTranslations({ locale, namespace: 'NzSchoolEnums' })
   const { getAuthorityClassLabel, getLevelClassLabel } = createNzSchoolEnumLabelHelpers(tEnum)
+  const baseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL || 'http://localhost:3000'
+  const pageUrl = `${baseUrl}/${locale}/nzschools/${schoolId}`
+  const localeCode = locale === 'zh' ? 'zh_CN' : 'en_US'
 
   const detail = await fetchSchoolDetail(schoolId)
   if (!detail?.name) {
-    return { title: tDetail('seoTitleFallback') }
+    const fallbackTitle = tDetail('seoTitleFallback')
+    return {
+      title: fallbackTitle,
+      description: tDetail('seoKeywordsBase'),
+      alternates: {
+        canonical: pageUrl,
+        languages: {
+          'zh-CN': `${baseUrl}/zh/nzschools/${schoolId}`,
+          en: `${baseUrl}/en/nzschools/${schoolId}`,
+        },
+      },
+      openGraph: {
+        type: 'article',
+        url: pageUrl,
+        title: fallbackTitle,
+        description: tDetail('seoKeywordsBase'),
+        locale: localeCode,
+        siteName: 'ThisIsCZ',
+      },
+      twitter: {
+        card: 'summary',
+        title: fallbackTitle,
+        description: tDetail('seoKeywordsBase'),
+      },
+      robots: {
+        index: true,
+        follow: true,
+      },
+    }
   }
 
   const city = detail.city?.trim() || '-'
@@ -60,9 +91,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       .map((keyword) => keyword.trim()),
   ].filter(Boolean)
 
-  return {
-    title: tDetail('seoTitle', { name: detail.name, city }),
-    description: tDetail('seoDescription', {
+  const title = tDetail('seoTitle', { name: detail.name, city })
+  const description = tDetail('seoDescription', {
       name: detail.name,
       city,
       authorityClass,
@@ -70,8 +100,36 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       eqi: detail.eqiIndex ?? '-',
       students: detail.totalStudents2025 ?? detail.totalStudents ?? '-',
       ueRatePart,
-    }),
+    })
+
+  return {
+    title,
+    description,
     keywords: [...new Set(keywords)],
+    alternates: {
+      canonical: pageUrl,
+      languages: {
+        'zh-CN': `${baseUrl}/zh/nzschools/${schoolId}`,
+        en: `${baseUrl}/en/nzschools/${schoolId}`,
+      },
+    },
+    openGraph: {
+      type: 'article',
+      url: pageUrl,
+      title,
+      description,
+      locale: localeCode,
+      siteName: 'ThisIsCZ',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
   }
 }
 
