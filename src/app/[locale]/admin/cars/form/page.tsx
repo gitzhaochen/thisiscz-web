@@ -252,6 +252,7 @@ export default function AdminCarsFormPage() {
     }
 
     createCar({ data: payload })
+    setXhsUrl('')
     form.reset()
   }
 

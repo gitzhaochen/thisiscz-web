@@ -258,6 +258,10 @@ export default function PageCarsClient() {
           const carPublicId = car.publicId
           if (!carPublicId) return null
           const imageUrl = car.imageUrls?.[0] || ''
+          const mileageWan =
+            typeof car.mileageKm === 'number' && car.mileageKm > 0
+              ? `${(car.mileageKm / 10000).toFixed(1).replace(/\.0$/, '')}万公里`
+              : '-'
           return (
             <Link
               key={carPublicId}
@@ -281,9 +285,9 @@ export default function PageCarsClient() {
                 <div className="flex items-center justify-between gap-1">
                   <div className="flex items-center gap-1">
                     <span>{car.year ? `${car.year}年` : '-'}</span>
-                    <span>{car.mileageKm ? `${car.mileageKm}km` : '-'}</span>
+                    <span>{mileageWan}</span>
                   </div>
-                  <span className="font-semibold text-[#ef4444]">${car.price}</span>
+                  <span className="text-sm font-semibold text-[#ef4444] tabular-nums">${car.price}</span>
                 </div>
               </div>
             </Link>

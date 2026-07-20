@@ -117,7 +117,7 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
             <div className="text-muted-foreground">车源信息</div>
             <p>
               <span className="font-medium">价格：</span>
-              <span className="text-[#ef4444]">
+              <span className="font-semibold text-[#ef4444] tabular-nums">
                 {showValue(car.price)} {showValue(car.currency)}
               </span>
             </p>
@@ -127,7 +127,9 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
             </p>
             <p>
               <span className="font-medium">公里数：</span>
-              {car.mileageKm ? `${car.mileageKm} km` : '-'}
+              {typeof car.mileageKm === 'number' && car.mileageKm > 0
+                ? `${(car.mileageKm / 10000).toFixed(1).replace(/\.0$/, '')}万公里`
+                : '-'}
             </p>
             <p>
               <span className="font-medium">年份：</span>
