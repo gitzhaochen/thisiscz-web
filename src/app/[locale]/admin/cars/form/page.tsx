@@ -39,25 +39,35 @@ const sourcePlatformOptions = [SourcePlatformType.xiaohongshu] as const
 
 const formSchema = z.object({
   price: z.string().min(1, { message: 'price is required' }),
-  currency: z.string().min(1, { message: 'currency is required' }),
-  year: z.string().min(1, { message: 'year is required' }),
-  manufacturer: z.string().min(1, { message: 'manufacturer is required' }),
-  model: z.string().min(1, { message: 'model is required' }),
-  mileageKm: z.string().min(1, { message: 'mileage is required' }),
-  transmission: z.enum(transmissionOptions),
+  currency: z.string().optional(),
+  year: z
+    .string()
+    .optional()
+    .refine((value) => !value || !value.trim() || !Number.isNaN(Number(value)), {
+      message: 'year must be a valid number',
+    }),
+  manufacturer: z.string().optional(),
+  model: z.string().optional(),
+  mileageKm: z
+    .string()
+    .optional()
+    .refine((value) => !value || !value.trim() || !Number.isNaN(Number(value)), {
+      message: 'mileage must be a valid number',
+    }),
+  transmission: z.enum(transmissionOptions).optional(),
   engineDisplacementL: z.string().optional(),
-  fuelType: z.enum(fuelTypeOptions),
+  fuelType: z.enum(fuelTypeOptions).optional(),
   contactPhone: z.string().optional(),
   contactWechat: z.string().optional(),
   contactEmail: z.string().optional(),
-  country: z.string().min(1, { message: 'country is required' }),
-  city: z.string().min(1, { message: 'city is required' }),
-  sellerType: z.enum(sellerTypeOptions),
-  sourcePlatform: z.enum(sourcePlatformOptions),
+  country: z.string().optional(),
+  city: z.string().optional(),
+  sellerType: z.enum(sellerTypeOptions).optional(),
+  sourcePlatform: z.enum(sourcePlatformOptions).optional(),
   parseSourceUrl: z.string().optional(),
-  sourceUrl: z.string().min(1, { message: 'sourceUrl is required' }),
-  postTitle: z.string().min(1, { message: 'postTitle is required' }),
-  postContent: z.string().min(1, { message: 'postContent is required' }),
+  sourceUrl: z.string().optional(),
+  postTitle: z.string().optional(),
+  postContent: z.string().optional(),
   imageUrlsText: z.string().optional(),
 })
 
@@ -88,6 +98,19 @@ type ParsedXhsCarFields = {
   sellerType?: string | null
   country?: string | null
   city?: string | null
+}
+
+const parseOptionalNumber = (value?: string) => {
+  if (!value || !value.trim()) {
+    return null
+  }
+  const parsed = Number(value)
+  return Number.isNaN(parsed) ? null : parsed
+}
+
+const parseOptionalText = (value?: string) => {
+  const text = value?.trim()
+  return text ? text : null
 }
 
 type XhsParseResponse = {
@@ -150,7 +173,7 @@ export default function AdminCarsFormPage() {
       year: String(carDetail.year ?? ''),
       manufacturer: carDetail.manufacturer || '',
       model: carDetail.model || '',
-      mileageKm: String(carDetail.mileageKm ?? ''),
+      mileageKm: carDetail.mileageKm === null || carDetail.mileageKm === undefined ? '' : String(carDetail.mileageKm),
       transmission: (carDetail.transmission as (typeof transmissionOptions)[number]) || TransmissionType.automatic,
       engineDisplacementL:
         carDetail.engineDisplacementL === null || carDetail.engineDisplacementL === undefined
@@ -201,25 +224,25 @@ export default function AdminCarsFormPage() {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const payload: CarCreationDTO = {
       price: Number(values.price),
-      currency: values.currency,
-      year: Number(values.year),
-      manufacturer: values.manufacturer.trim(),
-      model: values.model.trim(),
-      mileageKm: Number(values.mileageKm),
-      transmission: values.transmission,
+      currency: parseOptionalText(values.currency),
+      year: parseOptionalNumber(values.year),
+      manufacturer: parseOptionalText(values.manufacturer),
+      model: parseOptionalText(values.model),
+      mileageKm: parseOptionalNumber(values.mileageKm),
+      transmission: values.transmission ?? null,
       engineDisplacementL: values.engineDisplacementL?.trim() || null,
-      fuelType: values.fuelType,
+      fuelType: values.fuelType ?? null,
       contactPhone: values.contactPhone?.trim() || null,
       contactWechat: values.contactWechat?.trim() || null,
       contactEmail: values.contactEmail?.trim() || null,
-      country: values.country.trim(),
-      city: values.city.trim(),
-      sellerType: values.sellerType,
-      sourcePlatform: values.sourcePlatform,
+      country: parseOptionalText(values.country),
+      city: parseOptionalText(values.city),
+      sellerType: values.sellerType ?? null,
+      sourcePlatform: values.sourcePlatform ?? null,
       parseSourceUrl: values.parseSourceUrl?.trim() || null,
-      sourceUrl: values.sourceUrl.trim(),
-      postTitle: values.postTitle.trim(),
-      postContent: values.postContent.trim(),
+      sourceUrl: parseOptionalText(values.sourceUrl),
+      postTitle: parseOptionalText(values.postTitle),
+      postContent: parseOptionalText(values.postContent),
       imageUrls: parseImageUrls(values.imageUrlsText),
     }
 

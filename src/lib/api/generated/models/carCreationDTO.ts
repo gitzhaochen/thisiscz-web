@@ -5,36 +5,50 @@
  * Thisiscz 后端 API 文档
  * OpenAPI spec version: v1
  */
-import type { TransmissionType } from './transmissionType'
-import type { FuelType } from './fuelType'
-import type { SellerType } from './sellerType'
-import type { SourcePlatformType } from './sourcePlatformType'
+import type { CarCreationDTOTransmission } from './carCreationDTOTransmission'
+import type { CarCreationDTOFuelType } from './carCreationDTOFuelType'
+import type { CarCreationDTOSellerType } from './carCreationDTOSellerType'
+import type { CarCreationDTOSourcePlatform } from './carCreationDTOSourcePlatform'
 
 export interface CarCreationDTO {
   price?: number
-  currency?: string
-  year?: number
-  manufacturer?: string
-  model?: string
-  mileageKm?: number
-  transmission?: TransmissionType
+  /** @nullable */
+  currency?: string | null
+  /** @nullable */
+  year?: number | null
+  /** @nullable */
+  manufacturer?: string | null
+  /** @nullable */
+  model?: string | null
+  /** @nullable */
+  mileageKm?: number | null
+  /** @nullable */
+  transmission?: CarCreationDTOTransmission
   /** @nullable */
   engineDisplacementL?: string | null
-  fuelType?: FuelType
+  /** @nullable */
+  fuelType?: CarCreationDTOFuelType
   /** @nullable */
   contactPhone?: string | null
   /** @nullable */
   contactWechat?: string | null
   /** @nullable */
   contactEmail?: string | null
-  country?: string
-  city?: string
-  sellerType?: SellerType
-  sourcePlatform?: SourcePlatformType
+  /** @nullable */
+  country?: string | null
+  /** @nullable */
+  city?: string | null
+  /** @nullable */
+  sellerType?: CarCreationDTOSellerType
+  /** @nullable */
+  sourcePlatform?: CarCreationDTOSourcePlatform
   /** @nullable */
   parseSourceUrl?: string | null
-  sourceUrl?: string
-  postTitle?: string
-  postContent?: string
+  /** @nullable */
+  sourceUrl?: string | null
+  /** @nullable */
+  postTitle?: string | null
+  /** @nullable */
+  postContent?: string | null
   imageUrls?: string[]
 }

@@ -5,40 +5,55 @@
  * Thisiscz 后端 API 文档
  * OpenAPI spec version: v1
  */
-import type { TransmissionType } from './transmissionType'
-import type { FuelType } from './fuelType'
-import type { SellerType } from './sellerType'
+import type { CarDTOTransmission } from './carDTOTransmission'
+import type { CarDTOFuelType } from './carDTOFuelType'
+import type { CarDTOSellerType } from './carDTOSellerType'
 import type { CarStatus } from './carStatus'
-import type { SourcePlatformType } from './sourcePlatformType'
+import type { CarDTOSourcePlatform } from './carDTOSourcePlatform'
 
 export interface CarDTO {
-  publicId?: string
+  /** @nullable */
+  publicId?: string | null
   price?: number
-  currency?: string
-  year?: number
-  manufacturer?: string
-  model?: string
-  mileageKm?: number
-  transmission?: TransmissionType
+  /** @nullable */
+  currency?: string | null
+  /** @nullable */
+  year?: number | null
+  /** @nullable */
+  manufacturer?: string | null
+  /** @nullable */
+  model?: string | null
+  /** @nullable */
+  mileageKm?: number | null
+  /** @nullable */
+  transmission?: CarDTOTransmission
   /** @nullable */
   engineDisplacementL?: string | null
-  fuelType?: FuelType
+  /** @nullable */
+  fuelType?: CarDTOFuelType
   /** @nullable */
   contactPhone?: string | null
   /** @nullable */
   contactWechat?: string | null
   /** @nullable */
   contactEmail?: string | null
-  country?: string
-  city?: string
-  sellerType?: SellerType
+  /** @nullable */
+  country?: string | null
+  /** @nullable */
+  city?: string | null
+  /** @nullable */
+  sellerType?: CarDTOSellerType
   status?: CarStatus
-  sourcePlatform?: SourcePlatformType
+  /** @nullable */
+  sourcePlatform?: CarDTOSourcePlatform
   /** @nullable */
   parseSourceUrl?: string | null
-  sourceUrl?: string
-  postTitle?: string
-  postContent?: string
+  /** @nullable */
+  sourceUrl?: string | null
+  /** @nullable */
+  postTitle?: string | null
+  /** @nullable */
+  postContent?: string | null
   imageUrls?: string[]
   createdAt?: string
   /** @nullable */

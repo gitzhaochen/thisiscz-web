@@ -93,10 +93,10 @@ export default function AdminCarsPage() {
             >
               <div className="space-y-1">
                 <p className="font-medium">
-                  {car.postTitle} ({car.year}) - {car.manufacturer} {car.model}
+                  {car.postTitle || '-'} ({car.year ?? '-'}) - {car.manufacturer || '-'} {car.model || ''}
                 </p>
                 <p className="text-muted-foreground text-sm">
-                  {car.price} {car.currency} / {car.city}, {car.country} / status: {car.status}
+                  {car.price} {car.currency || '-'} / {car.city || '-'}, {car.country || '-'} / status: {car.status}
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -110,7 +110,7 @@ export default function AdminCarsPage() {
                   variant="destructive"
                   className="inline-flex items-center gap-1"
                   disabled={deleteCarPending || updateStatusPending}
-                  onClick={() => onDeleteCar(car.publicId!, car.postTitle)}
+                      onClick={() => onDeleteCar(car.publicId!, car.postTitle ?? undefined)}
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>

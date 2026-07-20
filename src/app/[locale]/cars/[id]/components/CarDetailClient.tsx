@@ -127,7 +127,7 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
             </p>
             <p>
               <span className="font-medium">公里数：</span>
-              {showValue(car.mileageKm)} km
+              {car.mileageKm ? `${car.mileageKm} km` : '-'}
             </p>
             <p>
               <span className="font-medium">年份：</span>

@@ -280,8 +280,8 @@ export default function PageCarsClient() {
                 <p className="line-clamp-1 text-sm font-semibold">{car.postTitle}</p>
                 <div className="flex items-center justify-between gap-1">
                   <div className="flex items-center gap-1">
-                    <span>{car.year}年</span>
-                    <span className="">{car.mileageKm}km</span>
+                    <span>{car.year ? `${car.year}年` : '-'}</span>
+                    <span>{car.mileageKm ? `${car.mileageKm}km` : '-'}</span>
                   </div>
                   <span className="font-semibold text-[#ef4444]">${car.price}</span>
                 </div>
