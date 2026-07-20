@@ -100,10 +100,13 @@ const extractTransmission = (text: string): ParsedCarFields['transmission'] => {
 }
 
 const extractEngineDisplacement = (text: string) => {
-  const value = text.match(/\b([0-9](?:\.[0-9])?)\s*(?:l|升)\b/i)?.[1]
+  const value = text.match(/\b([0-9](?:\.[0-9])?)\s*([lt]|升)\b/i)
   if (!value) return null
-  const parsed = Number(value)
-  return Number.isFinite(parsed) ? parsed : null
+  const num = value[1]
+  const unit = value[2]
+  if (!num) return null
+  if (!unit || unit === '升') return `${num}L`
+  return `${num}${unit.toUpperCase()}`
 }
 
 const extractFuelType = (text: string): ParsedCarFields['fuelType'] => {

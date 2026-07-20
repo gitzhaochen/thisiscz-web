@@ -21,7 +21,7 @@ export interface CarDTO {
   mileageKm?: number
   transmission?: TransmissionType
   /** @nullable */
-  engineDisplacementL?: number | null
+  engineDisplacementL?: string | null
   fuelType?: FuelType
   /** @nullable */
   contactPhone?: string | null

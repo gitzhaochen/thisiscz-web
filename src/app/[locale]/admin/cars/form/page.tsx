@@ -72,15 +72,6 @@ const parseImageUrls = (value: string | undefined) => {
     .filter(Boolean)
 }
 
-const parseOptionalNumber = (value: string | undefined) => {
-  if (!value || !value.trim()) {
-    return null
-  }
-
-  const parsed = Number(value)
-  return Number.isNaN(parsed) ? null : parsed
-}
-
 type ParsedXhsCarFields = {
   price?: number | null
   currency?: string | null
@@ -89,7 +80,7 @@ type ParsedXhsCarFields = {
   manufacturer?: string | null
   model?: string | null
   transmission?: string | null
-  engineDisplacementL?: number | null
+  engineDisplacementL?: string | null
   fuelType?: string | null
   contactPhone?: string | null
   contactWechat?: string | null
@@ -216,7 +207,7 @@ export default function AdminCarsFormPage() {
       model: values.model.trim(),
       mileageKm: Number(values.mileageKm),
       transmission: values.transmission,
-      engineDisplacementL: parseOptionalNumber(values.engineDisplacementL),
+      engineDisplacementL: values.engineDisplacementL?.trim() || null,
       fuelType: values.fuelType,
       contactPhone: values.contactPhone?.trim() || null,
       contactWechat: values.contactWechat?.trim() || null,
@@ -302,8 +293,8 @@ export default function AdminCarsFormPage() {
             shouldValidate: true,
           })
         }
-        if (typeof parsed.engineDisplacementL === 'number') {
-          form.setValue('engineDisplacementL', String(parsed.engineDisplacementL), {
+        if (typeof parsed.engineDisplacementL === 'string' && parsed.engineDisplacementL.trim()) {
+          form.setValue('engineDisplacementL', parsed.engineDisplacementL.trim(), {
             shouldDirty: true,
             shouldValidate: true,
           })
@@ -369,7 +360,18 @@ export default function AdminCarsFormPage() {
           <Input
             placeholder="https://www.xiaohongshu.com/..."
             value={xhsUrl}
-            onChange={(e) => setXhsUrl(e.target.value)}
+            onPaste={(e) => {
+              let text = e.clipboardData.getData('text')
+              text = text.trim()
+              // 使用正则提取以 http/https 开头的链接
+              const match = text.match(/https?:\/\/[^\s]+/)
+              if (match) {
+                setXhsUrl(match[0])
+              } else {
+                toast.error('请粘贴包含有效的小红书链接（以 http/https 开头）')
+                setXhsUrl('')
+              }
+            }}
           />
           <Button type="button" onClick={handleExtractFromXhs} disabled={isExtracting}>
             {isExtracting ? 'Parsing...' : 'Parse & Fill'}
@@ -586,7 +588,7 @@ export default function AdminCarsFormPage() {
             name="engineDisplacementL"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Engine displacement (L)</FormLabel>
+                <FormLabel>Engine displacement</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>

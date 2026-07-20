@@ -148,8 +148,7 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
             </p>
             <p>
               <span className="font-medium">排量：</span>
-              {car.engineDisplacementL ?? '-'}
-              {car.engineDisplacementL ? ' L' : ''}
+              {showValue(car.engineDisplacementL)}
             </p>
             <p>
               <span className="font-medium">燃油类型：</span>
