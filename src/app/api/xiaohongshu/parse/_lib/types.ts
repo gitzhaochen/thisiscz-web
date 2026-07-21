@@ -14,4 +14,5 @@ export type ParsedCarFields = {
   sellerType: 'individual' | 'dealer' | null
   country: string | null
   city: string | null
+  originalPostPublishedAt: string | null
 }

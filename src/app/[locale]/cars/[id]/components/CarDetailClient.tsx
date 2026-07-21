@@ -190,6 +190,10 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
               {formatDateTime(car.createdAt)}
             </p>
             <p>
+              <span className="font-medium">原贴发布时间：</span>
+              {formatDateTime(car.originalPostPublishedAt)}
+            </p>
+            <p>
               <span className="font-medium">数据来源：</span>
               {car.sourceUrl && (
                 <a

@@ -26,6 +26,11 @@ export const extractDetailTitle = (html: string) => {
   return match.replace(/<[^>]*>/g, '')
 }
 
+export const extractDateText = (html: string) => {
+  const match = html.match(/<span[^>]*class=["'][^"']*\bdate\b[^"']*["'][^>]*>([\s\S]*?)<\/span>/i)?.[1] || ''
+  return match.replace(/<[^>]*>/g, '')
+}
+
 export const extractImages = (html: string) => {
   const matches = [...html.matchAll(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["'][^>]*>/gi)]
   const urls = matches

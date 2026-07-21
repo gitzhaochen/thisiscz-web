@@ -285,5 +285,6 @@ export const extractParsedCarFields = (title: string, content: string): ParsedCa
     sellerType: extractSellerType(mergedText),
     country: extractCountry(mergedText),
     city: extractCity(mergedText),
+    originalPostPublishedAt: null,
   }
 }

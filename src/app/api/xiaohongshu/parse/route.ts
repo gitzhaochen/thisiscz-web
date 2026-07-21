@@ -1,6 +1,7 @@
 import { apiFetchServer } from '@/lib/apiFetch'
 import { extractParsedCarFields } from './_lib/car-fields'
-import { extractDetailTitle, extractImages, extractMeta, removeHashtagTopics, sanitizeText } from './_lib/html'
+import { extractDateText, extractDetailTitle, extractImages, extractMeta, removeHashtagTopics, sanitizeText } from './_lib/html'
+import { parseOriginalPostPublishedAt } from './_lib/post-date'
 import { NextRequest, NextResponse } from 'next/server'
 
 const ACCEPTED_HOSTS = ['xiaohongshu.com', 'xhslink.com', 'xhscdn.com']
@@ -60,8 +61,12 @@ export async function GET(request: NextRequest) {
     const finalUrl = response.url || parsed.toString()
     const title = getTitle(html)
     const content = getContent(html)
+    const dateText = sanitizeText(extractDateText(html))
     const imageUrls = extractImages(html)
-    const parsedFields = extractParsedCarFields(title, content)
+    const parsedFields = {
+      ...extractParsedCarFields(title, content),
+      originalPostPublishedAt: parseOriginalPostPublishedAt(dateText),
+    }
 
     return NextResponse.json({
       sourceUrl: finalUrl,

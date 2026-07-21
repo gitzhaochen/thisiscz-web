@@ -47,6 +47,8 @@ export interface CarCreationDTO {
   /** @nullable */
   sourceUrl?: string | null
   /** @nullable */
+  originalPostPublishedAt?: string | null
+  /** @nullable */
   postTitle?: string | null
   /** @nullable */
   postContent?: string | null

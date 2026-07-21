@@ -66,6 +66,7 @@ const formSchema = z.object({
   sourcePlatform: z.enum(sourcePlatformOptions).optional(),
   parseSourceUrl: z.string().optional(),
   sourceUrl: z.string().optional(),
+  originalPostPublishedAt: z.string().optional(),
   postTitle: z.string().optional(),
   postContent: z.string().optional(),
   imageUrlsText: z.string().optional(),
@@ -98,6 +99,7 @@ type ParsedXhsCarFields = {
   sellerType?: string | null
   country?: string | null
   city?: string | null
+  originalPostPublishedAt?: string | null
 }
 
 const parseOptionalNumber = (value?: string) => {
@@ -111,6 +113,23 @@ const parseOptionalNumber = (value?: string) => {
 const parseOptionalText = (value?: string) => {
   const text = value?.trim()
   return text ? text : null
+}
+
+const parseOptionalDateTime = (value?: string) => {
+  const text = value?.trim()
+  if (!text) return null
+  const date = new Date(text)
+  return Number.isNaN(date.getTime()) ? null : date.toISOString()
+}
+
+const formatDateTimeLocal = (value?: string | null) => {
+  if (!value) return ''
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return ''
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(
+    date.getMinutes(),
+  )}`
 }
 
 type XhsParseResponse = {
@@ -161,6 +180,7 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
       sourcePlatform: SourcePlatformType.xiaohongshu,
       parseSourceUrl: '',
       sourceUrl: '',
+      originalPostPublishedAt: '',
       postTitle: '',
       postContent: '',
       imageUrlsText: '',
@@ -199,6 +219,7 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
         (carDetail.sourcePlatform as (typeof sourcePlatformOptions)[number]) || SourcePlatformType.xiaohongshu,
       parseSourceUrl: carDetail.parseSourceUrl || '',
       sourceUrl: carDetail.sourceUrl || '',
+      originalPostPublishedAt: formatDateTimeLocal(carDetail.originalPostPublishedAt),
       postTitle: carDetail.postTitle || '',
       postContent: carDetail.postContent || '',
       imageUrlsText: (carDetail.imageUrls || []).join('\n'),
@@ -279,6 +300,7 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
       sourcePlatform: values.sourcePlatform ?? null,
       parseSourceUrl: values.parseSourceUrl?.trim() || null,
       sourceUrl: parseOptionalText(values.sourceUrl),
+      originalPostPublishedAt: parseOptionalDateTime(values.originalPostPublishedAt),
       postTitle: parseOptionalText(values.postTitle),
       postContent: parseOptionalText(values.postContent),
       imageUrls,
@@ -385,6 +407,12 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
         if (typeof parsed.city === 'string' && parsed.city.trim()) {
           form.setValue('city', parsed.city.trim(), { shouldDirty: true, shouldValidate: true })
         }
+        if (typeof parsed.originalPostPublishedAt === 'string' && parsed.originalPostPublishedAt.trim()) {
+          form.setValue('originalPostPublishedAt', formatDateTimeLocal(parsed.originalPostPublishedAt), {
+            shouldDirty: true,
+            shouldValidate: true,
+          })
+        }
         if (
           typeof parsed.sellerType === 'string' &&
           sellerTypeOptions.includes(parsed.sellerType as (typeof sellerTypeOptions)[number])
@@ -423,8 +451,8 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
             <Input
               placeholder="https://www.xiaohongshu.com/..."
               value={xhsUrl}
-              onPaste={(e) => {
-                let text = e.clipboardData.getData('text')
+              onChange={(e) => {
+                let text = e.target.value
                 text = text.trim()
                 // 使用正则提取以 http/https 开头的链接
                 const match = text.match(/https?:\/\/[^\s]+/)
@@ -682,6 +710,25 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
                   <Input {...field} />
                 </FormControl>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="originalPostPublishedAt"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Original post published at</FormLabel>
+                <FormControl>
+                  <Input
+                    type="datetime-local"
+                    value={field.value ?? ''}
+                    onChange={(event) => field.onChange(event.target.value)}
+                    onBlur={field.onBlur}
+                    name={field.name}
+                    ref={field.ref}
+                  />
+                </FormControl>
               </FormItem>
             )}
           />
