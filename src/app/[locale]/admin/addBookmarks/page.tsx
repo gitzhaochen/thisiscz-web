@@ -229,7 +229,7 @@ export default function AdminBookmarks() {
                             const filename = encodeURIComponent(file.name)
                             const filePath = `web/uploads/bookmarks/${filename}`
                             const fileType = encodeURIComponent(file.type || 'application/octet-stream')
-                            const response = await fetch(`/api/s3Upload?filePath=${filePath}&fileType=${fileType}`)
+                            const response = await fetch(`/api/upload-cdn?filePath=${filePath}&fileType=${fileType}`)
 
                             const data = await response.json()
                             const uploadResponse = await fetch(data.url, {

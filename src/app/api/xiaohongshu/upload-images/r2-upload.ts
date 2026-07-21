@@ -51,9 +51,16 @@ const createR2Client = () => {
 const MAX_IMAGE_BYTES = Number(process.env.XHS_PARSE_MAX_IMAGE_BYTES || 10 * 1024 * 1024)
 const MAX_UPLOAD_IMAGES = 5
 
-export const uploadImagesToR2 = async (imageUrls: string[], sourceUrl: string, targetUrl: string) => {
+type UploadImagesToR2Options = {
+  parseSourceUrl: string
+  keyPrefix?: string
+}
+
+export const uploadImagesToR2 = async (imageUrls: string[], options: UploadImagesToR2Options) => {
   if (!imageUrls.length) return imageUrls
   const limitedImageUrls = imageUrls.slice(0, MAX_UPLOAD_IMAGES)
+  const parseSourceUrl = options.parseSourceUrl
+  const keyPrefix = (options.keyPrefix || 'web/uploads/cars/xiaohongshu').replace(/^\/+|\/+$/g, '')
 
   const bucket = getRequiredEnv('APP_CLOUDFLARE_R2_BUCKET_NAME')
   const publicPrefix = getRequiredEnv('NEXT_PUBLIC_CLOUDFLARE_R2_ASSETS_PREFIX').replace(/\/$/, '')
@@ -67,7 +74,7 @@ export const uploadImagesToR2 = async (imageUrls: string[], sourceUrl: string, t
           headers: {
             'User-Agent':
               'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36',
-            Referer: sourceUrl,
+            Referer: parseSourceUrl,
           },
           cache: 'no-store',
         })
@@ -91,8 +98,8 @@ export const uploadImagesToR2 = async (imageUrls: string[], sourceUrl: string, t
 
         const contentType = response.headers.get('content-type') || 'application/octet-stream'
         const extension = inferExtension(url, contentType)
-        const hash = crypto.createHash('sha1').update(`${targetUrl}`).digest('hex').slice(0, 16)
-        const key = `web/uploads/cars/xiaohongshu/${hash}_${index + 1}.${extension}`
+        const hash = crypto.createHash('sha1').update(`${parseSourceUrl}`).digest('hex').slice(0, 16)
+        const key = `${keyPrefix}/${hash}_${index + 1}.${extension}`
 
         await r2Client.send(
           new PutObjectCommand({

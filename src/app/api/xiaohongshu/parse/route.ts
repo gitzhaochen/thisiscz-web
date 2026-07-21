@@ -1,7 +1,6 @@
 import { apiFetchServer } from '@/lib/apiFetch'
 import { extractParsedCarFields } from './_lib/car-fields'
 import { extractDetailTitle, extractImages, extractMeta, removeHashtagTopics, sanitizeText } from './_lib/html'
-import { uploadImagesToR2 } from './_lib/r2-upload'
 import { NextRequest, NextResponse } from 'next/server'
 
 const ACCEPTED_HOSTS = ['xiaohongshu.com', 'xhslink.com', 'xhscdn.com']
@@ -25,13 +24,6 @@ const getContent = (html: string) => {
 
 export async function GET(request: NextRequest) {
   try {
-    // 限制为 admin，避免被滥用成开放抓取代理
-    const currentUser = await apiFetchServer('/api/users/me')
-    const role = String(currentUser?.role || '').toLowerCase()
-    if (role !== 'admin') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
-
     const targetUrl = request.nextUrl.searchParams.get('url')?.trim()
     if (!targetUrl) {
       return NextResponse.json({ error: 'url is required' }, { status: 400 })
@@ -68,8 +60,7 @@ export async function GET(request: NextRequest) {
     const finalUrl = response.url || parsed.toString()
     const title = getTitle(html)
     const content = getContent(html)
-    const extractedImageUrls = extractImages(html)
-    const imageUrls = await uploadImagesToR2(extractedImageUrls, finalUrl, targetUrl)
+    const imageUrls = extractImages(html)
     const parsedFields = extractParsedCarFields(title, content)
 
     return NextResponse.json({

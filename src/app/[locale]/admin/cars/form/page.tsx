@@ -122,6 +122,11 @@ type XhsParseResponse = {
   parsedFields?: ParsedXhsCarFields
 }
 
+type XhsUploadImagesResponse = {
+  error?: string
+  imageUrls?: string[]
+}
+
 type AdminCarsFormPageProps = {
   mode?: 'edit' | 'parse'
 }
@@ -133,6 +138,7 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
   const isEdit = mode === 'edit' && !!publicId
   const [xhsUrl, setXhsUrl] = useState('')
   const [isExtracting, setIsExtracting] = useState(false)
+  const [isUploadingImages, setIsUploadingImages] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -224,7 +230,36 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
     },
   })
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const inputImageUrls = parseImageUrls(values.imageUrlsText)
+    let imageUrls = inputImageUrls
+    if (!isEdit && mode === 'parse' && inputImageUrls.length > 0) {
+      setIsUploadingImages(true)
+      try {
+        const response = await fetch('/api/xiaohongshu/upload-images', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            imageUrls: inputImageUrls,
+            parseSourceUrl: parseOptionalText(values.parseSourceUrl),
+          }),
+        })
+        const result = (await response.json()) as XhsUploadImagesResponse
+        if (!response.ok) {
+          toast.error(result?.error || 'Image upload failed')
+          return
+        }
+        imageUrls = Array.isArray(result.imageUrls) ? result.imageUrls : inputImageUrls
+      } catch {
+        toast.error('Image upload failed')
+        return
+      } finally {
+        setIsUploadingImages(false)
+      }
+    }
+
     const payload: CarCreationDTO = {
       price: Number(values.price),
       currency: parseOptionalText(values.currency),
@@ -246,7 +281,7 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
       sourceUrl: parseOptionalText(values.sourceUrl),
       postTitle: parseOptionalText(values.postTitle),
       postContent: parseOptionalText(values.postContent),
-      imageUrls: parseImageUrls(values.imageUrlsText),
+      imageUrls,
     }
 
     if (isEdit) {
@@ -735,8 +770,14 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
           </div>
 
           <div className="md:col-span-2">
-            <Button type="submit" disabled={createPending || updatePending}>
-              {createPending || updatePending ? 'Saving...' : isEdit ? 'Update car source' : 'Create parsed car source'}
+            <Button type="submit" disabled={createPending || updatePending || isUploadingImages}>
+              {isUploadingImages
+                ? 'Uploading images...'
+                : createPending || updatePending
+                  ? 'Saving...'
+                  : isEdit
+                    ? 'Update car source'
+                    : 'Create parsed car source'}
             </Button>
           </div>
         </form>
