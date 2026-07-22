@@ -62,6 +62,7 @@ export default function PageCarsClient() {
     maxYear: maxYear ? Number(maxYear) : undefined,
     city: city || undefined,
     fuelType: fuelType === 'all' ? undefined : (fuelType as FuelType),
+    sortType,
   })
 
   const handleFilterApply = (formData: FormData) => {
@@ -147,21 +148,7 @@ export default function PageCarsClient() {
     router.push(`${pathname}?${params.toString()}`)
   }
 
-  const items = [...(data?.items || [])]
-  if (sortType === 'priceLow') {
-    items.sort((a, b) => {
-      const left = a.price || 0
-      const right = b.price || 0
-      return left - right
-    })
-  } else {
-    items.sort((a, b) => {
-      const left = new Date(a.originalPostPublishedAt || a.createdAt || '').getTime()
-      const right = new Date(b.originalPostPublishedAt || b.createdAt || '').getTime()
-      return right - left
-    })
-  }
-
+  const items = data?.items || []
   const totalPages = Math.ceil((data?.totalCount || 0) / pageSize)
 
   return (

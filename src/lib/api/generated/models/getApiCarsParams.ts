@@ -27,6 +27,10 @@ export type GetApiCarsParams = {
   maxYear?: number
   minMileageKm?: number
   maxMileageKm?: number
+  /**
+   * latest: OriginalPostPublishedAt desc; priceLow: Price asc
+   */
+  sortType?: string
   page?: number
   pageSize?: number
 }
