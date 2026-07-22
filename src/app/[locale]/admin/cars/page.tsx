@@ -113,7 +113,7 @@ export default function AdminCarsPage() {
                 <TableHead>年份</TableHead>
                 <TableHead>里程</TableHead>
                 <TableHead>品牌/车型</TableHead>
-                <TableHead>创建时间</TableHead>
+                <TableHead>原贴发布时间</TableHead>
                 <TableHead className="w-[340px]">操作</TableHead>
               </TableRow>
             </TableHeader>
@@ -126,7 +126,8 @@ export default function AdminCarsPage() {
                     typeof car.mileageKm === 'number' && car.mileageKm > 0
                       ? `${(car.mileageKm / 10000).toFixed(1).replace(/\.0$/, '')}万公里`
                       : '-'
-                  const createdAt = car.createdAt ? new Date(car.createdAt).toLocaleString() : '-'
+                  const publishedAt = car.originalPostPublishedAt
+                  const originalPostPublishedAt = publishedAt ? new Date(publishedAt).toLocaleString() : '-'
                   const formattedPrice = typeof car.price === 'number' ? car.price.toLocaleString('en-NZ') : '-'
 
                   return (
@@ -170,7 +171,7 @@ export default function AdminCarsPage() {
                       <TableCell>
                         {car.manufacturer || '-'} {car.model || ''}
                       </TableCell>
-                      <TableCell>{createdAt}</TableCell>
+                      <TableCell>{originalPostPublishedAt}</TableCell>
                       <TableCell className="w-[340px]">
                         <div className="flex flex-nowrap gap-2 whitespace-nowrap">
                           <Link href={`/admin/cars/form?id=${car.publicId}`}>

@@ -156,8 +156,8 @@ export default function PageCarsClient() {
     })
   } else {
     items.sort((a, b) => {
-      const left = new Date(a.createdAt || '').getTime()
-      const right = new Date(b.createdAt || '').getTime()
+      const left = new Date(a.originalPostPublishedAt || a.createdAt || '').getTime()
+      const right = new Date(b.originalPostPublishedAt || b.createdAt || '').getTime()
       return right - left
     })
   }

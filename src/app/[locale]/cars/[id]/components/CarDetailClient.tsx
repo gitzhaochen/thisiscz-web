@@ -53,7 +53,8 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
   }
   const formatDateTime = (value?: string | null) => {
     if (!value) return '-'
-    const date = new Date(value)
+    const normalized = /(?:z|[+-]\d{2}:?\d{2})$/i.test(value) ? value : `${value}Z`
+    const date = new Date(normalized)
     if (Number.isNaN(date.getTime())) return value
     return date.toLocaleString()
   }
@@ -184,10 +185,6 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
             <p>
               <span className="font-medium">邮箱：</span>
               {showValue(car.contactEmail)}
-            </p>
-            <p>
-              <span className="font-medium">创建时间：</span>
-              {formatDateTime(car.createdAt)}
             </p>
             <p>
               <span className="font-medium">原贴发布时间：</span>
