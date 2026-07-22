@@ -52,6 +52,7 @@ const MAX_IMAGE_BYTES = Number(process.env.XHS_PARSE_MAX_IMAGE_BYTES || 10 * 102
 const MAX_UPLOAD_IMAGES = 5
 
 type UploadImagesToR2Options = {
+  sourceUrl: string
   parseSourceUrl: string
   keyPrefix?: string
 }
@@ -59,6 +60,7 @@ type UploadImagesToR2Options = {
 export const uploadImagesToR2 = async (imageUrls: string[], options: UploadImagesToR2Options) => {
   if (!imageUrls.length) return imageUrls
   const limitedImageUrls = imageUrls.slice(0, MAX_UPLOAD_IMAGES)
+  const sourceUrl = options.sourceUrl
   const parseSourceUrl = options.parseSourceUrl
   const keyPrefix = (options.keyPrefix || 'web/uploads/cars/xiaohongshu').replace(/^\/+|\/+$/g, '')
 
@@ -74,7 +76,7 @@ export const uploadImagesToR2 = async (imageUrls: string[], options: UploadImage
           headers: {
             'User-Agent':
               'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36',
-            Referer: parseSourceUrl,
+            Referer: sourceUrl,
           },
           cache: 'no-store',
         })

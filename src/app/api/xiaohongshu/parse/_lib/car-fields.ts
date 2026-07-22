@@ -212,6 +212,15 @@ const stripLeadingManufacturerAlias = (text: string, manufacturer: string) => {
     Kia: ['kia', '起亚'],
     Hyundai: ['hyundai', '现代'],
     Lexus: ['lexus', '雷克萨斯'],
+    'Mini Cooper': ['mini cooper', '迷你库伯'],
+    Jaguar: ['jaguar', '捷豹'],
+    'Land Rover': ['land rover', '路虎'],
+    Peugeot: ['peugeot', '标致'],
+    Citroen: ['citroen', '雪铁龙'],
+    Renault: ['renault', '雷诺'],
+    Seat: ['seat', '西亚特'],
+    Skoda: ['skoda', '斯柯达'],
+    Volvo: ['volvo', '沃尔沃'],
   }
 
   const aliases = aliasMap[manufacturer] || [manufacturer.toLowerCase()]
@@ -242,6 +251,15 @@ const extractManufacturerAndModel = (mergedText: string): Pick<ParsedCarFields, 
     { value: 'Kia', pattern: /\bkia\b/i },
     { value: 'Hyundai', pattern: /\bhyundai\b/i },
     { value: 'Lexus', pattern: /(lexus|雷克萨斯)/i },
+    { value: 'Mini Cooper', pattern: /(mini cooper|迷你库伯)/i },
+    { value: 'Jaguar', pattern: /(jaguar|捷豹)/i },
+    { value: 'Land Rover', pattern: /(land rover|路虎)/i },
+    { value: 'Peugeot', pattern: /(peugeot|标致)/i },
+    { value: 'Citroen', pattern: /(citroen|雪铁龙)/i },
+    { value: 'Renault', pattern: /(renault|雷诺)/i },
+    { value: 'Seat', pattern: /(seat|西亚特)/i },
+    { value: 'Skoda', pattern: /(skoda|斯柯达)/i },
+    { value: 'Volvo', pattern: /(volvo|沃尔沃)/i },
   ] as const
 
   for (const item of manufacturerMatchers) {

@@ -1,7 +1,4 @@
-const getTimezoneByText = (text: string) => {
-  if (/(新西兰|奥克兰)/.test(text)) return 'Pacific/Auckland'
-  return 'Asia/Shanghai'
-}
+const NZ_TIMEZONE = 'Pacific/Auckland'
 
 const getTimezoneOffsetMs = (date: Date, timeZone: string) => {
   const timeZoneName =
@@ -21,15 +18,12 @@ const getTimezoneOffsetMs = (date: Date, timeZone: string) => {
   return sign * (hours * 60 + minutes) * 60 * 1000
 }
 
-const getZonedParts = (date: Date, timeZone: string) => {
+const getZonedDateParts = (date: Date, timeZone: string) => {
   const parts = new Intl.DateTimeFormat('en-CA', {
     timeZone,
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
   }).formatToParts(date)
 
   const pick = (type: string) => Number(parts.find((part) => part.type === type)?.value || '0')
@@ -37,8 +31,6 @@ const getZonedParts = (date: Date, timeZone: string) => {
     year: pick('year'),
     month: pick('month'),
     day: pick('day'),
-    hour: pick('hour'),
-    minute: pick('minute'),
   }
 }
 
@@ -53,6 +45,25 @@ const zonedDateTimeToUtc = (
   const guessUtc = new Date(Date.UTC(year, month - 1, day, hour, minute, 0, 0))
   const offsetMs = getTimezoneOffsetMs(guessUtc, timeZone)
   return new Date(guessUtc.getTime() - offsetMs)
+}
+
+const getDayAnchorUtc = (now: Date, timeZone: string, minusDays: number) => {
+  const parts = getZonedDateParts(now, timeZone)
+  const dayAnchor = new Date(Date.UTC(parts.year, parts.month - 1, parts.day, 0, 0, 0, 0))
+  dayAnchor.setUTCDate(dayAnchor.getUTCDate() - minusDays)
+  return dayAnchor
+}
+
+const normalizeHour24 = (rawHour: number, meridiem?: string) => {
+  let hour = rawHour
+  if (/下午|晚上|pm/i.test(meridiem || '')) {
+    if (hour < 12) hour += 12
+  } else if (/凌晨|上午|am/i.test(meridiem || '')) {
+    if (hour === 12) hour = 0
+  } else if (/中午/.test(meridiem || '')) {
+    if (hour < 11) hour += 12
+  }
+  return Math.max(0, Math.min(23, hour))
 }
 
 export const parseOriginalPostPublishedAt = (rawText: string, now = new Date()) => {
@@ -75,15 +86,14 @@ export const parseOriginalPostPublishedAt = (rawText: string, now = new Date()) 
     }
   }
 
-  const timeZone = getTimezoneByText(text)
-  const nowParts = getZonedParts(now, timeZone)
+  const timeZone = NZ_TIMEZONE
+  const nowDateParts = getZonedDateParts(now, timeZone)
 
-  const yesterdayMatch = text.match(/昨天\s*(\d{1,2})[:：](\d{2})/)
+  const yesterdayMatch = text.match(/昨天\s*(凌晨|上午|中午|下午|晚上|am|pm)?\s*(\d{1,2})[:：](\d{2})/i)
   if (yesterdayMatch) {
-    const dayAnchor = new Date(Date.UTC(nowParts.year, nowParts.month - 1, nowParts.day, 0, 0, 0, 0))
-    dayAnchor.setUTCDate(dayAnchor.getUTCDate() - 1)
-    const hour = Number(yesterdayMatch[1] || '0')
-    const minute = Number(yesterdayMatch[2] || '0')
+    const dayAnchor = getDayAnchorUtc(now, timeZone, 1)
+    const hour = normalizeHour24(Number(yesterdayMatch[2] || '0'), yesterdayMatch[1])
+    const minute = Number(yesterdayMatch[3] || '0')
     const date = zonedDateTimeToUtc(
       dayAnchor.getUTCFullYear(),
       dayAnchor.getUTCMonth() + 1,
@@ -99,8 +109,7 @@ export const parseOriginalPostPublishedAt = (rawText: string, now = new Date()) 
   if (daysAgoMatch) {
     const days = Number(daysAgoMatch[1] || '0')
     if (Number.isFinite(days) && days >= 0) {
-      const dayAnchor = new Date(Date.UTC(nowParts.year, nowParts.month - 1, nowParts.day, 0, 0, 0, 0))
-      dayAnchor.setUTCDate(dayAnchor.getUTCDate() - days)
+      const dayAnchor = getDayAnchorUtc(now, timeZone, days)
       const date = zonedDateTimeToUtc(
         dayAnchor.getUTCFullYear(),
         dayAnchor.getUTCMonth() + 1,
@@ -113,17 +122,21 @@ export const parseOriginalPostPublishedAt = (rawText: string, now = new Date()) 
     }
   }
 
-  const monthDayMatch = text.match(/(\d{1,2})[-/.月](\d{1,2})/)
+  const monthDayMatch = text.match(
+    /(\d{1,2})[-/.月](\d{1,2})(?:日)?(?:\s*(凌晨|上午|中午|下午|晚上|am|pm)?\s*(\d{1,2})[:：](\d{2}))?/i,
+  )
   if (monthDayMatch) {
     const month = Number(monthDayMatch[1] || '0')
     const day = Number(monthDayMatch[2] || '0')
+    const hour = monthDayMatch[4] ? normalizeHour24(Number(monthDayMatch[4]), monthDayMatch[3]) : 0
+    const minute = monthDayMatch[5] ? Number(monthDayMatch[5]) : 0
     if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
-      let year = nowParts.year
-      let date = zonedDateTimeToUtc(year, month, day, 0, 0, timeZone)
+      let year = nowDateParts.year
+      let date = zonedDateTimeToUtc(year, month, day, hour, minute, timeZone)
       // 处理跨年：如当前年该日期在未来太多，回退一年
       if (date.getTime() > now.getTime() + 24 * 60 * 60 * 1000) {
         year -= 1
-        date = zonedDateTimeToUtc(year, month, day, 0, 0, timeZone)
+        date = zonedDateTimeToUtc(year, month, day, hour, minute, timeZone)
       }
       return date.toISOString()
     }

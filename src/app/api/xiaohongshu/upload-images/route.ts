@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 type UploadImagesRequest = {
   imageUrls?: string[]
+  sourceUrl?: string
   parseSourceUrl?: string
 }
 
@@ -18,7 +19,11 @@ export async function POST(request: NextRequest) {
 
     const body = (await request.json()) as UploadImagesRequest
     const imageUrls = Array.isArray(body?.imageUrls) ? body.imageUrls.filter((x) => typeof x === 'string') : []
+    const sourceUrl = (body?.sourceUrl || '').trim()
     const parseSourceUrl = (body?.parseSourceUrl || '').trim()
+    if (!sourceUrl) {
+      return NextResponse.json({ error: 'sourceUrl is required' }, { status: 400 })
+    }
     if (!parseSourceUrl) {
       return NextResponse.json({ error: 'parseSourceUrl is required' }, { status: 400 })
     }
@@ -30,6 +35,7 @@ export async function POST(request: NextRequest) {
     }
 
     const uploaded = await uploadImagesToR2(parsedImageUrls, {
+      sourceUrl,
       parseSourceUrl,
       keyPrefix: 'web/uploads/cars/xiaohongshu',
     })

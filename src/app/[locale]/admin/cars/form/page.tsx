@@ -124,7 +124,11 @@ const parseOptionalDateTime = (value?: string) => {
 
 const formatDateTimeLocal = (value?: string | null) => {
   if (!value) return ''
-  const date = new Date(value)
+  // 后端 DateTime 在某些情况下会返回不带时区后缀的字符串（如 2026-07-22T03:37:00），
+  // 前端会被当作“本地时间”解析，导致与带 Z 的 UTC 字符串显示不一致。
+  // 这里统一按 UTC 语义解析：无时区后缀时补 Z。
+  const normalized = /(?:z|[+-]\d{2}:?\d{2})$/i.test(value) ? value : `${value}Z`
+  const date = new Date(normalized)
   if (Number.isNaN(date.getTime())) return ''
   const pad = (n: number) => String(n).padStart(2, '0')
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(
@@ -264,6 +268,7 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
           },
           body: JSON.stringify({
             imageUrls: inputImageUrls,
+            sourceUrl: parseOptionalText(values.sourceUrl),
             parseSourceUrl: parseOptionalText(values.parseSourceUrl),
           }),
         })
