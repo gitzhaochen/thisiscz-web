@@ -1,10 +1,17 @@
 import { apiFetchServer } from '@/lib/apiFetch'
 import { extractParsedCarFields } from './_lib/car-fields'
-import { extractDateText, extractDetailTitle, extractImages, extractMeta, removeHashtagTopics, sanitizeText } from './_lib/html'
+import {
+  extractDateText,
+  extractDetailTitle,
+  extractImages,
+  extractMeta,
+  removeHashtagTopics,
+  sanitizeText,
+} from './_lib/html'
 import { parseOriginalPostPublishedAt } from './_lib/post-date'
 import { NextRequest, NextResponse } from 'next/server'
 
-const ACCEPTED_HOSTS = ['xiaohongshu.com', 'xhslink.com', 'xhscdn.com']
+const ACCEPTED_HOSTS = ['xiaohongshu.com', 'xhslink.com', 'xhscdn.com', 'xhslink.cn']
 
 const getTitle = (html: string) => {
   return (
