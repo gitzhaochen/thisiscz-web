@@ -155,12 +155,15 @@ export default function AdminCarsPage() {
                             href={car.sourceUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 font-medium hover:underline"
+                            className="block truncate font-medium hover:underline"
+                            title={car.postTitle || undefined}
                           >
-                            <span className="line-clamp-2">{car.postTitle || '-'}</span>
+                            {car.postTitle || '-'}
                           </a>
                         ) : (
-                          <p className="line-clamp-2 font-medium">{car.postTitle || '-'}</p>
+                          <p className="truncate font-medium" title={car.postTitle || undefined}>
+                            {car.postTitle || '-'}
+                          </p>
                         )}
                       </TableCell>
                       <TableCell className="font-semibold text-[#ef4444] tabular-nums">
