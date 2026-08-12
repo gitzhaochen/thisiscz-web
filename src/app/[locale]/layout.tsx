@@ -42,38 +42,33 @@ export default async function LocaleLayout({ children, params }: Props) {
   setRequestLocale(locale)
 
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <head>
-        <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_API_BASE_URL} />
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-WXNH2RJ7N7" strategy="afterInteractive" />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-WXNH2RJ7N7');
-          `}
-        </Script>
-        <Script id="crisp-chat" type="text/javascript" strategy="afterInteractive">
-          {`
-            window.$crisp=[];window.CRISP_WEBSITE_ID="860f0fe8-6635-4118-9b68-a8f12ec0bd6c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
-          `}
-        </Script>
-      </head>
-      <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <NextIntlClientProvider>
-            <QueryClientProvider>
-              <Suspense fallback={<div />}>
-                <AppInit />
-                <LayoutHeader />
-                {children}
-              </Suspense>
-            </QueryClientProvider>
-            <Toaster />
-          </NextIntlClientProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+    <>
+      <Script src="https://www.googletagmanager.com/gtag/js?id=G-WXNH2RJ7N7" strategy="afterInteractive" />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-WXNH2RJ7N7');
+        `}
+      </Script>
+      <Script id="crisp-chat" type="text/javascript" strategy="afterInteractive">
+        {`
+          window.$crisp=[];window.CRISP_WEBSITE_ID="860f0fe8-6635-4118-9b68-a8f12ec0bd6c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
+        `}
+      </Script>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <NextIntlClientProvider>
+          <QueryClientProvider>
+            <Suspense fallback={<div />}>
+              <AppInit />
+              <LayoutHeader />
+              <div lang={locale}>{children}</div>
+            </Suspense>
+          </QueryClientProvider>
+          <Toaster />
+        </NextIntlClientProvider>
+      </ThemeProvider>
+    </>
   )
 }

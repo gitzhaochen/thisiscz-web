@@ -19,7 +19,70 @@
     "nzSchools": "NZ学校",
     "nzRedNoteCars": "NZ小红书二手车",
     "resume": "简历",
-    "aiTalk": "AI聊天"
+    "aiTalk": "AI聊天",
+    "mathMotion": "动画数学"
+  },
+  "PageMathMotion": {
+    "seoTitle": "动画数学｜交互式数学公式推导",
+    "seoDescription": "通过可拖拽、可调参数的动画理解圆的周长、面积、扇形面积与弧长公式。",
+    "eyebrow": "看得见的数学",
+    "title": "动画数学",
+    "description": "拖动图形、修改数值，让公式从静态符号变成可观察、可验证的推导过程。",
+    "categoryCircle": "圆",
+    "topicNavigation": "圆的知识点",
+    "topics": {
+      "circleFormulas": "圆的周长和面积",
+      "sectorArea": "扇形的面积",
+      "arcLength": "弧长"
+    },
+    "circleFormulas": {
+      "title": "圆的周长和面积",
+      "subtitle": "把圆周展开是一条长为 2πr 的线；把圆等分成许多扇形并上下交错排列，会拼成底为 πr、高为 r 的近似长方形。",
+      "radius": "半径 r",
+      "unit": "单位",
+      "unfold": "周长展开图",
+      "unfoldArea": "面积展开图",
+      "restore": "还原展开图",
+      "restoreArea": "还原展开图",
+      "circumference": "圆的周长",
+      "area": "圆的面积",
+      "hint": "周长：圆滚动一周，滚过的轨迹长就是 2πr。面积：扇形一块块交错拼起来，趋近底为 πr、高为 r 的长方形，S = πr × r = πr²。",
+      "diagramLabel": "圆周滚动拉直与扇形拼成长方形的动画推导",
+      "circumferenceUnfolded": "圆滚动一周，周长被拉直",
+      "areaUnfolded": "扇形逐块拼成近似长方形",
+      "dragInstruction": "拖动橙色控制点改变半径"
+    },
+    "sectorArea": {
+      "title": "扇形的面积",
+      "subtitle": "扇形占整个圆的比例等于圆心角占 360° 的比例，因此面积也具有相同的比例关系。",
+      "centralAngle": "圆心角 θ",
+      "radius": "半径 r",
+      "unit": "单位",
+      "rearrange": "切分并重排",
+      "restore": "还原扇形",
+      "proportion": "占整圆的比例",
+      "sectorArea": "扇形面积",
+      "hint": "当 θ = 360° 时就是完整的圆；当 θ = 180° 时面积恰好是圆面积的一半。",
+      "diagramLabel": "可拖拽调整圆心角的扇形面积动画",
+      "dragInstruction": "拖动橙色控制点改变圆心角",
+      "rearrangedShape": "小扇形交错排列",
+      "baseLabel": "底边随弧长变化"
+    },
+    "arcLength": {
+      "title": "弧长",
+      "subtitle": "圆心角为 θ 的弧占完整圆周的 θ/360°，因此弧长就是这个比例乘以圆的周长。",
+      "centralAngle": "圆心角 θ",
+      "radius": "半径 r",
+      "unit": "单位",
+      "straighten": "拉直弧线",
+      "restore": "还原弧线",
+      "fullCircumference": "完整圆周",
+      "arcLength": "弧长",
+      "hint": "同一半径下，圆心角扩大几倍，弧长也扩大几倍；同一角度下，半径扩大几倍，弧长同样扩大几倍。",
+      "diagramLabel": "可拖拽调整圆心角并拉直弧线的动画",
+      "straightenedArc": "弧线拉直后的实际长度",
+      "dragInstruction": "沿圆周拖动橙色控制点"
+    }
   },
   "PageCars": {
     "title": "小红书个人二手车",

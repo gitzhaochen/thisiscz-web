@@ -19,7 +19,70 @@
     "nzSchools": "NZ Schools",
     "nzRedNoteCars": "NZ RedNote Cars",
     "resume": "Resume",
-    "aiTalk": "AiTalk"
+    "aiTalk": "AiTalk",
+    "mathMotion": "Math Motion"
+  },
+  "PageMathMotion": {
+    "seoTitle": "Math Motion | Interactive Formula Derivations",
+    "seoDescription": "Explore circle circumference, area, sector area and arc length through draggable, parameter-driven animations.",
+    "eyebrow": "Math you can see",
+    "title": "Math Motion",
+    "description": "Drag the diagrams and change their values to turn static formulas into derivations you can observe and verify.",
+    "categoryCircle": "Circle",
+    "topicNavigation": "Circle topics",
+    "topics": {
+      "circleFormulas": "Deriving circumference and area",
+      "sectorArea": "Deriving the sector area formula",
+      "arcLength": "Deriving the arc length formula"
+    },
+    "circleFormulas": {
+      "title": "Deriving circumference and area",
+      "subtitle": "Unrolling the circumference gives a line of length 2πr. Dividing the circle into equal sectors and alternating them forms an approximate rectangle with base πr and height r.",
+      "radius": "Radius r",
+      "unit": "units",
+      "unfold": "Play circumference unroll",
+      "unfoldArea": "Play area assembly",
+      "restore": "Restore circle",
+      "restoreArea": "Restore area unfold",
+      "circumference": "Circumference",
+      "area": "Area",
+      "hint": "Circumference: rolling the circle once traces a path of length 2πr. Area: sectors assemble piece by piece into a near-rectangle with base πr and height r, so S = πr × r = πr².",
+      "diagramLabel": "Animated circle rolling and sector-to-rectangle assembly",
+      "circumferenceUnfolded": "The circle rolls once and straightens its circumference",
+      "areaUnfolded": "Sectors assemble into a near-rectangle",
+      "dragInstruction": "Drag the orange handle to change the radius"
+    },
+    "sectorArea": {
+      "title": "Deriving the sector area formula",
+      "subtitle": "A sector occupies the same fraction of a circle as its central angle occupies of 360°, so its area follows the same proportion.",
+      "centralAngle": "Central angle θ",
+      "radius": "Radius r",
+      "unit": "units",
+      "rearrange": "Slice and rearrange",
+      "restore": "Restore sector",
+      "proportion": "Fraction of the circle",
+      "sectorArea": "Sector area",
+      "hint": "At θ = 360° the sector is a complete circle; at θ = 180° its area is exactly half of the circle.",
+      "diagramLabel": "A draggable sector area derivation",
+      "dragInstruction": "Drag the orange handle to change the angle",
+      "rearrangedShape": "Alternating small sectors",
+      "baseLabel": "Base changes with arc length"
+    },
+    "arcLength": {
+      "title": "Deriving the arc length formula",
+      "subtitle": "An arc with central angle θ occupies θ/360° of a complete circumference, so its length is that fraction of the circumference.",
+      "centralAngle": "Central angle θ",
+      "radius": "Radius r",
+      "unit": "units",
+      "straighten": "Straighten the arc",
+      "restore": "Restore the arc",
+      "fullCircumference": "Full circumference",
+      "arcLength": "Arc length",
+      "hint": "For a fixed radius, multiplying the angle multiplies the arc length by the same amount. The same relationship holds between radius and arc length.",
+      "diagramLabel": "A draggable arc that can be straightened",
+      "straightenedArc": "The arc's straightened length",
+      "dragInstruction": "Drag the orange handle around the circle"
+    }
   },
   "PageCars": {
     "title": "NZ RedNote Cars",
