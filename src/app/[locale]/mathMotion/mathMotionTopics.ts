@@ -70,24 +70,24 @@ export const mathMotionCatalog: MathMotionCatalogCategory[] = [
     id: 'square',
     label: '正方形',
     topics: [
-      { id: 'square-formula', label: '正方形的周长和面积', componentName: 'SquareFormulaTopic' },
       { id: 'square-properties', label: '正方形的性质', componentName: 'SquarePropertiesTopic' },
+      { id: 'square-formula', label: '正方形的周长和面积', componentName: 'SquareFormulaTopic' },
     ],
   },
   {
     id: 'rectangle',
     label: '长方形',
     topics: [
-      { id: 'rectangle-formula', label: '长方形的周长和面积', componentName: 'RectangleFormulaTopic' },
       { id: 'rectangle-properties', label: '长方形的性质', componentName: 'RectanglePropertiesTopic' },
+      { id: 'rectangle-formula', label: '长方形的周长和面积', componentName: 'RectangleFormulaTopic' },
     ],
   },
   {
     id: 'parallelogram',
     label: '平行四边形',
     topics: [
-      { id: 'parallelogram-formula', label: '平行四边形的周长和面积', componentName: 'ParallelogramFormulaTopic' },
       { id: 'parallelogram-properties', label: '平行四边形的性质', componentName: 'ParallelogramPropertiesTopic' },
+      { id: 'parallelogram-formula', label: '平行四边形的周长和面积', componentName: 'ParallelogramFormulaTopic' },
     ],
   },
   {
