@@ -44,7 +44,9 @@ export default function MathMotionExperience({ initialTopic }: Props) {
   return (
     <main className="mx-auto w-full max-w-[1600px] px-2 py-6 [&_button]:cursor-pointer">
       <div className="grid items-start gap-4 lg:grid-cols-[260px_minmax(0,1fr)]">
-        <MathMotionMenu activeTopic={activeTopic} onSelectTopic={selectTopic} />
+        <div className="hidden lg:block">
+          <MathMotionMenu activeTopic={activeTopic} onSelectTopic={selectTopic} />
+        </div>
         <section className="min-w-0" aria-live="polite">
           {renderContent()}
         </section>
