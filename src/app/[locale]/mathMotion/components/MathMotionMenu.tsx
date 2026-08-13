@@ -42,7 +42,7 @@ export default function MathMotionMenu({ activeTopic, onSelectTopic }: Props) {
               <button
                 type="button"
                 onClick={() => setExpandedCategories((prev) => ({ ...prev, [category.id]: !expanded }))}
-                className="flex w-full items-center justify-between border-b px-3 py-2 text-left text-sm font-semibold transition-colors hover:text-indigo-600/80"
+                className="flex w-full items-center justify-between border-b px-3 py-2 text-left text-sm font-semibold transition-colors hover:text-blue-600/80"
               >
                 <span>{t(`categories.${category.id}`)}</span>
                 <ChevronDown className={`h-4 w-4 transition-transform ${expanded ? 'rotate-180' : ''}`} />
@@ -58,7 +58,7 @@ export default function MathMotionMenu({ activeTopic, onSelectTopic }: Props) {
                         aria-current={active ? 'page' : undefined}
                         onClick={() => selectTopic(topic.id)}
                         className={`px-3 py-2 text-left text-sm transition-colors ${
-                          active ? 'border-b font-semibold text-indigo-600' : 'border-b hover:text-indigo-600/80'
+                          active ? 'border-b font-semibold text-blue-600' : 'border-b hover:text-blue-600/80'
                         }`}
                       >
                         {index + 1}. {t(`topics.${mathMotionTopicMessageKey(topic.id)}`)}

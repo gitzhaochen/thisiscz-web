@@ -63,35 +63,35 @@ export default function AdminSidebar() {
   }
 
   return (
-    <aside className="rounded-lg border p-2">
-      <div className="px-3 py-2 text-sm font-semibold">Admin Menu</div>
-      <nav className="flex flex-col gap-1">
+    <aside className="bg-card lg:sticky lg:top-20">
+      <nav aria-label="Admin Menu" className="space-y-1 pt-1">
         {menuGroups.map((group) => {
           const hasActiveChild = group.children.some((child) => child.isActive(pathname))
           const opened = openedKeys.includes(group.key) || hasActiveChild
 
           return (
-            <div key={group.key} className="rounded-md border border-transparent">
+            <div key={group.key}>
               <button
                 type="button"
                 onClick={() => toggleGroup(group.key)}
-                className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm font-medium transition-colors ${
-                  hasActiveChild ? 'bg-muted' : 'hover:bg-muted'
+                className={`flex w-full items-center justify-between border-b px-3 py-2 text-left text-sm font-semibold transition-colors ${
+                  hasActiveChild ? 'text-blue-600' : 'hover:text-blue-600/80'
                 }`}
               >
                 <span>{group.label}</span>
                 <ChevronDown className={`h-4 w-4 transition-transform ${opened ? 'rotate-180' : ''}`} />
               </button>
               {opened && (
-                <div className="mt-1 ml-3 flex flex-col gap-1 border-l pl-2">
+                <div className="mt-1 ml-3 flex flex-col gap-1">
                   {group.children.map((child) => {
                     const active = child.isActive(pathname)
                     return (
                       <Link
                         key={child.key}
                         href={child.href}
-                        className={`rounded-md px-3 py-2 text-sm transition-colors ${
-                          active ? 'font-semibold' : 'hover:bg-muted'
+                        aria-current={active ? 'page' : undefined}
+                        className={`border-b px-3 py-2 text-sm transition-colors ${
+                          active ? 'font-semibold text-blue-600' : 'hover:text-blue-600/80'
                         }`}
                       >
                         {child.label}
