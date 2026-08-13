@@ -52,11 +52,11 @@ export default async function LocaleLayout({ children, params }: Props) {
           gtag('config', 'G-WXNH2RJ7N7');
         `}
       </Script>
-      <Script id="crisp-chat" type="text/javascript" strategy="afterInteractive">
+      {/* <Script id="crisp-chat" type="text/javascript" strategy="afterInteractive">
         {`
           window.$crisp=[];window.CRISP_WEBSITE_ID="860f0fe8-6635-4118-9b68-a8f12ec0bd6c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
         `}
-      </Script>
+      </Script> */}
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         <NextIntlClientProvider>
           <QueryClientProvider>

@@ -87,7 +87,7 @@ export function FormulaBox({ label, formula, value }: { label: string; formula: 
   return (
     <div className="bg-muted/40 rounded-xl border p-3.5">
       <div className="text-muted-foreground text-xs font-medium">{label}</div>
-      <div className="mt-1 font-mono text-base font-bold text-indigo-600 dark:text-indigo-300">{formula}</div>
+      <div className="mt-1 text-base font-bold text-indigo-600 dark:text-indigo-300">{formula}</div>
       <div className="text-muted-foreground mt-1 text-xs">= {value}</div>
     </div>
   )

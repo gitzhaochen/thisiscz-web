@@ -48,7 +48,7 @@ export default function TriangleDefinitionTopic() {
                 key={key}
                 type="button"
                 onClick={() => setMode(key)}
-                className={`rounded-lg px-2 py-2 text-xs font-semibold transition-colors sm:text-sm ${
+                className={`rounded-lg px-1.5 py-2 text-[11px] font-semibold whitespace-nowrap transition-colors ${
                   mode === key ? 'bg-indigo-600 text-white' : 'bg-muted hover:bg-muted/80'
                 }`}
               >

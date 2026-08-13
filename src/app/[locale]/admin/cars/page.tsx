@@ -148,7 +148,7 @@ export default function AdminCarsPage() {
                           )}
                         </div>
                       </TableCell>
-                      <TableCell className="font-mono text-xs">{car.publicId}</TableCell>
+                      <TableCell className="text-xs">{car.publicId}</TableCell>
                       <TableCell className="max-w-[340px]">
                         {car.sourceUrl ? (
                           <a
