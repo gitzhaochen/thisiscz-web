@@ -71,9 +71,38 @@ export default function AdminCarsPage() {
     })
   }
 
-  const onDeleteCar = (publicId: string, title?: string) => {
+  const onDeleteCar = async (car: {
+    publicId?: string | null
+    postTitle?: string | null
+    imageUrls?: string[]
+  }) => {
+    const publicId = car.publicId || ''
+    if (!publicId) return
+
+    const title = car.postTitle || ''
     const confirmed = window.confirm(`确定删除车源吗？\n${title || ''}`)
     if (!confirmed) return
+
+    const imageUrls = Array.isArray(car.imageUrls) ? car.imageUrls.filter((x) => typeof x === 'string' && x.trim()) : []
+    if (imageUrls.length > 0) {
+      try {
+        const response = await fetch('/api/xiaohongshu/delete-images', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            imageUrls,
+          }),
+        })
+        if (!response.ok) {
+          throw new Error(`Delete images failed: ${response.status}`)
+        }
+      } catch (error) {
+        console.error('Delete R2 images before deleting car failed:', error)
+        toast.error('删除图片失败，已取消删除车源')
+        return
+      }
+    }
+
     deleteCar({ publicId })
   }
 
@@ -187,7 +216,13 @@ export default function AdminCarsPage() {
                             variant="destructive"
                             className="inline-flex items-center gap-1"
                             disabled={deleteCarPending || updateStatusPending}
-                            onClick={() => onDeleteCar(car.publicId!, car.postTitle ?? undefined)}
+                            onClick={() =>
+                              void onDeleteCar({
+                                publicId: car.publicId,
+                                postTitle: car.postTitle,
+                                imageUrls: car.imageUrls,
+                              })
+                            }
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </Button>
