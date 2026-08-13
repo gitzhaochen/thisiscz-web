@@ -21,6 +21,7 @@ export type MathMotionComponentName =
   | 'TriangleDefinitionTopic'
   | 'TriangleAreaPerimeterTopic'
   | 'TriangleAngleSumTopic'
+  | 'PythagoreanTheoremTopic'
   | 'SquareFormulaTopic'
   | 'SquarePropertiesTopic'
   | 'RectangleFormulaTopic'
@@ -34,6 +35,7 @@ export type MathMotionComponentName =
   | 'TrapezoidPropertiesTopic'
   | 'RegularPolygonDefinitionTopic'
   | 'RegularPolygonAngleSumTopic'
+  | 'PolygonAngleSumsTopic'
 
 export type MathMotionCatalogTopic = {
   id: string
@@ -64,6 +66,7 @@ export const mathMotionCatalog: MathMotionCatalogCategory[] = [
       { id: 'triangle-definition', label: '三角形的定义和分类', componentName: 'TriangleDefinitionTopic' },
       { id: 'triangle-area-perimeter', label: '三角形的面积和周长', componentName: 'TriangleAreaPerimeterTopic' },
       { id: 'triangle-angle-sum', label: '三角形的内角和180°定理', componentName: 'TriangleAngleSumTopic' },
+      { id: 'pythagorean-theorem', label: '勾股定理', componentName: 'PythagoreanTheoremTopic' },
     ],
   },
   {
@@ -91,14 +94,6 @@ export const mathMotionCatalog: MathMotionCatalogCategory[] = [
     ],
   },
   {
-    id: 'rhombus',
-    label: '菱形',
-    topics: [
-      { id: 'rhombus-definition', label: '菱形的定义', componentName: 'RhombusDefinitionTopic' },
-      { id: 'rhombus-properties', label: '菱形的性质', componentName: 'RhombusPropertiesTopic' },
-    ],
-  },
-  {
     id: 'trapezoid',
     label: '梯形',
     topics: [
@@ -108,11 +103,18 @@ export const mathMotionCatalog: MathMotionCatalogCategory[] = [
     ],
   },
   {
-    id: 'regular-polygon',
-    label: '正多边形',
+    id: 'rhombus',
+    label: '菱形',
     topics: [
-      { id: 'regular-polygon-definition', label: '正多边形定义', componentName: 'RegularPolygonDefinitionTopic' },
-      { id: 'regular-polygon-angle-sum', label: '正多边形的内角和', componentName: 'RegularPolygonAngleSumTopic' },
+      { id: 'rhombus-definition', label: '菱形的定义', componentName: 'RhombusDefinitionTopic' },
+      { id: 'rhombus-properties', label: '菱形的性质', componentName: 'RhombusPropertiesTopic' },
+    ],
+  },
+  {
+    id: 'polygon',
+    label: '多边形',
+    topics: [
+      { id: 'polygon-angle-sums', label: '多边形的内角和和外角和', componentName: 'PolygonAngleSumsTopic' },
     ],
   },
 ]

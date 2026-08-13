@@ -5,6 +5,7 @@ import { ReactElement } from 'react'
 import TriangleDefinitionTopic from './TriangleDefinitionTopic'
 import TriangleAreaPerimeterTopic from './TriangleAreaPerimeterTopic'
 import TriangleAngleSumTopic from './TriangleAngleSumTopic'
+import PythagoreanTheoremTopic from './PythagoreanTheoremTopic'
 import SquareFormulaTopic from './SquareFormulaTopic'
 import SquarePropertiesTopic from './SquarePropertiesTopic'
 import RectangleFormulaTopic from './RectangleFormulaTopic'
@@ -18,11 +19,13 @@ import TrapezoidAreaTopic from './TrapezoidAreaTopic'
 import TrapezoidPropertiesTopic from './TrapezoidPropertiesTopic'
 import RegularPolygonDefinitionTopic from './RegularPolygonDefinitionTopic'
 import RegularPolygonAngleSumTopic from './RegularPolygonAngleSumTopic'
+import PolygonAngleSumsTopic from './PolygonAngleSumsTopic'
 
 export const planeTopicComponentMap: Partial<Record<MathMotionComponentName, () => ReactElement>> = {
   TriangleDefinitionTopic,
   TriangleAreaPerimeterTopic,
   TriangleAngleSumTopic,
+  PythagoreanTheoremTopic,
   SquareFormulaTopic,
   SquarePropertiesTopic,
   RectangleFormulaTopic,
@@ -36,6 +39,7 @@ export const planeTopicComponentMap: Partial<Record<MathMotionComponentName, () 
   TrapezoidPropertiesTopic,
   RegularPolygonDefinitionTopic,
   RegularPolygonAngleSumTopic,
+  PolygonAngleSumsTopic,
 }
 
 export function hasPlaneTopicComponent(topicId: MathMotionTopic) {
