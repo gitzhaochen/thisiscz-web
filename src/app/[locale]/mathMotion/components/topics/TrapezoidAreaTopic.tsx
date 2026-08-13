@@ -2,6 +2,7 @@
 
 import { FormulaBox, Hint, NumberControl, TopicPanel } from '../TopicUi'
 import { Play, RotateCcw } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
@@ -12,6 +13,8 @@ const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2,
 type Phase = 'idle' | 'join' | 'addBase' | 'timesH' | 'halve' | 'done'
 
 export default function TrapezoidAreaTopic() {
+  const t = useTranslations('PageMathMotion.trapezoidArea')
+  const tc = useTranslations('PageMathMotion.common')
   const [topBase, setTopBase] = useState(6)
   const [bottomBase, setBottomBase] = useState(10)
   const [height, setHeight] = useState(5)
@@ -79,16 +82,20 @@ export default function TrapezoidAreaTopic() {
   const showHalve = phase === 'halve' || phase === 'done'
   const stageExpression =
     phase === 'idle'
-      ? 'S = (a + b) × h ÷ 2'
+      ? t('stageIdle')
       : phase === 'join'
-        ? '先拼合：两个全等梯形 → 一个平行四边形'
+        ? t('stageJoin')
         : phase === 'addBase'
-          ? '底边 = a + b'
+          ? t('stageAddBase')
           : phase === 'timesH'
-            ? `乘高：S平行四边形 = (a + b) × h = ${topBase + bottomBase} × ${height} = ${paraArea.toFixed(1)}`
+            ? t('stageTimesH', {
+                sum: topBase + bottomBase,
+                height,
+                paraArea: paraArea.toFixed(1),
+              })
             : phase === 'halve'
-              ? `对半分：S梯形 = S平行四边形 ÷ 2 = ${paraArea.toFixed(1)} ÷ 2`
-              : `S = (a + b) × h ÷ 2 = ${area.toFixed(1)} cm²`
+              ? t('stageHalve', { paraArea: paraArea.toFixed(1) })
+              : t('stageDone', { area: area.toFixed(1) })
 
   const bottomPx = 240
   const topPx = 140
@@ -120,13 +127,13 @@ export default function TrapezoidAreaTopic() {
 
   return (
     <TopicPanel
-      title="梯形的面积公式"
-      subtitle="两个全等梯形拼成平行四边形，再对半分：S = (a + b) × h ÷ 2。"
+      title={t('title')}
+      subtitle={t('subtitle')}
       controls={
         <div className="space-y-4">
           <NumberControl
             id="trap-top"
-            label="上底 a"
+            label={t('topBase')}
             value={topBase}
             min={2}
             max={12}
@@ -136,7 +143,7 @@ export default function TrapezoidAreaTopic() {
           />
           <NumberControl
             id="trap-bottom"
-            label="下底 b"
+            label={t('bottomBase')}
             value={bottomBase}
             min={3}
             max={15}
@@ -146,7 +153,7 @@ export default function TrapezoidAreaTopic() {
           />
           <NumberControl
             id="trap-height"
-            label="高 h"
+            label={t('height')}
             value={height}
             min={2}
             max={10}
@@ -154,7 +161,7 @@ export default function TrapezoidAreaTopic() {
             unit="cm"
             onChange={setHeight}
           />
-          <FormulaBox label="梯形面积" formula="S = (a + b) × h ÷ 2" value={`${area.toFixed(1)} cm²`} />
+          <FormulaBox label={t('areaLabel')} formula="S = (a + b) × h ÷ 2" value={`${area.toFixed(1)} cm²`} />
           <button
             type="button"
             disabled={playing}
@@ -162,7 +169,7 @@ export default function TrapezoidAreaTopic() {
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:opacity-60"
           >
             {playing ? <RotateCcw className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
-            {playing ? '推导中...' : '播放公式推导'}
+            {playing ? tc('deriving') : t('playDerive')}
           </button>
           {progress > 0 ? (
             <button
@@ -171,15 +178,15 @@ export default function TrapezoidAreaTopic() {
               className="flex w-full items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-muted"
             >
               <RotateCcw className="h-4 w-4" />
-              还原
+              {tc('restore')}
             </button>
           ) : null}
           <Hint>
-            <span className="block font-semibold">推导四步</span>
-            <span className="mt-1 block">① 两个全等梯形拼成平行四边形</span>
-            <span className="block">② 底边 = a + b</span>
-            <span className="block">③ 平行四边形面积 = (a + b) × h</span>
-            <span className="block">④ 梯形是一半 → ÷ 2</span>
+            <span className="block font-semibold">{t('stepsTitle')}</span>
+            <span className="mt-1 block">{t('step1')}</span>
+            <span className="block">{t('step2')}</span>
+            <span className="block">{t('step3')}</span>
+            <span className="block">{t('step4')}</span>
           </Hint>
         </div>
       }
@@ -228,11 +235,11 @@ export default function TrapezoidAreaTopic() {
           <>
             <line x1={D.x} y1={D.y} x2={C.x} y2={C.y} stroke="#16a34a" strokeWidth="4" />
             <text x={(D.x + C.x) / 2} y={D.y - 10} textAnchor="middle" fill="#16a34a" fontSize="14" fontWeight="700">
-              上底 a
+              {t('topBaseLabel')}
             </text>
             <line x1={A.x} y1={A.y} x2={B.x} y2={B.y} stroke="#2563eb" strokeWidth="4" />
             <text x={(A.x + B.x) / 2} y={A.y + 20} textAnchor="middle" fill="#2563eb" fontSize="14" fontWeight="700">
-              下底 b
+              {t('bottomBaseLabel')}
             </text>
             {showSecondTrapezoid ? <line x1={D2.x} y1={D2.y} x2={C2.x} y2={C2.y} stroke="#16a34a" strokeWidth="4" /> : null}
           </>
@@ -261,7 +268,7 @@ export default function TrapezoidAreaTopic() {
         {showHalve ? (
           <>
             <text x={B.x + 8} y={(B.y + endA2.y) / 2} fill="#ef4444" fontSize="13" fontWeight="700">
-              对分
+              {t('halve')}
             </text>
           </>
         ) : null}

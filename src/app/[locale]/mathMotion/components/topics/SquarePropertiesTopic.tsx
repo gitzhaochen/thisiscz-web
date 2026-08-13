@@ -1,11 +1,13 @@
 'use client'
 
 import { Hint, TopicPanel } from '../TopicUi'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 type ViewMode = 'definition' | 'properties' | 'symmetry'
 
 export default function SquarePropertiesTopic() {
+  const t = useTranslations('PageMathMotion.squareProperties')
   const [mode, setMode] = useState<ViewMode>('definition')
 
   const square = { left: 220, top: 90, size: 180 }
@@ -14,38 +16,38 @@ export default function SquarePropertiesTopic() {
   const cx = square.left + square.size / 2
   const cy = square.top + square.size / 2
 
+  const tabs = [
+    ['definition', 'tabDefinition'],
+    ['properties', 'tabProperties'],
+    ['symmetry', 'tabSymmetry'],
+  ] as const
+
   return (
     <TopicPanel
-      title="正方形的性质"
-      subtitle="正方形兼具矩形与菱形的特征，是特殊的平行四边形。"
+      title={t('title')}
+      subtitle={t('subtitle')}
       controls={
         <div className="space-y-4">
           <Hint>
-            <span className="block font-semibold">定义</span>
-            <span className="mt-1 block">有一组邻边相等，并且有一个角是直角的平行四边形，叫做正方形。</span>
+            <span className="block font-semibold">{t('definitionTitle')}</span>
+            <span className="mt-1 block">{t('definitionBody')}</span>
           </Hint>
           {mode === 'properties' ? (
             <Hint>
-              <span className="block font-semibold">性质定理</span>
-              <span className="mt-1 block">1. 四个角都是直角，四条边都相等。</span>
-              <span className="block">2. 两条对角线相等，互相垂直，且平分每一组对角。</span>
+              <span className="block font-semibold">{t('propertiesTitle')}</span>
+              <span className="mt-1 block">{t('properties1')}</span>
+              <span className="block">{t('properties2')}</span>
             </Hint>
           ) : null}
           {mode === 'symmetry' ? (
             <Hint>
-              <span className="block font-semibold">对称性</span>
-              <span className="mt-1 block">正方形是轴对称图形，有 4 条对称轴。</span>
-              <span className="block">也是中心对称图形，对称中心是对角线交点。</span>
+              <span className="block font-semibold">{t('symmetryTitle')}</span>
+              <span className="mt-1 block">{t('symmetryBody1')}</span>
+              <span className="block">{t('symmetryBody2')}</span>
             </Hint>
           ) : null}
           <div className="grid grid-cols-3 gap-2">
-            {(
-              [
-                ['definition', '定义'],
-                ['properties', '性质'],
-                ['symmetry', '对称性'],
-              ] as const
-            ).map(([key, label]) => (
+            {tabs.map(([key, labelKey]) => (
               <button
                 key={key}
                 type="button"
@@ -54,7 +56,7 @@ export default function SquarePropertiesTopic() {
                   mode === key ? 'bg-indigo-600 text-white' : 'bg-muted hover:bg-muted/80'
                 }`}
               >
-                {label}
+                {t(labelKey)}
               </button>
             ))}
           </div>
@@ -64,32 +66,32 @@ export default function SquarePropertiesTopic() {
       {mode === 'definition' ? (
         <svg viewBox="0 0 720 360" className="w-full">
           <text x="360" y="32" textAnchor="middle" fill="#334155" fontSize="16" fontWeight="700">
-            正方形可以看作“矩形 + 菱形”
+            {t('comboTitle')}
           </text>
 
           {/* 矩形 → 正方形 */}
           <text x="200" y="62" textAnchor="middle" fill="#334155" fontSize="14" fontWeight="700">
-            矩形 + 邻边相等
+            {t('rectPlusEqual')}
           </text>
           <rect x="90" y="80" width="130" height="85" fill="#bae6fd88" stroke="#0891b2" strokeWidth="2.5" />
           <text x="155" y="182" textAnchor="middle" fill="#0891b2" fontSize="12">
-            矩形
+            {t('rectangle')}
           </text>
           <text x="248" y="128" fill="#64748b" fontSize="22" fontWeight="700">
             →
           </text>
           <rect x="280" y="80" width="105" height="105" fill="#bbf7d088" stroke="#16a34a" strokeWidth="2.5" />
           <text x="332" y="205" textAnchor="middle" fill="#16a34a" fontSize="12" fontWeight="700">
-            正方形
+            {t('square')}
           </text>
 
           {/* 菱形 → 正方形 */}
           <text x="560" y="62" textAnchor="middle" fill="#334155" fontSize="14" fontWeight="700">
-            菱形 + 一个直角
+            {t('rhombusPlusRight')}
           </text>
           <polygon points="530,185 590,115 650,185 590,255" fill="#ddd6fe88" stroke="#7c3aed" strokeWidth="2.5" />
           <text x="590" y="275" textAnchor="middle" fill="#7c3aed" fontSize="12">
-            菱形
+            {t('rhombus')}
           </text>
           <text x="668" y="178" fill="#64748b" fontSize="22" fontWeight="700">
             →
@@ -97,11 +99,11 @@ export default function SquarePropertiesTopic() {
           <rect x="530" y="80" width="105" height="105" fill="#bbf7d088" stroke="#16a34a" strokeWidth="2.5" />
           <path d="M 530 100 L 550 100 L 550 80" fill="none" stroke="#16a34a" strokeWidth="2" />
           <text x="582" y="205" textAnchor="middle" fill="#16a34a" fontSize="12" fontWeight="700">
-            正方形
+            {t('square')}
           </text>
 
           <text x="360" y="330" textAnchor="middle" fill="#64748b" fontSize="13">
-            平行四边形 ⊃ 矩形、菱形 ⊃ 正方形
+            {t('inclusion')}
           </text>
         </svg>
       ) : null}
@@ -137,33 +139,33 @@ export default function SquarePropertiesTopic() {
 
           {/* 等边标记 */}
           <text x={cx} y={square.top - 10} textAnchor="middle" fill="#d97706" fontSize="13" fontWeight="600">
-            四边相等
+            {t('equalSides')}
           </text>
           <text x={cx} y={bottom + 30} textAnchor="middle" fill="#7c3aed" fontSize="13" fontWeight="600">
-            对角线相等且互相垂直
+            {t('diagonalsPerp')}
           </text>
 
           <rect x="430" y="88" width="250" height="200" rx="12" fill="#f8fafc" stroke="#cbd5e1" />
           <text x="442" y="116" fill="#334155" fontSize="13" fontWeight="700">
-            边与角
+            {t('sidesAngles')}
           </text>
           <text x="442" y="138" fill="#64748b" fontSize="12">
-            · 对边平行，四边相等
+            {t('sidesAngles1')}
           </text>
           <text x="442" y="158" fill="#64748b" fontSize="12">
-            · 四个角都是 90°
+            {t('sidesAngles2')}
           </text>
           <text x="442" y="186" fill="#334155" fontSize="13" fontWeight="700">
-            对角线
+            {t('diagonals')}
           </text>
           <text x="442" y="208" fill="#64748b" fontSize="12">
-            · AC = BD，且 AC ⊥ BD
+            {t('diagonals1')}
           </text>
           <text x="442" y="228" fill="#64748b" fontSize="12">
-            · 互相平分，平分每组对角
+            {t('diagonals2')}
           </text>
           <text x="442" y="256" fill="#64748b" fontSize="12">
-            · ∠BAC = ∠DAC = 45°
+            {t('diagonals3')}
           </text>
         </svg>
       ) : null}
@@ -180,17 +182,17 @@ export default function SquarePropertiesTopic() {
 
           <circle cx={cx} cy={cy} r="6" fill="#7c3aed" />
           <text x={cx + 12} y={cy + 4} fill="#7c3aed" fontSize="12" fontWeight="700">
-            中心
+            {t('center')}
           </text>
 
           <text x="360" y="40" textAnchor="middle" fill="#334155" fontSize="16" fontWeight="700">
-            4 条对称轴
+            {t('fourAxes')}
           </text>
           <text x="360" y="310" textAnchor="middle" fill="#64748b" fontSize="13">
-            两条过对边中点，两条过对角顶点
+            {t('axesDesc')}
           </text>
           <text x="360" y="332" textAnchor="middle" fill="#64748b" fontSize="13">
-            绕中心旋转 90° 后与自身重合
+            {t('rotateDesc')}
           </text>
         </svg>
       ) : null}

@@ -1,8 +1,9 @@
 'use client'
 
-import { TopicContent, TopicAnimationType } from '../../mathMotionTopics'
+import { TopicAnimationType } from '../../mathMotionTopics'
 import { FormulaBox, Hint, TopicPanel } from '../TopicUi'
 import { Play, RotateCcw } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
@@ -122,16 +123,21 @@ function renderTopicAnimation(type: TopicAnimationType, progress: number) {
 }
 
 type Props = {
-  title: string
-  content: TopicContent
+  translationKey: string
+  animationType?: TopicAnimationType
 }
 
-export default function GeneralPlaneTopic({ title, content }: Props) {
+export default function GeneralPlaneTopic({ translationKey, animationType }: Props) {
+  const t = useTranslations(`PageMathMotion.${translationKey}`)
+  const tc = useTranslations('PageMathMotion.common')
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
+  const points = t.raw('points') as string[]
+  const formulas = t.has('formulas') ? (t.raw('formulas') as string[]) : []
+  const title = t('title')
 
   const play = () => {
-    if (!content.animationType) return
+    if (!animationType) return
     if (playing) return
     setPlaying(true)
     setProgress(0)
@@ -139,9 +145,9 @@ export default function GeneralPlaneTopic({ title, content }: Props) {
     const duration = 1800
 
     const tick = (now: number) => {
-      const t = clamp((now - start) / duration, 0, 1)
-      setProgress(easeOut(t))
-      if (t < 1) {
+      const next = clamp((now - start) / duration, 0, 1)
+      setProgress(easeOut(next))
+      if (next < 1) {
         requestAnimationFrame(tick)
       } else {
         setPlaying(false)
@@ -154,10 +160,10 @@ export default function GeneralPlaneTopic({ title, content }: Props) {
   return (
     <TopicPanel
       title={title}
-      subtitle={content.intro}
+      subtitle={t('intro')}
       controls={
         <div className="space-y-4">
-          {content.animationType ? (
+          {animationType ? (
             <button
               type="button"
               disabled={playing}
@@ -165,15 +171,15 @@ export default function GeneralPlaneTopic({ title, content }: Props) {
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:opacity-60"
             >
               {playing ? <RotateCcw className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
-              {playing ? '播放中...' : '播放动画'}
+              {playing ? tc('playing') : tc('play')}
             </button>
           ) : null}
-          {content.formulas?.map((formula) => (
-            <FormulaBox key={formula} label="公式" formula={formula} value=" " />
+          {formulas.map((formula) => (
+            <FormulaBox key={formula} label={tc('formula')} formula={formula} value=" " />
           ))}
           <Hint>
-            <span className="block">要点：</span>
-            {content.points.map((point) => (
+            <span className="block">{tc('keyPoints')}</span>
+            {points.map((point) => (
               <span key={point} className="mt-1 block">
                 - {point}
               </span>
@@ -183,8 +189,8 @@ export default function GeneralPlaneTopic({ title, content }: Props) {
       }
     >
       <svg viewBox="0 0 440 280" className="w-full">
-        {content.animationType ? (
-          renderTopicAnimation(content.animationType, progress)
+        {animationType ? (
+          renderTopicAnimation(animationType, progress)
         ) : (
           <>
             <rect x="80" y="70" width="280" height="140" rx="14" fill="#f1f5f9" stroke="#94a3b8" />
@@ -192,7 +198,7 @@ export default function GeneralPlaneTopic({ title, content }: Props) {
               {title}
             </text>
             <text x="220" y="162" textAnchor="middle" fill="#64748b" fontSize="14">
-              定义 / 性质讲解
+              {tc('definitionExplain')}
             </text>
           </>
         )}

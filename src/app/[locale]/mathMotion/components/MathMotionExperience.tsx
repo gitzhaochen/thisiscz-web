@@ -4,8 +4,14 @@ import ArcLengthTopic from './topics/ArcLengthTopic'
 import CircleFormulasTopic from './topics/CircleFormulasTopic'
 import { planeTopicComponentMap } from './topics/PlaneTopicComponents'
 import SectorAreaTopic from './topics/SectorAreaTopic'
-import { MathMotionComponentName, MathMotionTopic, mathMotionCatalog } from '../mathMotionTopics'
+import {
+  MathMotionComponentName,
+  MathMotionTopic,
+  mathMotionCatalog,
+  mathMotionTopicMessageKey,
+} from '../mathMotionTopics'
 import { ChevronDown } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { ReactElement, useMemo, useState } from 'react'
 
 type Props = {
@@ -13,6 +19,7 @@ type Props = {
 }
 
 export default function MathMotionExperience({ initialTopic }: Props) {
+  const t = useTranslations('PageMathMotion')
   const [activeTopic, setActiveTopic] = useState(initialTopic)
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(mathMotionCatalog.map((category) => [category.id, category.id === 'circle'])),
@@ -48,7 +55,7 @@ export default function MathMotionExperience({ initialTopic }: Props) {
     <main className="mx-auto w-full max-w-[1500px] px-4 py-6 sm:px-6 lg:px-8">
       <div className="grid items-start gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
         <aside className="bg-card lg:sticky lg:top-20">
-          <nav aria-label="平面图形知识菜单" className="space-y-1">
+          <nav aria-label={t('common.navAriaLabel')} className="space-y-1">
             {mathMotionCatalog.map((category) => {
               const expanded = !!expandedCategories[category.id]
               return (
@@ -58,7 +65,7 @@ export default function MathMotionExperience({ initialTopic }: Props) {
                     onClick={() => setExpandedCategories((prev) => ({ ...prev, [category.id]: !expanded }))}
                     className="hover:bg-muted flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-semibold transition-colors"
                   >
-                    <span>{category.label}</span>
+                    <span>{t(`categories.${category.id}`)}</span>
                     <ChevronDown className={`h-4 w-4 transition-transform ${expanded ? 'rotate-180' : ''}`} />
                   </button>
                   {expanded ? (
@@ -75,7 +82,7 @@ export default function MathMotionExperience({ initialTopic }: Props) {
                               active ? 'bg-indigo-600 font-semibold text-white' : 'hover:bg-muted'
                             }`}
                           >
-                            {index + 1}. {topic.label}
+                            {index + 1}. {t(`topics.${mathMotionTopicMessageKey(topic.id)}`)}
                           </button>
                         )
                       })}

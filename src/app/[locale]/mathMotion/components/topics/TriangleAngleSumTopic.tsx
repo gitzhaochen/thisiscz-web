@@ -2,6 +2,7 @@
 
 import { FormulaBox, Hint, NumberControl, TopicPanel } from '../TopicUi'
 import { Play, RotateCcw } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
@@ -101,6 +102,7 @@ function computeTriangle(angleB: number, angleC: number) {
 }
 
 export default function TriangleAngleSumTopic() {
+  const t = useTranslations('PageMathMotion.triangleAngleSum')
   const [angleB, setAngleB] = useState(55)
   const [angleC, setAngleC] = useState(65)
   const [playing, setPlaying] = useState(false)
@@ -126,9 +128,9 @@ export default function TriangleAngleSumTopic() {
     const duration = 2400
 
     const tick = (now: number) => {
-      const t = easeInOut(clamp((now - start) / duration, 0, 1))
-      setProgress(t)
-      if (t < 1) {
+      const tAnim = easeInOut(clamp((now - start) / duration, 0, 1))
+      setProgress(tAnim)
+      if (tAnim < 1) {
         rafRef.current = requestAnimationFrame(tick)
       } else {
         setPlaying(false)
@@ -194,16 +196,16 @@ export default function TriangleAngleSumTopic() {
 
   return (
     <TopicPanel
-      title="三角形的内角和 180° 定理"
-      subtitle="先猜想，再用拼叠法验证，最后用平行线完成推理论证。"
+      title={t('title')}
+      subtitle={t('subtitle')}
       controls={
         <div className="space-y-4">
           <NumberControl id="triangle-angle-b" label="∠B" value={angleB} min={20} max={140} step={1} unit="°" onChange={setAngleB} />
           <NumberControl id="triangle-angle-c" label="∠C" value={angleC} min={20} max={140} step={1} unit="°" onChange={setAngleC} />
           <FormulaBox
-            label="内角和定理"
+            label={t('theoremLabel')}
             formula="∠A + ∠B + ∠C = 180°"
-            value={validTriangle ? `∠A = ${angleA}°` : '请调整角度使内角和为 180°'}
+            value={validTriangle ? `∠A = ${angleA}°` : t('adjustAngles')}
           />
           <button
             type="button"
@@ -212,7 +214,7 @@ export default function TriangleAngleSumTopic() {
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:opacity-60"
           >
             {playing ? <RotateCcw className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
-            {playing ? '拼叠中...' : '播放拼叠动画'}
+            {playing ? t('assembling') : t('playAssemble')}
           </button>
           {progress > 0 ? (
             <button
@@ -221,15 +223,15 @@ export default function TriangleAngleSumTopic() {
               className="flex w-full items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-muted"
             >
               <RotateCcw className="h-4 w-4" />
-              还原三角形
+              {t('restore')}
             </button>
           ) : null}
           <Hint>
-            <span className="block font-semibold">验证思路（拼叠法）</span>
-            <span className="mt-1 block">把三角形的三个内角剪下，拼在一起，刚好组成一个平角 180°。</span>
-            <span className="mt-2 block font-semibold">证明思路（平行线法）</span>
-            <span className="mt-1 block">过顶点 A 作 BC 的平行线 EF，利用内错角相等，得 ∠B=∠1，∠C=∠2。</span>
-            <span className="mt-1 block">又因为 ∠1+∠BAC+∠2=180°，所以 ∠A+∠B+∠C=180°。</span>
+            <span className="block font-semibold">{t('verifyTitle')}</span>
+            <span className="mt-1 block">{t('verifyBody')}</span>
+            <span className="mt-2 block font-semibold">{t('proofTitle')}</span>
+            <span className="mt-1 block">{t('proofBody1')}</span>
+            <span className="mt-1 block">{t('proofBody2')}</span>
           </Hint>
         </div>
       }
@@ -290,14 +292,14 @@ export default function TriangleAngleSumTopic() {
               {angleA}° + {angleB}° + {angleC}° = 180°
             </text>
             <text x={FAN_VERTEX.x} y={FAN_VERTEX.y + 70} textAnchor="middle" fill="#64748b" fontSize="13">
-              三个内角恰好拼成一条直线（平角）
+              {t('assembledHint')}
             </text>
           </>
         ) : null}
 
         {progress > 0 && progress < 0.15 ? (
           <text x={360} y={320} textAnchor="middle" fill="#64748b" fontSize="14">
-            正在剪下内角……
+            {t('cutting')}
           </text>
         ) : null}
       </svg>

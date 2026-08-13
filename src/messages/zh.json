@@ -24,16 +24,56 @@
   },
   "PageMathMotion": {
     "seoTitle": "动画数学｜交互式数学公式推导",
-    "seoDescription": "通过可拖拽、可调参数的动画理解圆的周长、面积、扇形面积与弧长公式。",
+    "seoDescription": "通过可拖拽、可调参数的动画理解平面几何中的周长、面积、角与公式推导。",
     "eyebrow": "看得见的数学",
     "title": "动画数学",
     "description": "拖动图形、修改数值，让公式从静态符号变成可观察、可验证的推导过程。",
-    "categoryCircle": "圆",
-    "topicNavigation": "圆的知识点",
+    "common": {
+      "navAriaLabel": "平面图形知识菜单",
+      "play": "播放动画",
+      "playing": "播放中...",
+      "restore": "还原",
+      "deriving": "推导中...",
+      "formula": "公式",
+      "keyPoints": "要点：",
+      "definitionExplain": "定义 / 性质讲解",
+      "perimeter": "周长",
+      "area": "面积",
+      "derivation": "推导",
+      "unit": "单位"
+    },
+    "categories": {
+      "circle": "圆形",
+      "triangle": "三角形",
+      "square": "正方形",
+      "rectangle": "长方形",
+      "parallelogram": "平行四边形",
+      "trapezoid": "梯形",
+      "rhombus": "菱形",
+      "polygon": "多边形"
+    },
     "topics": {
       "circleFormulas": "圆的周长和面积",
       "sectorArea": "扇形的面积",
-      "arcLength": "弧长"
+      "arcLength": "弧长",
+      "triangleDefinition": "三角形的定义和分类",
+      "triangleAreaPerimeter": "三角形的面积和周长",
+      "triangleAngleSum": "三角形的内角和180°定理",
+      "pythagoreanTheorem": "勾股定理",
+      "squareProperties": "正方形的性质",
+      "squareFormula": "正方形的周长和面积",
+      "rectangleProperties": "长方形的性质",
+      "rectangleFormula": "长方形的周长和面积",
+      "parallelogramProperties": "平行四边形的性质",
+      "parallelogramFormula": "平行四边形的周长和面积",
+      "trapezoidDefinition": "梯形的定义",
+      "trapezoidProperties": "梯形的性质",
+      "trapezoidArea": "梯形的面积",
+      "rhombusDefinition": "菱形的定义",
+      "rhombusProperties": "菱形的性质",
+      "polygonAngleSums": "多边形的内角和和外角和",
+      "regularPolygonDefinition": "正多边形定义",
+      "regularPolygonAngleSum": "正多边形的内角和公式"
     },
     "circleFormulas": {
       "title": "圆的周长和面积",
@@ -82,6 +122,301 @@
       "diagramLabel": "可拖拽调整圆心角并拉直弧线的动画",
       "straightenedArc": "弧线拉直后的实际长度",
       "dragInstruction": "沿圆周拖动橙色控制点"
+    },
+    "triangleDefinition": {
+      "title": "三角形的定义和分类",
+      "subtitle": "认识三角形的基本元素、三边关系，并按边与角进行分类。",
+      "definitionTitle": "定义",
+      "definitionBody": "由不在同一直线上的三条线段首尾顺次联结所组成的图形，叫做三角形。",
+      "notationTitle": "记号",
+      "notationBody1": "边可用大写顶点表示：AB、BC、AC。",
+      "notationBody2": "小写 a、b、c 分别表示 ∠A、∠B、∠C 的对边。",
+      "sideRelationTitle": "三边关系",
+      "sideRelationBody": "三角形任意两边之和大于第三边；任意两边之差小于第三边。",
+      "sideRelationTip": "判断能否构成三角形：看两条较短边之和是否大于最长边。",
+      "sideRelationLabel": "三边关系",
+      "tabDefinition": "定义与记号",
+      "tabBySide": "按边分类",
+      "tabByAngle": "按角分类",
+      "elementsTitle": "△ABC 的组成元素",
+      "elementsFooter": "三条线段不在同一直线上，且首尾顺次联结",
+      "equilateral": "等边三角形",
+      "equilateralDesc": "三边都相等",
+      "isosceles": "等腰三角形",
+      "isoscelesDesc": "有两条边相等（腰）",
+      "scalene": "不等边三角形",
+      "scaleneDesc": "三边都不相等",
+      "bySideFooter": "等边三角形是等腰三角形的特例",
+      "acute": "锐角三角形",
+      "acuteDesc": "三个角都是锐角",
+      "right": "直角三角形",
+      "rightDesc": "有一个角是直角",
+      "obtuse": "钝角三角形",
+      "obtuseDesc": "有一个角是钝角",
+      "byAngleFooter": "一个三角形最多有 1 个直角，最多有 1 个钝角"
+    },
+    "triangleAreaPerimeter": {
+      "title": "三角形的面积和周长",
+      "subtitle": "周长是三边之和；面积由“底×高÷2”得到，可由两个全等三角形拼成平行四边形来理解。",
+      "tabArea": "面积推导",
+      "tabPerimeter": "周长计算",
+      "base": "底 a",
+      "height": "高 h",
+      "triangleArea": "三角形面积",
+      "parallelogramArea": "平行四边形面积",
+      "assembling": "拼合中...",
+      "playAssemble": "播放拼合动画",
+      "heightTitle": "高的定义",
+      "heightBody": "从顶点向对边所在直线作垂线，顶点到垂足之间的线段叫做高。",
+      "areaMethodTitle": "面积法（拓展）",
+      "areaMethodBody": "同一三角形面积不变：½·BC·AD = ½·AC·BP，可用来求线段长度。",
+      "sideA": "边 a",
+      "sideB": "边 b",
+      "sideC": "边 c",
+      "perimeter": "周长",
+      "perimeterMeaningTitle": "周长的意义",
+      "perimeterMeaningBody": "周长是三角形三条边长度之和，表示图形边界一周的长度。",
+      "noteTitle": "注意",
+      "noteBody": "三条边必须满足三角形三边关系，才能构成三角形。",
+      "baseLabel": "底 a",
+      "parallelogramAreaText": "平行四边形面积 = 底 × 高 = a × h",
+      "triangleAreaText": "三角形面积 = 平行四边形面积 ÷ 2 = a × h ÷ 2",
+      "assemblingHint": "全等三角形正在旋转拼合……",
+      "playHint": "点击播放，观察两个全等三角形如何拼成平行四边形",
+      "invalidTriangle": "当前三边不满足三角形三边关系，不能构成三角形"
+    },
+    "triangleAngleSum": {
+      "title": "三角形的内角和 180° 定理",
+      "subtitle": "先猜想，再用拼叠法验证，最后用平行线完成推理论证。",
+      "theoremLabel": "内角和定理",
+      "adjustAngles": "请调整角度使内角和为 180°",
+      "assembling": "拼叠中...",
+      "playAssemble": "播放拼叠动画",
+      "restore": "还原三角形",
+      "verifyTitle": "验证思路（拼叠法）",
+      "verifyBody": "把三角形的三个内角剪下，拼在一起，刚好组成一个平角 180°。",
+      "proofTitle": "证明思路（平行线法）",
+      "proofBody1": "过顶点 A 作 BC 的平行线 EF，利用内错角相等，得 ∠B=∠1，∠C=∠2。",
+      "proofBody2": "又因为 ∠1+∠BAC+∠2=180°，所以 ∠A+∠B+∠C=180°。",
+      "assembledHint": "三个内角恰好拼成一条直线（平角）",
+      "cutting": "正在剪下内角……"
+    },
+    "pythagoreanTheorem": {
+      "title": "勾股定理",
+      "subtitle": "直角三角形中，两直角边平方和等于斜边平方。",
+      "legA": "直角边 a",
+      "legB": "直角边 b",
+      "theoremLabel": "勾股定理",
+      "areaRelation": "面积关系",
+      "playDerive": "播放推导动画",
+      "hintTitle": "推导提示",
+      "hintBody1": "先看直角三角形，再分别在 a、b、c 三边上向外作正方形。",
+      "hintBody2": "面积关系：a² + b² = c²。",
+      "buildingSquares": "依次作出 a²、b²、c²……",
+      "playHint": "点击播放：在三边上作出正方形，观察面积关系"
+    },
+    "squareProperties": {
+      "title": "正方形的性质",
+      "subtitle": "正方形兼具矩形与菱形的特征，是特殊的平行四边形。",
+      "definitionTitle": "定义",
+      "definitionBody": "有一组邻边相等，并且有一个角是直角的平行四边形，叫做正方形。",
+      "propertiesTitle": "性质定理",
+      "properties1": "1. 四个角都是直角，四条边都相等。",
+      "properties2": "2. 两条对角线相等，互相垂直，且平分每一组对角。",
+      "symmetryTitle": "对称性",
+      "symmetryBody1": "正方形是轴对称图形，有 4 条对称轴。",
+      "symmetryBody2": "也是中心对称图形，对称中心是对角线交点。",
+      "tabDefinition": "定义",
+      "tabProperties": "性质",
+      "tabSymmetry": "对称性",
+      "comboTitle": "正方形可以看作“矩形 + 菱形”",
+      "rectPlusEqual": "矩形 + 邻边相等",
+      "rectangle": "矩形",
+      "square": "正方形",
+      "rhombusPlusRight": "菱形 + 一个直角",
+      "rhombus": "菱形",
+      "inclusion": "平行四边形 ⊃ 矩形、菱形 ⊃ 正方形",
+      "equalSides": "四边相等",
+      "diagonalsPerp": "对角线相等且互相垂直",
+      "sidesAngles": "边与角",
+      "sidesAngles1": "· 对边平行，四边相等",
+      "sidesAngles2": "· 四个角都是 90°",
+      "diagonals": "对角线",
+      "diagonals1": "· AC = BD，且 AC ⊥ BD",
+      "diagonals2": "· 互相平分，平分每组对角",
+      "diagonals3": "· ∠BAC = ∠DAC = 45°",
+      "center": "中心",
+      "fourAxes": "4 条对称轴",
+      "axesDesc": "两条过对边中点，两条过对角顶点",
+      "rotateDesc": "绕中心旋转 90° 后与自身重合"
+    },
+    "squareFormula": {
+      "title": "正方形的周长和面积",
+      "subtitle": "正方形四边相等，周长是四条边之和，面积等于边长乘边长。",
+      "side": "边长 a",
+      "perimeter": "周长",
+      "area": "面积",
+      "filling": "填充中...",
+      "playArea": "播放面积动画",
+      "perimeterHint1": "正方形四条边都相等，每条边长为 a。",
+      "perimeterHint2": "周长 = a + a + a + a = 4a。",
+      "areaHint1": "把正方形分成边长为 1 的小正方形，每行 a 个，共 a 行。",
+      "areaHint2": "小正方形总数 = a × a，所以 S = a²。",
+      "fillingHint": "正在逐格填充……",
+      "playHint": "点击播放，观察 a×a 个单位正方形如何铺满",
+      "areaResult": "{count} × {count} = {area} 个小正方形 → S = a² = {area} cm²"
+    },
+    "parallelogramFormula": {
+      "title": "平行四边形的周长和面积",
+      "subtitle": "周长由对边相等得到；面积通过“剪拼”转化为长方形：S = 底 × 高。",
+      "sideA": "邻边 a",
+      "sideB": "底边 b",
+      "base": "底 b",
+      "height": "高 h",
+      "perimeter": "周长",
+      "area": "面积",
+      "cutting": "剪拼中...",
+      "playCut": "播放剪拼动画",
+      "perimeterHint1": "平行四边形对边相等：AB = CD = b，AD = BC = a。",
+      "perimeterHint2": "周长 = a + b + a + b = 2(a + b)。",
+      "areaHintTitle": "推导思路",
+      "areaHint1": "从顶点向底边作高，剪下左侧直角三角形。",
+      "areaHint2": "平移到右侧，刚好拼成长方形。",
+      "areaHint3": "面积不变：S = 长 × 宽 = b × h。",
+      "baseLabel": "底 b = {value}",
+      "rectangleLabel": "长方形：长 = b，宽 = h",
+      "slidingHint": "左侧三角形正在平移到右侧……",
+      "playHint": "点击播放，观察剪拼成长方形的过程"
+    },
+    "trapezoidArea": {
+      "title": "梯形的面积公式",
+      "subtitle": "两个全等梯形拼成平行四边形，再对半分：S = (a + b) × h ÷ 2。",
+      "topBase": "上底 a",
+      "bottomBase": "下底 b",
+      "height": "高 h",
+      "areaLabel": "梯形面积",
+      "playDerive": "播放公式推导",
+      "stepsTitle": "推导四步",
+      "step1": "① 两个全等梯形拼成平行四边形",
+      "step2": "② 底边 = a + b",
+      "step3": "③ 平行四边形面积 = (a + b) × h",
+      "step4": "④ 梯形是一半 → ÷ 2",
+      "stageIdle": "S = (a + b) × h ÷ 2",
+      "stageJoin": "先拼合：两个全等梯形 → 一个平行四边形",
+      "stageAddBase": "底边 = a + b",
+      "stageTimesH": "乘高：S平行四边形 = (a + b) × h = {sum} × {height} = {paraArea}",
+      "stageHalve": "对半分：S梯形 = S平行四边形 ÷ 2 = {paraArea} ÷ 2",
+      "stageDone": "S = (a + b) × h ÷ 2 = {area} cm²",
+      "topBaseLabel": "上底 a",
+      "bottomBaseLabel": "下底 b",
+      "halve": "对分"
+    },
+    "polygonAngleSums": {
+      "title": "多边形的内角和和外角和",
+      "subtitle": "从一个顶点把多边形分成若干三角形，推导内角和；沿同一方向转一圈，得到外角和。",
+      "nGon": "{n}边形",
+      "interiorLabel": "内角和公式",
+      "exteriorLabel": "外角和公式",
+      "playDerive": "播放推导动画",
+      "hintTitle": "推导要点",
+      "hintInterior": "内角和：从一个顶点可分成 (n-2) 个三角形，所以是 (n-2)×180°。",
+      "hintExterior": "外角和：沿多边形同向走一圈，总转角始终是 360°。",
+      "triangleSplit": "分成 {count} 个三角形",
+      "interiorEq": "内角和 = {count} × 180° = {sum}°",
+      "exteriorEq": "外角和 = 360°",
+      "exteriorGuide": "辅助线：每个顶点延长一边得到外角 β",
+      "exteriorSumGuide": "β₁ + β₂ + ... + βₙ = 360°（转一圈）",
+      "finalResult": "{n}边形：内角和 {interior}°，外角和 360°",
+      "playHint": "点击播放：看 {n}边形被分成几个三角形，并观察外角和"
+    },
+    "rectangleProperties": {
+      "title": "长方形的性质",
+      "intro": "长方形是四角都为直角的四边形。",
+      "points": [
+        "对边平行且相等。",
+        "四个内角都为90°。",
+        "两条对角线相等且互相平分。"
+      ]
+    },
+    "rectangleFormula": {
+      "title": "长方形的周长和面积公式",
+      "intro": "长方形由长 l 和宽 w 描述，公式直接由边关系得到。",
+      "points": [
+        "对边相等：两条长是 l，两条宽是 w。",
+        "周长由两组对边求和。",
+        "面积是长乘宽。"
+      ],
+      "formulas": [
+        "P = 2(l + w)",
+        "S = l × w"
+      ]
+    },
+    "parallelogramProperties": {
+      "title": "平行四边形的性质",
+      "intro": "平行四边形由两组平行边定义，并带来一系列角线性质。",
+      "points": [
+        "对边平行且相等。",
+        "对角相等、邻角互补。",
+        "两条对角线互相平分。"
+      ]
+    },
+    "trapezoidDefinition": {
+      "title": "梯形定义",
+      "intro": "梯形是仅有一组对边平行的四边形。",
+      "points": [
+        "平行边称为上底与下底。",
+        "两底间距离称为高 h。",
+        "等腰梯形是常见特殊形式。"
+      ]
+    },
+    "trapezoidProperties": {
+      "title": "梯形的性质",
+      "intro": "梯形性质围绕“单组平行边”展开。",
+      "points": [
+        "同一腰上的两个内角互补。",
+        "中位线平行于底，长度为 (a+b)/2。",
+        "等腰梯形两腰相等且同底角相等。"
+      ]
+    },
+    "rhombusDefinition": {
+      "title": "菱形的定义",
+      "intro": "菱形是四边都相等的平行四边形。",
+      "points": [
+        "可以看成“等边的平行四边形”。",
+        "内角不一定是直角。",
+        "当内角全是直角时即为正方形。"
+      ]
+    },
+    "rhombusProperties": {
+      "title": "菱形的性质",
+      "intro": "菱形的关键性质集中在边与对角线。",
+      "points": [
+        "四边长度相等。",
+        "对角线互相垂直且互相平分。",
+        "每条对角线平分一组对角。"
+      ]
+    },
+    "regularPolygonDefinition": {
+      "title": "正多边形定义",
+      "intro": "正多边形是边长和内角都相等的多边形。",
+      "points": [
+        "常见：正三角形、正方形、正五边形等。",
+        "可外接于同一圆，中心到顶点距离相等。",
+        "边数越多越接近圆。"
+      ]
+    },
+    "regularPolygonAngleSum": {
+      "title": "正多边形的内角和公式",
+      "intro": "n 边形可从一个顶点划分为 (n-2) 个三角形。",
+      "points": [
+        "每个三角形内角和 180°。",
+        "总内角和 = 三角形数量 × 180°。",
+        "正多边形每个内角相等，可继续除以 n。"
+      ],
+      "formulas": [
+        "内角和 = (n - 2) × 180°",
+        "每个内角 = ((n - 2) × 180°) / n"
+      ]
     }
   },
   "PageCars": {
@@ -250,7 +585,6 @@
       "wellington": "惠灵顿"
     }
   },
-
   "PageAiTalk": {
     "title": "AI聊天助手",
     "currentMode": "当前模式",

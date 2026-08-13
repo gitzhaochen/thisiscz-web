@@ -2,6 +2,7 @@
 
 import { FormulaBox, Hint, NumberControl, TopicPanel } from '../TopicUi'
 import { Play, RotateCcw } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
 
 type Mode = 'perimeter' | 'area'
@@ -11,6 +12,8 @@ const lerp = (from: number, to: number, t: number) => from + (to - from) * t
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
 
 export default function ParallelogramFormulaTopic() {
+  const t = useTranslations('PageMathMotion.parallelogramFormula')
+  const tc = useTranslations('PageMathMotion.common')
   const [mode, setMode] = useState<Mode>('area')
   const [sideA, setSideA] = useState(5)
   const [sideB, setSideB] = useState(8)
@@ -37,9 +40,9 @@ export default function ParallelogramFormulaTopic() {
     const duration = 2000
 
     const tick = (now: number) => {
-      const t = easeInOut(clamp((now - start) / duration, 0, 1))
-      setProgress(t)
-      if (t < 1) {
+      const tAnim = easeInOut(clamp((now - start) / duration, 0, 1))
+      setProgress(tAnim)
+      if (tAnim < 1) {
         rafRef.current = requestAnimationFrame(tick)
       } else {
         setPlaying(false)
@@ -87,8 +90,8 @@ export default function ParallelogramFormulaTopic() {
 
   return (
     <TopicPanel
-      title="平行四边形的周长和面积"
-      subtitle="周长由对边相等得到；面积通过“剪拼”转化为长方形：S = 底 × 高。"
+      title={t('title')}
+      subtitle={t('subtitle')}
       controls={
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-2">
@@ -102,7 +105,7 @@ export default function ParallelogramFormulaTopic() {
                 mode === 'perimeter' ? 'bg-indigo-600 text-white' : 'bg-muted hover:bg-muted/80'
               }`}
             >
-              周长
+              {t('perimeter')}
             </button>
             <button
               type="button"
@@ -114,7 +117,7 @@ export default function ParallelogramFormulaTopic() {
                 mode === 'area' ? 'bg-indigo-600 text-white' : 'bg-muted hover:bg-muted/80'
               }`}
             >
-              面积
+              {t('area')}
             </button>
           </div>
 
@@ -122,7 +125,7 @@ export default function ParallelogramFormulaTopic() {
             <>
               <NumberControl
                 id="para-side-a"
-                label="邻边 a"
+                label={t('sideA')}
                 value={sideA}
                 min={2}
                 max={12}
@@ -132,7 +135,7 @@ export default function ParallelogramFormulaTopic() {
               />
               <NumberControl
                 id="para-side-b"
-                label="底边 b"
+                label={t('sideB')}
                 value={sideB}
                 min={3}
                 max={15}
@@ -140,18 +143,18 @@ export default function ParallelogramFormulaTopic() {
                 unit="cm"
                 onChange={setSideB}
               />
-              <FormulaBox label="周长" formula="P = 2(a + b)" value={`${perimeter.toFixed(1)} cm`} />
+              <FormulaBox label={t('perimeter')} formula="P = 2(a + b)" value={`${perimeter.toFixed(1)} cm`} />
               <Hint>
-                <span className="block font-semibold">推导</span>
-                <span className="mt-1 block">平行四边形对边相等：AB = CD = b，AD = BC = a。</span>
-                <span className="block">周长 = a + b + a + b = 2(a + b)。</span>
+                <span className="block font-semibold">{tc('derivation')}</span>
+                <span className="mt-1 block">{t('perimeterHint1')}</span>
+                <span className="block">{t('perimeterHint2')}</span>
               </Hint>
             </>
           ) : (
             <>
               <NumberControl
                 id="para-base"
-                label="底 b"
+                label={t('base')}
                 value={sideB}
                 min={3}
                 max={15}
@@ -161,7 +164,7 @@ export default function ParallelogramFormulaTopic() {
               />
               <NumberControl
                 id="para-height"
-                label="高 h"
+                label={t('height')}
                 value={height}
                 min={2}
                 max={10}
@@ -169,7 +172,7 @@ export default function ParallelogramFormulaTopic() {
                 unit="cm"
                 onChange={setHeight}
               />
-              <FormulaBox label="面积" formula="S = b × h" value={`${area.toFixed(1)} cm²`} />
+              <FormulaBox label={t('area')} formula="S = b × h" value={`${area.toFixed(1)} cm²`} />
               <button
                 type="button"
                 disabled={playing}
@@ -177,7 +180,7 @@ export default function ParallelogramFormulaTopic() {
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:opacity-60"
               >
                 {playing ? <RotateCcw className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
-                {playing ? '剪拼中...' : '播放剪拼动画'}
+                {playing ? t('cutting') : t('playCut')}
               </button>
               {progress > 0 ? (
                 <button
@@ -186,14 +189,14 @@ export default function ParallelogramFormulaTopic() {
                   className="flex w-full items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-muted"
                 >
                   <RotateCcw className="h-4 w-4" />
-                  还原
+                  {tc('restore')}
                 </button>
               ) : null}
               <Hint>
-                <span className="block font-semibold">推导思路</span>
-                <span className="mt-1 block">从顶点向底边作高，剪下左侧直角三角形。</span>
-                <span className="block">平移到右侧，刚好拼成长方形。</span>
-                <span className="block">面积不变：S = 长 × 宽 = b × h。</span>
+                <span className="block font-semibold">{t('areaHintTitle')}</span>
+                <span className="mt-1 block">{t('areaHint1')}</span>
+                <span className="block">{t('areaHint2')}</span>
+                <span className="block">{t('areaHint3')}</span>
               </Hint>
             </>
           )}
@@ -273,7 +276,7 @@ export default function ParallelogramFormulaTopic() {
 
           {/* 底边标注 */}
           <text x={(E.x + B.x) / 2} y={A.y + 22} textAnchor="middle" fill="#d97706" fontSize="14" fontWeight="700">
-            底 b = {sideB}
+            {t('baseLabel', { value: sideB })}
           </text>
 
           {/* 剪拼完成后的长方形虚线框 */}
@@ -290,7 +293,7 @@ export default function ParallelogramFormulaTopic() {
                 strokeDasharray="6 4"
               />
               <text x={E.x + basePx / 2} y={D.y - 14} textAnchor="middle" fill="#64748b" fontSize="14" fontWeight="700">
-                长方形：长 = b，宽 = h
+                {t('rectangleLabel')}
               </text>
               <text x={360} y={320} textAnchor="middle" fill="#334155" fontSize="16" fontWeight="700">
                 S = b × h = {sideB} × {height} = {area.toFixed(1)} cm²
@@ -298,7 +301,7 @@ export default function ParallelogramFormulaTopic() {
             </>
           ) : (
             <text x={360} y={320} textAnchor="middle" fill="#64748b" fontSize="14">
-              {progress > 0 ? '左侧三角形正在平移到右侧……' : '点击播放，观察剪拼成长方形的过程'}
+              {progress > 0 ? t('slidingHint') : t('playHint')}
             </text>
           )}
         </svg>

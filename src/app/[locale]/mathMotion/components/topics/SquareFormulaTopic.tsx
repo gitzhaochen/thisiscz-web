@@ -2,6 +2,7 @@
 
 import { FormulaBox, Hint, NumberControl, TopicPanel } from '../TopicUi'
 import { Play, RotateCcw } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
 
 type Mode = 'perimeter' | 'area'
@@ -10,6 +11,8 @@ const clamp = (value: number, min: number, max: number) => Math.min(max, Math.ma
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
 
 export default function SquareFormulaTopic() {
+  const t = useTranslations('PageMathMotion.squareFormula')
+  const tc = useTranslations('PageMathMotion.common')
   const [mode, setMode] = useState<Mode>('area')
   const [side, setSide] = useState(5)
   const [playing, setPlaying] = useState(false)
@@ -35,9 +38,9 @@ export default function SquareFormulaTopic() {
     const duration = 1800
 
     const tick = (now: number) => {
-      const t = easeInOut(clamp((now - start) / duration, 0, 1))
-      setProgress(t)
-      if (t < 1) {
+      const tAnim = easeInOut(clamp((now - start) / duration, 0, 1))
+      setProgress(tAnim)
+      if (tAnim < 1) {
         rafRef.current = requestAnimationFrame(tick)
       } else {
         setPlaying(false)
@@ -66,8 +69,8 @@ export default function SquareFormulaTopic() {
 
   return (
     <TopicPanel
-      title="正方形的周长和面积"
-      subtitle="正方形四边相等，周长是四条边之和，面积等于边长乘边长。"
+      title={t('title')}
+      subtitle={t('subtitle')}
       controls={
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-2">
@@ -81,7 +84,7 @@ export default function SquareFormulaTopic() {
                 mode === 'perimeter' ? 'bg-indigo-600 text-white' : 'bg-muted hover:bg-muted/80'
               }`}
             >
-              周长
+              {t('perimeter')}
             </button>
             <button
               type="button"
@@ -93,24 +96,24 @@ export default function SquareFormulaTopic() {
                 mode === 'area' ? 'bg-indigo-600 text-white' : 'bg-muted hover:bg-muted/80'
               }`}
             >
-              面积
+              {t('area')}
             </button>
           </div>
 
-          <NumberControl id="square-side" label="边长 a" value={side} min={2} max={8} step={1} unit="cm" onChange={setSide} />
+          <NumberControl id="square-side" label={t('side')} value={side} min={2} max={8} step={1} unit="cm" onChange={setSide} />
 
           {mode === 'perimeter' ? (
             <>
-              <FormulaBox label="周长" formula="P = 4a" value={`${perimeter} cm`} />
+              <FormulaBox label={t('perimeter')} formula="P = 4a" value={`${perimeter} cm`} />
               <Hint>
-                <span className="block font-semibold">推导</span>
-                <span className="mt-1 block">正方形四条边都相等，每条边长为 a。</span>
-                <span className="block">周长 = a + a + a + a = 4a。</span>
+                <span className="block font-semibold">{tc('derivation')}</span>
+                <span className="mt-1 block">{t('perimeterHint1')}</span>
+                <span className="block">{t('perimeterHint2')}</span>
               </Hint>
             </>
           ) : (
             <>
-              <FormulaBox label="面积" formula="S = a × a = a²" value={`${area} cm²`} />
+              <FormulaBox label={t('area')} formula="S = a × a = a²" value={`${area} cm²`} />
               <button
                 type="button"
                 disabled={playing}
@@ -118,7 +121,7 @@ export default function SquareFormulaTopic() {
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:opacity-60"
               >
                 {playing ? <RotateCcw className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
-                {playing ? '填充中...' : '播放面积动画'}
+                {playing ? t('filling') : t('playArea')}
               </button>
               {progress > 0 ? (
                 <button
@@ -127,13 +130,13 @@ export default function SquareFormulaTopic() {
                   className="flex w-full items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-muted"
                 >
                   <RotateCcw className="h-4 w-4" />
-                  还原
+                  {tc('restore')}
                 </button>
               ) : null}
               <Hint>
-                <span className="block font-semibold">推导</span>
-                <span className="mt-1 block">把正方形分成边长为 1 的小正方形，每行 a 个，共 a 行。</span>
-                <span className="block">小正方形总数 = a × a，所以 S = a²。</span>
+                <span className="block font-semibold">{tc('derivation')}</span>
+                <span className="mt-1 block">{t('areaHint1')}</span>
+                <span className="block">{t('areaHint2')}</span>
               </Hint>
             </>
           )}
@@ -193,11 +196,11 @@ export default function SquareFormulaTopic() {
 
           {progress > 0.85 ? (
             <text x={cx} y={top + size + 28} textAnchor="middle" fill="#334155" fontSize="16" fontWeight="700">
-              {unitCount} × {unitCount} = {area} 个小正方形 → S = a² = {area} cm²
+              {t('areaResult', { count: unitCount, area })}
             </text>
           ) : (
             <text x={cx} y={top + size + 28} textAnchor="middle" fill="#64748b" fontSize="14">
-              {progress > 0 ? '正在逐格填充……' : '点击播放，观察 a×a 个单位正方形如何铺满'}
+              {progress > 0 ? t('fillingHint') : t('playHint')}
             </text>
           )}
         </svg>

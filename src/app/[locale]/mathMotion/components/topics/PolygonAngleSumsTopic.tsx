@@ -2,6 +2,7 @@
 
 import { FormulaBox, Hint, TopicPanel } from '../TopicUi'
 import { Play, RotateCcw } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 type PolygonMode = 4 | 5 | 6 | 7 | 8
@@ -15,6 +16,8 @@ const pointAt = (cx: number, cy: number, radius: number, deg: number) => {
 }
 
 export default function PolygonAngleSumsTopic() {
+  const t = useTranslations('PageMathMotion.polygonAngleSums')
+  const tc = useTranslations('PageMathMotion.common')
   const [mode, setMode] = useState<PolygonMode>(4)
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -40,9 +43,9 @@ export default function PolygonAngleSumsTopic() {
     const duration = 2400
 
     const tick = (now: number) => {
-      const t = easeInOut(clamp((now - start) / duration, 0, 1))
-      setProgress(t)
-      if (t < 1) {
+      const tAnim = easeInOut(clamp((now - start) / duration, 0, 1))
+      setProgress(tAnim)
+      if (tAnim < 1) {
         rafRef.current = requestAnimationFrame(tick)
       } else {
         setPlaying(false)
@@ -85,8 +88,8 @@ export default function PolygonAngleSumsTopic() {
 
   return (
     <TopicPanel
-      title="多边形的内角和和外角和"
-      subtitle="从一个顶点把多边形分成若干三角形，推导内角和；沿同一方向转一圈，得到外角和。"
+      title={t('title')}
+      subtitle={t('subtitle')}
       controls={
         <div className="space-y-4">
           <div className="grid grid-cols-5 gap-2">
@@ -102,13 +105,13 @@ export default function PolygonAngleSumsTopic() {
                   mode === sides ? 'bg-indigo-600 text-white' : 'bg-muted hover:bg-muted/80'
                 }`}
               >
-                {sides}边形
+                {t('nGon', { n: sides })}
               </button>
             ))}
           </div>
 
-          <FormulaBox label="内角和公式" formula="(n - 2) × 180°" value={`(${n} - 2) × 180° = ${interiorSum}°`} />
-          <FormulaBox label="外角和公式" formula="360°" value={`${exteriorSum}°`} />
+          <FormulaBox label={t('interiorLabel')} formula="(n - 2) × 180°" value={`(${n} - 2) × 180° = ${interiorSum}°`} />
+          <FormulaBox label={t('exteriorLabel')} formula="360°" value={`${exteriorSum}°`} />
 
           <button
             type="button"
@@ -117,7 +120,7 @@ export default function PolygonAngleSumsTopic() {
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:opacity-60"
           >
             {playing ? <RotateCcw className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
-            {playing ? '推导中...' : '播放推导动画'}
+            {playing ? tc('deriving') : t('playDerive')}
           </button>
           {progress > 0 ? (
             <button
@@ -126,14 +129,14 @@ export default function PolygonAngleSumsTopic() {
               className="flex w-full items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-muted"
             >
               <RotateCcw className="h-4 w-4" />
-              还原
+              {tc('restore')}
             </button>
           ) : null}
 
           <Hint>
-            <span className="block font-semibold">推导要点</span>
-            <span className="mt-1 block">内角和：从一个顶点可分成 (n-2) 个三角形，所以是 (n-2)×180°。</span>
-            <span className="block">外角和：沿多边形同向走一圈，总转角始终是 360°。</span>
+            <span className="block font-semibold">{t('hintTitle')}</span>
+            <span className="mt-1 block">{t('hintInterior')}</span>
+            <span className="block">{t('hintExterior')}</span>
           </Hint>
         </div>
       }
@@ -217,25 +220,25 @@ export default function PolygonAngleSumsTopic() {
         {progress > 0 ? (
           <>
             <text x={470} y={95} fill="#334155" fontSize="15" fontWeight="700">
-              {mode}边形
+              {t('nGon', { n: mode })}
             </text>
             <text x={470} y={128} fill="#7c3aed" fontSize="14" fontWeight="700">
-              分成 {triangleCount} 个三角形
+              {t('triangleSplit', { count: triangleCount })}
             </text>
             <text x={470} y={158} fill="#334155" fontSize="14">
-              内角和 = {triangleCount} × 180° = {interiorSum}°
+              {t('interiorEq', { count: triangleCount, sum: interiorSum })}
             </text>
             <text x={470} y={188} fill="#f97316" fontSize="14">
-              外角和 = 360°
+              {t('exteriorEq')}
             </text>
             {showExteriorGuides ? (
               <text x={470} y={215} fill="#f97316" fontSize="13">
-                辅助线：每个顶点延长一边得到外角 β
+                {t('exteriorGuide')}
               </text>
             ) : null}
             {showExteriorGuides ? (
               <text x={470} y={236} fill="#f97316" fontSize="13">
-                β₁ + β₂ + ... + βₙ = 360°（转一圈）
+                {t('exteriorSumGuide')}
               </text>
             ) : null}
           </>
@@ -243,11 +246,11 @@ export default function PolygonAngleSumsTopic() {
 
         {showFinal ? (
           <text x={360} y={335} textAnchor="middle" fill="#334155" fontSize="16" fontWeight="700">
-            {mode}边形：内角和 {interiorSum}°，外角和 360°
+            {t('finalResult', { n: mode, interior: interiorSum })}
           </text>
         ) : (
           <text x={360} y={335} textAnchor="middle" fill="#64748b" fontSize="14">
-            点击播放：看 {mode}边形被分成几个三角形，并观察外角和
+            {t('playHint', { n: mode })}
           </text>
         )}
       </svg>

@@ -2,6 +2,7 @@
 
 import { FormulaBox, Hint, NumberControl, TopicPanel } from '../TopicUi'
 import { Play, RotateCcw } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
@@ -9,6 +10,8 @@ const lerp = (from: number, to: number, t: number) => from + (to - from) * t
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
 
 export default function PythagoreanTheoremTopic() {
+  const t = useTranslations('PageMathMotion.pythagoreanTheorem')
+  const tc = useTranslations('PageMathMotion.common')
   const [a, setA] = useState(3)
   const [b, setB] = useState(4)
   const [playing, setPlaying] = useState(false)
@@ -35,9 +38,9 @@ export default function PythagoreanTheoremTopic() {
     const duration = 2800
 
     const tick = (now: number) => {
-      const t = easeInOut(clamp((now - start) / duration, 0, 1))
-      setProgress(t)
-      if (t < 1) {
+      const tAnim = easeInOut(clamp((now - start) / duration, 0, 1))
+      setProgress(tAnim)
+      if (tAnim < 1) {
         rafRef.current = requestAnimationFrame(tick)
       } else {
         setPlaying(false)
@@ -121,14 +124,14 @@ export default function PythagoreanTheoremTopic() {
 
   return (
     <TopicPanel
-      title="勾股定理"
-      subtitle="直角三角形中，两直角边平方和等于斜边平方。"
+      title={t('title')}
+      subtitle={t('subtitle')}
       controls={
         <div className="space-y-4">
-          <NumberControl id="pythagorean-a" label="直角边 a" value={a} min={1} max={12} step={1} onChange={setA} />
-          <NumberControl id="pythagorean-b" label="直角边 b" value={b} min={1} max={12} step={1} onChange={setB} />
-          <FormulaBox label="勾股定理" formula="a² + b² = c²" value={`${a}² + ${b}² = ${c.toFixed(2)}²`} />
-          <FormulaBox label="面积关系" formula="S(a²) + S(b²) = S(c²)" value={`${areaA} + ${areaB} = ${areaC.toFixed(2)}`} />
+          <NumberControl id="pythagorean-a" label={t('legA')} value={a} min={1} max={12} step={1} onChange={setA} />
+          <NumberControl id="pythagorean-b" label={t('legB')} value={b} min={1} max={12} step={1} onChange={setB} />
+          <FormulaBox label={t('theoremLabel')} formula="a² + b² = c²" value={`${a}² + ${b}² = ${c.toFixed(2)}²`} />
+          <FormulaBox label={t('areaRelation')} formula="S(a²) + S(b²) = S(c²)" value={`${areaA} + ${areaB} = ${areaC.toFixed(2)}`} />
           <button
             type="button"
             disabled={playing}
@@ -136,7 +139,7 @@ export default function PythagoreanTheoremTopic() {
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:opacity-60"
           >
             {playing ? <RotateCcw className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
-            {playing ? '推导中...' : '播放推导动画'}
+            {playing ? tc('deriving') : t('playDerive')}
           </button>
           {progress > 0 ? (
             <button
@@ -145,13 +148,13 @@ export default function PythagoreanTheoremTopic() {
               className="flex w-full items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-muted"
             >
               <RotateCcw className="h-4 w-4" />
-              还原
+              {tc('restore')}
             </button>
           ) : null}
           <Hint>
-            <span className="block font-semibold">推导提示</span>
-            <span className="mt-1 block">先看直角三角形，再分别在 a、b、c 三边上向外作正方形。</span>
-            <span className="block">面积关系：a² + b² = c²。</span>
+            <span className="block font-semibold">{t('hintTitle')}</span>
+            <span className="mt-1 block">{t('hintBody1')}</span>
+            <span className="block">{t('hintBody2')}</span>
           </Hint>
         </div>
       }
@@ -258,8 +261,8 @@ export default function PythagoreanTheoremTopic() {
           {showResult
             ? `a² + b² = c² → ${areaA} + ${areaB} = ${areaC.toFixed(2)}`
             : showSquares
-              ? '依次作出 a²、b²、c²……'
-              : '点击播放：在三边上作出正方形，观察面积关系'}
+              ? t('buildingSquares')
+              : t('playHint')}
         </text>
       </svg>
     </TopicPanel>
