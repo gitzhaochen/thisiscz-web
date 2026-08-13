@@ -119,3 +119,7 @@ export type MathMotionTopic = (typeof mathMotionTopics)[number]['id']
 export function isMathMotionTopic(value?: string): value is MathMotionTopic {
   return mathMotionTopics.some((topic) => topic.id === value)
 }
+
+export function findCategoryIdForTopic(topicId: string): string | undefined {
+  return mathMotionCatalog.find((category) => category.topics.some((topic) => topic.id === topicId))?.id
+}
