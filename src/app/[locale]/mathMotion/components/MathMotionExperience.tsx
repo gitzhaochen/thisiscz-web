@@ -52,8 +52,8 @@ export default function MathMotionExperience({ initialTopic }: Props) {
   }
 
   return (
-    <main className="mx-auto w-full max-w-[1600px] px-2 py-6">
-      <div className="grid items-start gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
+    <main className="mx-auto w-full max-w-[1600px] px-2 py-6 [&_button]:cursor-pointer">
+      <div className="grid items-start gap-4 lg:grid-cols-[260px_minmax(0,1fr)]">
         <aside className="bg-card lg:sticky lg:top-20">
           <nav aria-label={t('common.navAriaLabel')} className="space-y-1">
             {mathMotionCatalog.map((category) => {

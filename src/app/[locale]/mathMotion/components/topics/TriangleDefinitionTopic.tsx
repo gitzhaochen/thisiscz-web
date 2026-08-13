@@ -16,26 +16,6 @@ export default function TriangleDefinitionTopic() {
       subtitle={t('subtitle')}
       controls={
         <div className="space-y-4">
-          <Hint>
-            <span className="block font-semibold">{t('definitionTitle')}</span>
-            <span className="mt-1 block">{t('definitionBody')}</span>
-          </Hint>
-          {mode === 'definition' ? (
-            <Hint>
-              <span className="block font-semibold">{t('notationTitle')}</span>
-              <span className="mt-1 block">{t('notationBody1')}</span>
-              <span className="block">{t('notationBody2')}</span>
-            </Hint>
-          ) : (
-            <>
-              <Hint>
-                <span className="block font-semibold">{t('sideRelationTitle')}</span>
-                <span className="mt-1 block">{t('sideRelationBody')}</span>
-                <span className="mt-1 block text-[11px] opacity-90">{t('sideRelationTip')}</span>
-              </Hint>
-              <FormulaBox label={t('sideRelationLabel')} formula="a + b > c，b + c > a，c + a > b" value=" " />
-            </>
-          )}
           <div className="grid grid-cols-3 gap-2">
             {(
               [
@@ -56,6 +36,26 @@ export default function TriangleDefinitionTopic() {
               </button>
             ))}
           </div>
+          <Hint>
+            <span className="block font-semibold">{t('definitionTitle')}</span>
+            <span className="mt-1 block">{t('definitionBody')}</span>
+          </Hint>
+          {mode === 'definition' ? (
+            <Hint>
+              <span className="block font-semibold">{t('notationTitle')}</span>
+              <span className="mt-1 block">{t('notationBody1')}</span>
+              <span className="block">{t('notationBody2')}</span>
+            </Hint>
+          ) : (
+            <>
+              <Hint>
+                <span className="block font-semibold">{t('sideRelationTitle')}</span>
+                <span className="mt-1 block">{t('sideRelationBody')}</span>
+                <span className="mt-1 block text-[11px] opacity-90">{t('sideRelationTip')}</span>
+              </Hint>
+              <FormulaBox label={t('sideRelationLabel')} formula="a + b > c，b + c > a，c + a > b" value=" " />
+            </>
+          )}
         </div>
       }
     >

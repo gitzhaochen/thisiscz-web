@@ -12,14 +12,14 @@ export function TopicPanel({
   controls: ReactNode
 }) {
   return (
-    <article className="bg-card overflow-hidden rounded-2xl border shadow-sm">
-      <div className="border-b px-5 py-5 sm:px-7">
+    <article className="bg-card overflow-hidden rounded-lg border">
+      <div className="border-b p-4">
         <h2 className="text-xl font-bold sm:text-2xl">{title}</h2>
         <p className="text-muted-foreground mt-1.5 text-sm leading-6">{subtitle}</p>
       </div>
       <div className="grid xl:grid-cols-[minmax(0,1fr)_280px]">
-        <div className="from-muted/30 to-background min-w-0 bg-gradient-to-b p-3 sm:p-6">{children}</div>
-        <div className="border-t p-5 xl:border-t-0 xl:border-l">{controls}</div>
+        <div className="from-muted/30 to-background min-w-0 bg-gradient-to-b p-4">{children}</div>
+        <div className="border-t p-4 xl:border-t-0 xl:border-l">{controls}</div>
       </div>
     </article>
   )

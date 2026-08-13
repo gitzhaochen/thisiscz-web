@@ -14,7 +14,7 @@ export const navigation = [
   { name: 'nzRedNoteCars', href: '/cars' },
   { name: 'posts', href: '/posts' },
   { name: 'bookmarks', href: '/bookmarks' },
-  { name: 'aiTalk', href: '/aiTalk' },
+  // { name: 'aiTalk', href: '/aiTalk' },
   // { name: 'resume', href: '/resume' },
 ]
 
