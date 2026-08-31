@@ -72,8 +72,8 @@ export default function PageBookmarks() {
                 src={link.imageUrl || ''}
                 alt={link.title || ''}
                 fill
-                objectFit="cover"
-                className="transition-transform duration-300 hover:scale-105"
+                sizes="(max-width: 768px) 50vw, 25vw"
+                className="object-cover transition-transform duration-300 hover:scale-105"
               />
             </Link>
             <div className="flex flex-col gap-2 p-2 md:p-3">

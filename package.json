@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "generate:api": "orval"
+    "generate:api": "orval",
+    "verify:seo": "node verify-seo.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1063.0",
@@ -51,6 +52,8 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.6",
+    "@eslint/js": "^10.0.1",
     "@openapitools/openapi-generator-cli": "^2.25.2",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4.1.6",

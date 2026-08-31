@@ -2,6 +2,7 @@ import { Locale } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
 import { ReactNode } from 'react'
 import type { Metadata } from 'next'
+import { SITE_URL } from '@/lib/seo'
 
 type Props = {
   children: ReactNode
@@ -11,7 +12,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'PageNzSchools' })
-  const baseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL || 'http://localhost:3000'
+  const baseUrl = SITE_URL
   const pageUrl = `${baseUrl}/${locale}/nzschools`
   const title = t('seoTitle')
   const description = t('seoDescription')
@@ -29,6 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       languages: {
         'zh-CN': `${baseUrl}/zh/nzschools`,
         en: `${baseUrl}/en/nzschools`,
+        'x-default': `${baseUrl}/en/nzschools`,
       },
     },
     openGraph: {

@@ -79,6 +79,7 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
                       src={url}
                       alt={`${car.postTitle || 'car'}-${index}`}
                       fill
+                      sizes="(max-width: 768px) 100vw, 680px"
                       className="object-cover object-center"
                     />
                   </div>
@@ -106,7 +107,13 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
             {images.map((url, index) => (
               <SwiperSlide key={`${url}-${index}`}>
                 <div className="thumb relative aspect-square overflow-hidden rounded-md border">
-                  <Image src={url} alt={`${car.postTitle || 'car'}-${index}`} fill className="object-cover" />
+                  <Image
+                    src={url}
+                    alt={`${car.postTitle || 'car'}-${index}`}
+                    fill
+                    sizes="(max-width: 768px) 20vw, 85px"
+                    className="object-cover"
+                  />
                 </div>
               </SwiperSlide>
             ))}

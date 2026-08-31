@@ -4,7 +4,7 @@ import useSafari100vh from '@/hooks/useSafari100vh'
 import { getAccessToken } from '@/lib/auth'
 import { useUserStore } from '@/store/userStore'
 import { useGetApiUsersMe } from '@/lib/api/generated'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import RenderWakeupOnMount from '../RenderWakeupOnMount'
 
 export default function AppInit() {

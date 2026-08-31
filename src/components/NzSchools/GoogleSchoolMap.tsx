@@ -90,6 +90,7 @@ export function GoogleSchoolMap({
   const viewportKeyRef = useRef<string>('')
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
   const [mapError, setMapError] = useState<string | null>(null)
+  const [shouldLoad, setShouldLoad] = useState(false)
 
   const validMarkers = useMemo(
     () =>
@@ -104,6 +105,23 @@ export function GoogleSchoolMap({
   )
 
   useEffect(() => {
+    const element = mapElementRef.current
+    if (!element || shouldLoad || validMarkers.length === 0) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '200px' },
+    )
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [shouldLoad, validMarkers.length])
+
+  useEffect(() => {
     if (validMarkers.length === 0) {
       for (const marker of markerInstancesRef.current) {
         marker.setMap(null)
@@ -113,8 +131,9 @@ export function GoogleSchoolMap({
       return
     }
 
+    if (!shouldLoad) return
+
     if (!apiKey) {
-      setMapError(missingApiKeyText)
       return
     }
 
@@ -231,10 +250,14 @@ export function GoogleSchoolMap({
     return () => {
       isCancelled = true
     }
-  }, [apiKey, validMarkers, missingApiKeyText, loadErrorText])
+  }, [apiKey, validMarkers, missingApiKeyText, loadErrorText, shouldLoad])
 
   if (validMarkers.length === 0) {
     return <div className={cn('text-muted-foreground text-sm', className)}>{noCoordinatesText}</div>
+  }
+
+  if (!apiKey) {
+    return <div className={cn('text-muted-foreground text-sm', className)}>{missingApiKeyText}</div>
   }
 
   if (mapError) {
@@ -243,7 +266,11 @@ export function GoogleSchoolMap({
 
   return (
     <div className={cn('overflow-hidden rounded-lg border', className)}>
-      <div ref={mapElementRef} className={cn('w-full', heightClassName)} />
+      <div
+        ref={mapElementRef}
+        className={cn('bg-muted/30 w-full', heightClassName)}
+        aria-label={validMarkers.length === 1 ? validMarkers[0].title : undefined}
+      />
     </div>
   )
 }

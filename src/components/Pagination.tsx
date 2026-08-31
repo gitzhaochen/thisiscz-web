@@ -9,8 +9,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { MouseEvent } from 'react'
+import { usePathname, useSearchParams } from 'next/navigation'
 
 interface PaginationProps {
   currentPage: number
@@ -18,7 +17,6 @@ interface PaginationProps {
 }
 
 export function Pagination({ currentPage, totalPages }: PaginationProps) {
-  const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
@@ -26,10 +24,6 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
     const params = new URLSearchParams(searchParams)
     params.set('page', pageNumber.toString())
     return `${pathname}?${params.toString()}`
-  }
-
-  const handlePageChange = (page: number) => {
-    router.push(createPageURL(page))
   }
 
   // 生成要显示的页码
@@ -76,13 +70,9 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            href="#"
-            onClick={(e: MouseEvent) => {
-              e.preventDefault()
-              if (currentPage > 1) {
-                handlePageChange(currentPage - 1)
-              }
-            }}
+            href={createPageURL(Math.max(1, currentPage - 1))}
+            aria-disabled={currentPage === 1}
+            tabIndex={currentPage === 1 ? -1 : undefined}
             className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
           />
         </PaginationItem>
@@ -92,14 +82,7 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
             {page === '...' ? (
               <PaginationEllipsis />
             ) : (
-              <PaginationLink
-                href="#"
-                onClick={(e: MouseEvent) => {
-                  e.preventDefault()
-                  handlePageChange(page as number)
-                }}
-                isActive={currentPage === page}
-              >
+              <PaginationLink href={createPageURL(page as number)} isActive={currentPage === page}>
                 {page}
               </PaginationLink>
             )}
@@ -108,13 +91,9 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
 
         <PaginationItem>
           <PaginationNext
-            href="#"
-            onClick={(e: MouseEvent) => {
-              e.preventDefault()
-              if (currentPage < totalPages) {
-                handlePageChange(currentPage + 1)
-              }
-            }}
+            href={createPageURL(Math.min(totalPages, currentPage + 1))}
+            aria-disabled={currentPage === totalPages}
+            tabIndex={currentPage === totalPages ? -1 : undefined}
             className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
           />
         </PaginationItem>

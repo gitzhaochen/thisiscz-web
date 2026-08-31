@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Schoolbell&family=ZCOOL+KuaiLe&display=swap');
-
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @plugin "@tailwindcss/typography";
@@ -130,8 +128,8 @@
    */
 
 @theme {
-  --font-schoolbell: 'Schoolbell', cursive;
-  --font-chinese: 'ZCOOL KuaiLe', sans-serif;
+  --font-schoolbell: var(--font-schoolbell-loaded), cursive;
+  --font-chinese: var(--font-chinese-loaded), sans-serif;
 }
 
 @layer base {

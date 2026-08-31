@@ -332,24 +332,13 @@
     "rectangleProperties": {
       "title": "Properties of a rectangle",
       "intro": "A quadrilateral with four right angles.",
-      "points": [
-        "Opposite sides parallel and equal.",
-        "All angles 90°.",
-        "Diagonals equal and bisect each other."
-      ]
+      "points": ["Opposite sides parallel and equal.", "All angles 90°.", "Diagonals equal and bisect each other."]
     },
     "rectangleFormula": {
       "title": "Perimeter & area",
       "intro": "Described by length l and width w.",
-      "points": [
-        "Two lengths l, two widths w.",
-        "P = 2(l + w).",
-        "S = l × w."
-      ],
-      "formulas": [
-        "P = 2(l + w)",
-        "S = l × w"
-      ]
+      "points": ["Two lengths l, two widths w.", "P = 2(l + w).", "S = l × w."],
+      "formulas": ["P = 2(l + w)", "S = l × w"]
     },
     "parallelogramProperties": {
       "title": "Properties of a parallelogram",
@@ -381,11 +370,7 @@
     "rhombusDefinition": {
       "title": "Definition of a rhombus",
       "intro": "A parallelogram with four equal sides.",
-      "points": [
-        "An “equilateral parallelogram”.",
-        "Angles need not be right.",
-        "All right angles → square."
-      ]
+      "points": ["An “equilateral parallelogram”.", "Angles need not be right.", "All right angles → square."]
     },
     "rhombusProperties": {
       "title": "Properties of a rhombus",
@@ -408,15 +393,8 @@
     "regularPolygonAngleSum": {
       "title": "Interior angle sum",
       "intro": "From one vertex, split into (n−2) triangles.",
-      "points": [
-        "Each triangle sums to 180°.",
-        "Interior sum = (n−2) × 180°.",
-        "Regular: each angle = sum ÷ n."
-      ],
-      "formulas": [
-        "Interior sum = (n − 2) × 180°",
-        "Each angle = ((n − 2) × 180°) / n"
-      ]
+      "points": ["Each triangle sums to 180°.", "Interior sum = (n−2) × 180°.", "Regular: each angle = sum ÷ n."],
+      "formulas": ["Interior sum = (n − 2) × 180°", "Each angle = ((n − 2) × 180°) / n"]
     }
   },
   "PageCars": {
@@ -463,6 +441,11 @@
     "seoTitle": "NZ Schools Directory",
     "seoDescription": "Search NZ schools by city, level, EQI and UE rate. Explore locations on the map with ethnicity and tertiary progression data.",
     "seoKeywords": "NZ schools,New Zealand schools,Auckland schools,school map,EQI index,UE rate,ethnicity,school directory,education in New Zealand,state school,private school",
+    "heading": "New Zealand Schools Directory",
+    "intro": "Compare New Zealand primary, intermediate and secondary schools by location, school type, EQI and university entrance data. Open a school profile for enrolment, ethnicity, address and map information.",
+    "pageTitle": "Page {page}",
+    "resultsTitle": "School search results",
+    "resultCount": "{count, plural, =0 {No schools found} one {# school found} other {# schools found}}",
     "filtersTitle": "Filters",
     "namePlaceholder": "School name (fuzzy)",
     "city": "City",
@@ -494,6 +477,9 @@
     "seoDescription": "{name} in {city} is a {authorityClass} {levelClass} school. EQI {eqi}, {students} students in 2025{ueRatePart}. View address, ethnicity breakdown, 2023 UE rate and map.",
     "seoUeRatePart": ", UE rate {ueRate}",
     "seoKeywordsBase": "NZ schools,EQI index,UE rate,ethnicity,school directory,school map",
+    "directory": "NZ Schools Directory",
+    "breadcrumbLabel": "Breadcrumb",
+    "viewCitySchools": "View more schools in {city}",
     "schoolId": "School ID",
     "eqiIndex": "EQI Index",
     "totalStudents2025": "Total Students (2025)",

@@ -7,8 +7,12 @@ console.log('__IS_PROD__', __IS_PROD__)
 const withNextIntl = createNextIntlPlugin()
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  images: { unoptimized: true },
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: '**' },
+      { protocol: 'http', hostname: 'localhost' },
+    ],
+  },
 }
 
 export default withNextIntl(nextConfig)

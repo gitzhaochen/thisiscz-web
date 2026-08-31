@@ -9,6 +9,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import Script from 'next/script'
 import { ReactNode, Suspense } from 'react'
+import type { Metadata } from 'next'
+import { SITE_URL } from '@/lib/seo'
 import '../globals.css'
 
 type Props = {
@@ -20,14 +22,19 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
 }
 
-export async function generateMetadata(props: Omit<Props, 'children'>) {
+export async function generateMetadata(props: Omit<Props, 'children'>): Promise<Metadata> {
   const { locale } = await props.params
 
   const t = await getTranslations({ locale, namespace: 'Common' })
 
   return {
+    metadataBase: new URL(SITE_URL),
     title: t('siteTitle'),
     description: t('description'),
+    openGraph: {
+      siteName: 'ThisIsCZ',
+      type: 'website',
+    },
   }
 }
 
@@ -43,8 +50,8 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <>
-      <Script src="https://www.googletagmanager.com/gtag/js?id=G-WXNH2RJ7N7" strategy="afterInteractive" />
-      <Script id="google-analytics" strategy="afterInteractive">
+      <Script src="https://www.googletagmanager.com/gtag/js?id=G-WXNH2RJ7N7" strategy="lazyOnload" />
+      <Script id="google-analytics" strategy="lazyOnload">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}

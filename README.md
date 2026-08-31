@@ -54,6 +54,7 @@ Create `.env.local` (or copy from `.env.development`):
 | ----------------------------------------- | ------------- | ------------------------------------------------------------ |
 | `NEXT_PUBLIC_APP_BASE_URL`                | Yes           | Frontend base URL, e.g. `http://localhost:3000`              |
 | `NEXT_PUBLIC_API_BASE_URL`                | Yes           | Backend API base URL, e.g. `http://localhost:5239`           |
+| `GOOGLE_SITE_VERIFICATION`                | For SEO       | Google Search Console HTML verification token                |
 | `DEEPSEEK_API_KEY`                        | For AI Talk   | DeepSeek API key (server-side only)                          |
 | `APP_CLOUDFLARE_R2_ACCESS_KEY_ID`         | For R2 upload | Cloudflare R2 access key id                                  |
 | `APP_CLOUDFLARE_R2_SECRET_ACCESS_KEY`     | For R2 upload | Cloudflare R2 secret access key                              |

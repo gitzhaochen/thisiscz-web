@@ -27,7 +27,13 @@ export default async function PageBookmarksDetail({ params }: Props) {
       <div className="mx-auto max-w-[680px]">
         <div className="relative flex flex-col gap-4">
           <div className="relative aspect-2/1 w-full overflow-hidden rounded-xl">
-            <Image src={linkDetail.imageUrl!} alt={linkDetail.title!} fill objectFit="cover" />
+            <Image
+              src={linkDetail.imageUrl!}
+              alt={linkDetail.title!}
+              fill
+              sizes="(max-width: 720px) 100vw, 680px"
+              className="object-cover"
+            />
           </div>
           <a
             href={linkDetail.url}

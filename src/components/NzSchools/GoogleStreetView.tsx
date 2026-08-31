@@ -72,6 +72,7 @@ export function GoogleStreetView({
   const panoramaRef = useRef<any | null>(null)
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
   const [error, setError] = useState<string | null>(null)
+  const [shouldLoad, setShouldLoad] = useState(false)
 
   const hasValidCoordinates =
     typeof lat === 'number' &&
@@ -82,12 +83,28 @@ export function GoogleStreetView({
     Math.abs(lng) <= 180
 
   useEffect(() => {
-    if (!hasValidCoordinates) {
+    const element = panoramaElementRef.current
+    if (!element || shouldLoad || !hasValidCoordinates) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '200px' },
+    )
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [hasValidCoordinates, shouldLoad])
+
+  useEffect(() => {
+    if (!hasValidCoordinates || !shouldLoad) {
       return
     }
 
     if (!apiKey) {
-      setError(missingApiKeyText)
       return
     }
 
@@ -101,36 +118,33 @@ export function GoogleStreetView({
         }
 
         const streetViewService = new window.google.maps.StreetViewService()
-        streetViewService.getPanorama(
-          { location: targetLocation, radius: 2000 },
-          (data: any, status: string) => {
-            if (isCancelled) {
-              return
-            }
+        streetViewService.getPanorama({ location: targetLocation, radius: 2000 }, (data: any, status: string) => {
+          if (isCancelled) {
+            return
+          }
 
-            if (status !== window.google.maps.StreetViewStatus.OK) {
-              setError(noStreetViewText)
-              return
-            }
+          if (status !== window.google.maps.StreetViewStatus.OK) {
+            setError(noStreetViewText)
+            return
+          }
 
-            const panoramaPosition = data?.location?.latLng ?? targetLocation
-            if (!panoramaRef.current) {
-              panoramaRef.current = new window.google.maps.StreetViewPanorama(panoramaElementRef.current, {
-                position: panoramaPosition,
-                pov: { heading: 34, pitch: 8 },
-                zoom: 1,
-                addressControl: false,
-                fullscreenControl: false,
-                motionTracking: false,
-                showRoadLabels: true,
-              })
-            } else {
-              panoramaRef.current.setPosition(panoramaPosition)
-            }
+          const panoramaPosition = data?.location?.latLng ?? targetLocation
+          if (!panoramaRef.current) {
+            panoramaRef.current = new window.google.maps.StreetViewPanorama(panoramaElementRef.current, {
+              position: panoramaPosition,
+              pov: { heading: 34, pitch: 8 },
+              zoom: 1,
+              addressControl: false,
+              fullscreenControl: false,
+              motionTracking: false,
+              showRoadLabels: true,
+            })
+          } else {
+            panoramaRef.current.setPosition(panoramaPosition)
+          }
 
-            setError(null)
-          },
-        )
+          setError(null)
+        })
       })
       .catch(() => {
         if (!isCancelled) {
@@ -141,10 +155,14 @@ export function GoogleStreetView({
     return () => {
       isCancelled = true
     }
-  }, [apiKey, lat, lng, hasValidCoordinates, missingApiKeyText, loadErrorText, noStreetViewText])
+  }, [apiKey, lat, lng, hasValidCoordinates, missingApiKeyText, loadErrorText, noStreetViewText, shouldLoad])
 
   if (!hasValidCoordinates) {
     return <div className={cn('text-muted-foreground text-sm', className)}>{noCoordinatesText}</div>
+  }
+
+  if (!apiKey) {
+    return <div className={cn('text-muted-foreground text-sm', className)}>{missingApiKeyText}</div>
   }
 
   if (error) {
@@ -153,7 +171,7 @@ export function GoogleStreetView({
 
   return (
     <div className={cn('overflow-hidden rounded-lg border', className)}>
-      <div ref={panoramaElementRef} className={cn('w-full', heightClassName)} />
+      <div ref={panoramaElementRef} className={cn('bg-muted/30 w-full', heightClassName)} />
     </div>
   )
 }

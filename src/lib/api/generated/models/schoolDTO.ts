@@ -40,4 +40,5 @@ export interface SchoolDTO {
   city?: string | null
   /** @nullable */
   ueRate?: number | null
+  updatedAt?: string
 }
