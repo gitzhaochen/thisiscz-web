@@ -16,3 +16,30 @@ export type ParsedCarFields = {
   city: string | null
   originalPostPublishedAt: string | null
 }
+
+export type AiParsedFieldName = Exclude<keyof ParsedCarFields, 'originalPostPublishedAt'>
+
+export type AiFieldCandidate = {
+  value: ParsedCarFields[AiParsedFieldName]
+  confidence: number
+  evidence: string
+}
+
+export type AiParsedCarFields = Partial<Record<AiParsedFieldName, AiFieldCandidate>>
+
+export type ParsedFieldSource = 'deepseek' | 'date'
+
+export type ParsedFieldSources = Partial<Record<keyof ParsedCarFields, ParsedFieldSource>>
+
+export type DeepSeekUsage = {
+  promptTokens?: number
+  completionTokens?: number
+  totalTokens?: number
+}
+
+export type DeepSeekCarParseResult = {
+  fields: AiParsedCarFields
+  model: string
+  usage?: DeepSeekUsage
+  durationMs: number
+}

@@ -143,6 +143,12 @@ type XhsParseResponse = {
   postContent?: string
   imageUrls?: string[]
   parsedFields?: ParsedXhsCarFields
+  parseSource?: 'deepseek'
+  warning?: string
+  aiMeta?: {
+    model?: string
+    durationMs?: number
+  }
 }
 
 type XhsUploadImagesResponse = {
@@ -329,7 +335,10 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
 
     setIsExtracting(true)
     try {
-      const response = await fetch(`/api/xiaohongshu/parse?url=${encodeURIComponent(xhsUrl.trim())}`)
+      const query = new URLSearchParams({
+        url: xhsUrl.trim(),
+      })
+      const response = await fetch(`/api/xiaohongshu/parse?${query}`)
       const result = (await response.json()) as XhsParseResponse
 
       if (!response.ok) {
@@ -433,7 +442,13 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
         shouldDirty: true,
         shouldValidate: true,
       })
-      toast.success('Xiaohongshu data filled')
+      if (result.warning === 'deepseek_no_confident_fields') {
+        toast.warning('AI parsing completed, but no sufficiently confident fields were found')
+      } else {
+        const duration =
+          typeof result.aiMeta?.durationMs === 'number' ? ` in ${(result.aiMeta.durationMs / 1000).toFixed(1)}s` : ''
+        toast.success(`AI data filled${duration}; please review before saving`)
+      }
     } catch {
       toast.error('Parse failed')
     } finally {
@@ -469,8 +484,12 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
                 }
               }}
             />
-            <Button type="button" onClick={handleExtractFromXhs} disabled={isExtracting}>
-              {isExtracting ? 'Parsing...' : 'Parse & Fill'}
+            <Button
+              type="button"
+              onClick={handleExtractFromXhs}
+              disabled={isExtracting}
+            >
+              {isExtracting ? 'AI Parsing...' : 'AI Parse & Fill'}
             </Button>
           </div>
         </div>
