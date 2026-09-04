@@ -36,7 +36,7 @@ async function readAwsMarkdown(fileName: string, locale: Locale): Promise<string
 
     for (const url of filePaths) {
       try {
-        const response = await fetch(url, {
+        const response = await fetch(url + '?v20260904', {
           // Markdown assets change infrequently; cache with ISR for faster TTFB.
           cache: 'force-cache',
           next: { revalidate: MARKDOWN_REVALIDATE_SECONDS },
