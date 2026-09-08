@@ -24,11 +24,14 @@ function parsePage(searchParams: SearchParams) {
   return Number.isInteger(page) && page > 0 ? page : 1
 }
 
+const DEFAULT_CITY = 'Auckland'
+
 function parseFilters(searchParams: SearchParams): SchoolFilters {
   const levelClass = getParam(searchParams, 'levelClass')
   return {
     name: getParam(searchParams, 'name'),
-    city: getParam(searchParams, 'city'),
+    // No city query → Auckland; `city=` (empty) means all cities.
+    city: 'city' in searchParams ? getParam(searchParams, 'city') : DEFAULT_CITY,
     authorityClass: getParam(searchParams, 'authorityClass'),
     levelClass,
     coEdStatus: getParam(searchParams, 'coEdStatus'),

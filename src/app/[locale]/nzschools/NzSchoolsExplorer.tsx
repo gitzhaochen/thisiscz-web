@@ -56,11 +56,14 @@ function getAuthorityMarkerColor(authorityClass?: string | null) {
   }
 }
 
+const DEFAULT_CITY = 'Auckland'
+
 function buildListUrl(pathname: string, filters: SchoolFilters, page = 1) {
   const params = new URLSearchParams()
 
   if (filters.name.trim()) params.set('name', filters.name.trim())
-  if (filters.city) params.set('city', filters.city)
+  // Always set city so empty means "all" and is not confused with the Auckland default.
+  params.set('city', filters.city)
   if (filters.authorityClass) params.set('authorityClass', filters.authorityClass)
   if (filters.levelClass) params.set('levelClass', filters.levelClass)
   if (filters.coEdStatus) params.set('coEdStatus', filters.coEdStatus)
@@ -123,7 +126,7 @@ export default function NzSchoolsExplorer({
   const onReset = () => {
     const resetFilters: SchoolFilters = {
       name: '',
-      city: '',
+      city: DEFAULT_CITY,
       authorityClass: '',
       levelClass: '',
       coEdStatus: '',
