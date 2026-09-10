@@ -91,16 +91,18 @@ export default async function PagePostsDetail({ params }: Props) {
   const tCommonPromise = getTranslations('Common')
   const [postDetail, t, tCommon] = await Promise.all([postDetailPromise, tPromise, tCommonPromise])
 
-  // 尝试从静态文件读取内容
-  let markdownContent = locale === 'zh' ? postDetail.contentZh : postDetail.content
-
-  // 尝试根据 title 生成文件名
+  // 尝试从静态 markdown 文件读取内容；没有则回退到标题 + summary
+  let markdownContent: string | null = null
   if (postDetail.title) {
     const fileName = generateFileNameFromTitle(postDetail.title)
-    const staticContent = await readAwsMarkdown(fileName, locale)
-    if (staticContent) {
-      markdownContent = staticContent
-    }
+    markdownContent = await readAwsMarkdown(fileName, locale)
+  }
+
+  if (!markdownContent) {
+    const title = locale === 'zh' ? postDetail.titleZh || postDetail.title : postDetail.title
+    const summary = locale === 'zh' ? postDetail.summaryZh || postDetail.summary : postDetail.summary
+    const content = locale === 'zh' ? postDetail.contentZh || postDetail.content : postDetail.content
+    markdownContent = [title ? `# ${title}` : '', summary || '', content || ''].filter(Boolean).join('\n\n')
   }
 
   return (
@@ -108,7 +110,7 @@ export default async function PagePostsDetail({ params }: Props) {
       <div className="">
         <div key={postDetail.id!} className="relative flex flex-col gap-6">
           <div className="">
-            <MarkdownView content={markdownContent || ''} />
+            <MarkdownView content={markdownContent} />
           </div>
           <div className="text-muted-foreground flex items-center gap-6 text-sm">
             <div className="flex items-center gap-2">
