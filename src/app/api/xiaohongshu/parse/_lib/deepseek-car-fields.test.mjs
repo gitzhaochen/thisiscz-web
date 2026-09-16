@@ -108,6 +108,8 @@ test('uses DeepSeek JSON mode once and reports usage', async () => {
     const result = await extractCarFieldsWithDeepSeek('丰田 Corolla', '个人卖车')
     assert.equal(calls, 1)
     assert.deepEqual(requestBody.response_format, { type: 'json_object' })
+    assert.deepEqual(requestBody.thinking, { type: 'disabled' })
+    assert.equal(requestBody.max_tokens, 4096)
     assert.equal(requestBody.temperature, 0)
     assert.equal(result.fields.manufacturer?.value, 'Toyota')
     assert.equal(result.usage?.totalTokens, 130)

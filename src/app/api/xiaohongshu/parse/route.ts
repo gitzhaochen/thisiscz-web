@@ -9,12 +9,7 @@ import {
   sanitizeText,
 } from './_lib/html'
 import { parseOriginalPostPublishedAt } from './_lib/post-date'
-import type {
-  AiParsedCarFields,
-  DeepSeekCarParseResult,
-  ParsedCarFields,
-  ParsedFieldSources,
-} from './_lib/types'
+import type { AiParsedCarFields, DeepSeekCarParseResult, ParsedCarFields, ParsedFieldSources } from './_lib/types'
 import { NextRequest, NextResponse } from 'next/server'
 
 const ACCEPTED_HOSTS = ['xiaohongshu.com', 'xhslink.com', 'xhscdn.com', 'xhslink.cn']
@@ -62,9 +57,7 @@ const buildParsedFields = (
     city: null,
     originalPostPublishedAt,
   }
-  const fieldSources: ParsedFieldSources = originalPostPublishedAt
-    ? { originalPostPublishedAt: 'date' }
-    : {}
+  const fieldSources: ParsedFieldSources = originalPostPublishedAt ? { originalPostPublishedAt: 'date' } : {}
   const fieldEvidence: Partial<Record<keyof ParsedCarFields, string>> = {}
 
   for (const [field, candidate] of Object.entries(aiFields)) {
@@ -131,6 +124,10 @@ export async function GET(request: NextRequest) {
     const dateText = sanitizeText(extractDateText(html))
     const imageUrls = extractImages(html)
     let aiResult: DeepSeekCarParseResult
+    console.log('title', title)
+    console.log('content', content)
+    console.log('dateText', dateText)
+    console.log('imageUrls', imageUrls)
     try {
       aiResult = await extractCarFieldsWithDeepSeek(title, content)
     } catch (error) {
@@ -140,10 +137,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'AI parse failed', code }, { status })
     }
 
-    const parsedResult = buildParsedFields(
-      aiResult.fields,
-      parseOriginalPostPublishedAt(dateText),
-    )
+    const parsedResult = buildParsedFields(aiResult.fields, parseOriginalPostPublishedAt(dateText))
 
     return NextResponse.json({
       sourceUrl: finalUrl,

@@ -418,10 +418,10 @@
     "backToList": "返回列表"
   },
   "PageNzSchools": {
-    "seoTitle": "新西兰中小学校查询",
+    "seoTitle": "新西兰中小学校数据",
     "seoDescription": "按城市、学段、EQI 与 UE 率筛选新西兰学校，地图查看学校位置、族裔分布与升学数据。",
     "seoKeywords": "新西兰学校,新西兰中学,奥克兰学校,学校地图,EQI指数,UE率,族裔比例,选校,新西兰留学,公立学校,私立学校,State school",
-    "heading": "新西兰中小学校查询",
+    "heading": "新西兰中小学校数据",
     "intro": "按城市、学段、学校性质、EQI 与大学入学数据比较新西兰小学、初中和高中。进入学校详情可查看在校人数、族裔构成、地址与地图信息。",
     "pageTitle": "第 {page} 页",
     "resultsTitle": "学校查询结果",

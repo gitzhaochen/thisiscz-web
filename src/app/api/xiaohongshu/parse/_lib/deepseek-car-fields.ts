@@ -161,7 +161,8 @@ export async function extractCarFieldsWithDeepSeek(title: string, content: strin
         model,
         stream: false,
         temperature: 0,
-        max_tokens: 2200,
+        max_tokens: 4096,
+        thinking: { type: 'disabled' },
         response_format: { type: 'json_object' },
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },

@@ -438,10 +438,10 @@
     "backToList": "Back to list"
   },
   "PageNzSchools": {
-    "seoTitle": "NZ Schools Directory",
+    "seoTitle": "NZ Schools Data",
     "seoDescription": "Search NZ schools by city, level, EQI and UE rate. Explore locations on the map with ethnicity and tertiary progression data.",
     "seoKeywords": "NZ schools,New Zealand schools,Auckland schools,school map,EQI index,UE rate,ethnicity,school directory,education in New Zealand,state school,private school",
-    "heading": "New Zealand Schools Directory",
+    "heading": "New Zealand Schools Data",
     "intro": "Compare New Zealand primary, intermediate and secondary schools by location, school type, EQI and university entrance data. Open a school profile for enrolment, ethnicity, address and map information.",
     "pageTitle": "Page {page}",
     "resultsTitle": "School search results",
