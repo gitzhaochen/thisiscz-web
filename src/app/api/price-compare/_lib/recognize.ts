@@ -70,6 +70,9 @@ export async function recognizeProductFromImage(params: {
       body: JSON.stringify({
         model: pickVisionModel(),
         stream: false,
+        temperature: 0,
+        max_tokens: 512,
+        thinking: { type: 'disabled' },
         response_format: { type: 'json_object' },
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
