@@ -1,27 +1,13 @@
 'use client'
 
-import {
-  Camera,
-  CheckSquare,
-  Crosshair,
-  ImagePlus,
-  Loader2,
-  MapPin,
-  Pencil,
-  Square,
-  X,
-} from 'lucide-react'
+import { Camera, CheckSquare, Crosshair, Loader2, Pencil, Square, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useCallback, useEffect, useMemo, useRef, useState, useTransition, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react'
 import { toast } from 'sonner'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { CurrentLocationLabel } from './CurrentLocationLabel'
 
 type ChainId = 'paknsave' | 'woolworths'
+type ChainFilter = ChainId | 'all'
 type SortMode = 'price' | 'distance'
 
 type StoreDTO = {
@@ -82,12 +68,11 @@ function formatPrice(value: number) {
 }
 
 function chainBadgeClass(chain: ChainId) {
-  return chain === 'paknsave'
-    ? 'bg-[#FDB913] text-[#0F172A]'
-    : 'bg-[#1E7E34] text-white'
+  return chain === 'paknsave' ? 'bg-[#FDB913] text-[#0F172A]' : 'bg-[#1E7E34] text-white'
 }
 
-function chainDotClass(chain: ChainId) {
+function chainDotClass(chain: ChainId | 'all') {
+  if (chain === 'all') return 'bg-gradient-to-r from-[#FDB913] to-[#1E7E34]'
   return chain === 'paknsave' ? 'bg-[#FDB913]' : 'bg-[#1E7E34]'
 }
 
@@ -96,9 +81,7 @@ function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371
   const dLat = toRad(lat2 - lat1)
   const dLon = toRad(lon2 - lon1)
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
@@ -127,11 +110,10 @@ function pickNearestDefaults(stores: StoreDTO[], origin: { lat: number; lng: num
 export default function PriceCompareClient() {
   const t = useTranslations('PageNzPriceCompare')
   const cameraInputRef = useRef<HTMLInputElement>(null)
-  const galleryInputRef = useRef<HTMLInputElement>(null)
   const [stores, setStores] = useState<StoreDTO[]>([])
   const [storesLoading, setStoresLoading] = useState(true)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const [chainFilter, setChainFilter] = useState<ChainId>('paknsave')
+  const [chainFilter, setChainFilter] = useState<ChainFilter>('all')
   const [inStockOnly, setInStockOnly] = useState(false)
   const [query, setQuery] = useState(DEFAULT_QUERY)
   const [recognizing, setRecognizing] = useState(false)
@@ -193,10 +175,7 @@ export default function PriceCompareClient() {
   }, [origin, stores])
 
   const filteredStores = useMemo(
-    () => sortStoresByDistance(
-      stores.filter((s) => s.chain === chainFilter),
-      origin,
-    ),
+    () => sortStoresByDistance(chainFilter === 'all' ? stores : stores.filter((s) => s.chain === chainFilter), origin),
     [stores, chainFilter, origin],
   )
 
@@ -206,11 +185,19 @@ export default function PriceCompareClient() {
       const selected = available.filter((s) => selectedIds.includes(s.id))
       return { available: available.length, selected: selected.length }
     }
+    const paknsave = forChain('paknsave')
+    const woolworths = forChain('woolworths')
     return {
-      paknsave: forChain('paknsave'),
-      woolworths: forChain('woolworths'),
+      all: {
+        available: paknsave.available + woolworths.available,
+        selected: paknsave.selected + woolworths.selected,
+      },
+      paknsave,
+      woolworths,
     }
   }, [stores, selectedIds])
+
+  const activeChainStats = chainStats[chainFilter]
 
   const runSearch = useCallback(
     (searchQuery: string, storeIds: string[]) => {
@@ -292,42 +279,11 @@ export default function PriceCompareClient() {
     } finally {
       setRecognizing(false)
       if (cameraInputRef.current) cameraInputRef.current.value = ''
-      if (galleryInputRef.current) galleryInputRef.current.value = ''
     }
   }
 
   function openCamera() {
     cameraInputRef.current?.click()
-  }
-
-  function openGallery() {
-    galleryInputRef.current?.click()
-  }
-
-  function ImageSourceMenu({
-    trigger,
-    align = 'end',
-    side = 'top',
-  }: {
-    trigger: ReactNode
-    align?: 'start' | 'center' | 'end'
-    side?: 'top' | 'bottom'
-  }) {
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
-        <DropdownMenuContent align={align} side={side} className="min-w-44">
-          <DropdownMenuItem onSelect={openCamera} className="gap-2">
-            <Camera className="h-4 w-4" />
-            {t('takePhoto')}
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={openGallery} className="gap-2">
-            <ImagePlus className="h-4 w-4" />
-            {t('uploadImage')}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    )
   }
 
   function toggleStore(id: string) {
@@ -343,24 +299,14 @@ export default function PriceCompareClient() {
     setSelectedIds((prev) => [...prev, id])
   }
 
-  const activeChainStats = chainStats[chainFilter]
-
   return (
     <div className="mx-auto max-w-3xl pb-28 font-[family-name:var(--font-kiwi-body)]">
       <header className="mb-4">
-        <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#006948] text-sm font-bold text-white">
-            KP
-          </div>
-          <div>
-            <h1 className="font-[family-name:var(--font-kiwi-headline)] text-xl font-bold tracking-tight text-[#131b2e] sm:text-2xl">
-              <span className="text-[#006948]">KiwiPrice</span> Compare
-            </h1>
-            <p className="flex items-center gap-1 text-xs text-[#3d4a42]">
-              <MapPin className="h-3.5 w-3.5 text-[#006948]" />
-              {t('location')}
-            </p>
-          </div>
+        <div className="flex items-center justify-between gap-2">
+          <h1 className="font-[family-name:var(--font-kiwi-headline)] text-xl font-bold tracking-tight text-[#131b2e] sm:text-2xl">
+            <span className="text-[#006948]">KiwiPrice</span> Compare
+          </h1>
+          <CurrentLocationLabel latitude={origin.lat} longitude={origin.lng} />
         </div>
         <p className="mt-2 text-sm text-[#3d4a42]">{t('intro')}</p>
       </header>
@@ -381,32 +327,21 @@ export default function PriceCompareClient() {
                   : t('aiRecognized', { name: recognizedLabel || '' })}
               </span>
             </div>
-            <ImageSourceMenu
-              side="bottom"
-              align="end"
-              trigger={
-                <button type="button" className="shrink-0 text-xs font-semibold text-[#006948]">
-                  {t('retake')}
-                </button>
-              }
-            />
+            <button type="button" className="shrink-0 text-xs font-semibold text-[#006948]" onClick={openCamera}>
+              {t('retake')}
+            </button>
           </div>
         )}
 
         <div className="flex items-center gap-1.5 rounded-xl bg-white p-1.5 shadow-sm">
-          <ImageSourceMenu
-            side="bottom"
-            align="start"
-            trigger={
-              <button
-                type="button"
-                aria-label={t('captureAria')}
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#006948]/10 text-[#006948] active:scale-95"
-              >
-                {recognizing ? <Loader2 className="h-5 w-5 animate-spin" /> : <Camera className="h-5 w-5" />}
-              </button>
-            }
-          />
+          <button
+            type="button"
+            aria-label={t('captureAria')}
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#006948]/10 text-[#006948] active:scale-95"
+            onClick={openCamera}
+          >
+            {recognizing ? <Loader2 className="h-5 w-5 animate-spin" /> : <Camera className="h-5 w-5" />}
+          </button>
           <div className="flex min-w-0 flex-1 items-center rounded-lg bg-[#f2f3ff] px-2 py-1">
             <input
               className="w-full bg-transparent font-[family-name:var(--font-kiwi-headline)] text-sm font-semibold text-[#131b2e] outline-none"
@@ -449,21 +384,15 @@ export default function PriceCompareClient() {
           className="hidden"
           onChange={(e) => onPickImage(e.target.files?.[0] || null)}
         />
-        <input
-          ref={galleryInputRef}
-          type="file"
-          accept="image/jpeg,image/png,image/webp,image/gif"
-          className="hidden"
-          onChange={(e) => onPickImage(e.target.files?.[0] || null)}
-        />
       </section>
 
       <section className="mt-3">
-        <div className="grid grid-cols-2 gap-1 rounded-xl bg-[#eaedff] p-1">
+        <div className="grid grid-cols-3 gap-1 rounded-xl bg-[#eaedff] p-1">
           {(
             [
-              ['paknsave', t('tabs.yellow')] as const,
-              ['woolworths', t('tabs.green')] as const,
+              ['all', t('tabs.all')],
+              ['paknsave', t('tabs.yellow')],
+              ['woolworths', t('tabs.green')],
             ] as const
           ).map(([id, label]) => {
             const active = chainFilter === id
@@ -473,7 +402,7 @@ export default function PriceCompareClient() {
                 key={id}
                 type="button"
                 onClick={() => setChainFilter(id)}
-                className={`flex items-center justify-center gap-1.5 rounded-lg px-1 py-2 text-xs font-semibold transition-all sm:text-sm ${
+                className={`flex items-center justify-center gap-1 rounded-lg px-1 py-2 text-[12px] font-semibold transition-all sm:gap-1.5 sm:text-sm ${
                   active ? 'bg-white text-[#131b2e] shadow-sm' : 'text-[#3d4a42] hover:bg-white/60'
                 }`}
               >
@@ -617,25 +546,19 @@ export default function PriceCompareClient() {
         ) : null}
 
         {sortedResults.map((row) => {
-          const isBest =
-            lowestPrice != null && row.product != null && Math.abs(row.product.price - lowestPrice) < 0.001
-          const delta =
-            lowestPrice != null && row.product != null ? row.product.price - lowestPrice : null
+          const isBest = lowestPrice != null && row.product != null && Math.abs(row.product.price - lowestPrice) < 0.001
+          const delta = lowestPrice != null && row.product != null ? row.product.price - lowestPrice : null
 
           return (
             <article
               key={row.storeId}
               className={`flex flex-col gap-1 rounded-2xl bg-white p-3 shadow-sm ${
-                isBest
-                  ? 'shadow-[0_4px_12px_-2px_rgba(5,150,105,0.12)] ring-[1.5px] ring-[#006948]/80'
-                  : ''
+                isBest ? 'shadow-[0_4px_12px_-2px_rgba(5,150,105,0.12)] ring-[1.5px] ring-[#006948]/80' : ''
               } ${!row.product || !row.product.inStock ? 'opacity-60' : ''}`}
             >
               <div className="flex items-center justify-between gap-2">
                 <div className="flex min-w-0 items-center gap-1.5">
-                  <span
-                    className={`rounded px-2 py-0.5 text-[11px] font-black ${chainBadgeClass(row.chain)}`}
-                  >
+                  <span className={`rounded px-2 py-0.5 text-[11px] font-black ${chainBadgeClass(row.chain)}`}>
                     {row.chain === 'paknsave' ? t('badge.yellow') : t('badge.green')}
                   </span>
                   <span className="truncate font-[family-name:var(--font-kiwi-headline)] text-sm font-bold text-[#131b2e]">
@@ -660,9 +583,7 @@ export default function PriceCompareClient() {
                 {row.product ? (
                   <div>
                     <div className="flex items-baseline gap-1">
-                      <span className={`text-xs font-bold ${isBest ? 'text-[#006948]' : 'text-[#131b2e]'}`}>
-                        NZ$
-                      </span>
+                      <span className={`text-xs font-bold ${isBest ? 'text-[#006948]' : 'text-[#131b2e]'}`}>NZ$</span>
                       <span
                         className={`font-[family-name:var(--font-kiwi-headline)] text-[28px] leading-8 font-extrabold ${
                           isBest ? 'text-[#006948]' : 'text-[#131b2e]'
@@ -695,19 +616,14 @@ export default function PriceCompareClient() {
         })}
       </section>
 
-      <ImageSourceMenu
-        align="end"
-        side="top"
-        trigger={
-          <button
-            type="button"
-            aria-label={t('captureAria')}
-            className="fixed right-4 bottom-20 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#006948] text-white shadow-xl transition-transform hover:scale-105 active:scale-95"
-          >
-            <Camera className="h-7 w-7" />
-          </button>
-        }
-      />
+      <button
+        type="button"
+        aria-label={t('captureAria')}
+        onClick={openCamera}
+        className="fixed right-4 bottom-20 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#006948] text-white shadow-xl transition-transform hover:scale-105 active:scale-95"
+      >
+        <Camera className="h-7 w-7" />
+      </button>
     </div>
   )
 }

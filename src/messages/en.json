@@ -443,7 +443,8 @@
     "seoDescription": "Snap a product photo or type a name, then compare live prices across Woolworths and PAK'nSAVE stores with multi-store filters.",
     "seoKeywords": "NZ price compare,Woolworths,PaknSave,grocery prices,Auckland supermarket,product OCR",
     "intro": "Snap or type a product name to compare live Auckland Woolworths and PAK'nSAVE store prices.",
-    "location": "Auckland Central",
+    "location": "Auckland",
+    "locating": "Locating…",
     "queryPlaceholder": "Type or scan a product name…",
     "compare": "Compare",
     "captureAria": "Take photo or upload image",
@@ -454,6 +455,7 @@
     "aiRecognized": "AI recognized: {name}",
     "retake": "Choose again",
     "tabs": {
+      "all": "All",
       "green": "Woolworths",
       "yellow": "PAK'nSAVE"
     },
