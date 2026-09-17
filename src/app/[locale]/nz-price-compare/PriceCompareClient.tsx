@@ -300,7 +300,7 @@ export default function PriceCompareClient() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl pb-28 font-[family-name:var(--font-kiwi-body)]">
+    <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col pb-28 font-[family-name:var(--font-kiwi-body)]">
       <header className="mb-4">
         <div className="flex items-center justify-between gap-2">
           <h1 className="font-[family-name:var(--font-kiwi-headline)] text-lg font-bold tracking-tight text-[#131b2e] sm:text-2xl">
@@ -344,7 +344,7 @@ export default function PriceCompareClient() {
           </button>
           <div className="flex min-w-0 flex-1 items-center rounded-lg bg-[#f2f3ff] px-2 py-1">
             <input
-              className="w-full bg-transparent font-[family-name:var(--font-kiwi-headline)] text-sm font-semibold text-[#131b2e] outline-none"
+              className="w-full bg-transparent font-[family-name:var(--font-kiwi-headline)] text-base font-semibold text-[#131b2e] outline-none"
               placeholder={t('queryPlaceholder')}
               value={query}
               onChange={(e) => setQuery(e.target.value)}

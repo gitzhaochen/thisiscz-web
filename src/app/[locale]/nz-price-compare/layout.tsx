@@ -76,5 +76,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default function NzPriceCompareLayout({ children }: { children: ReactNode }) {
-  return <div className={`${headline.variable} ${body.variable} ${mono.variable}`}>{children}</div>
+  return (
+    <div className={`${headline.variable} ${body.variable} ${mono.variable} flex min-h-[calc(100dvh-3.5rem)] flex-col`}>
+      {children}
+    </div>
+  )
 }

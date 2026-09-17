@@ -11,7 +11,7 @@ export default async function NzPriceComparePage({ params }: Props) {
   setRequestLocale(locale)
 
   return (
-    <main className="page-wrapper bg-[#faf8ff] pt-6 pb-8">
+    <main className="page-wrapper flex min-h-[calc(100dvh-3.5rem)] flex-col bg-[#faf8ff] pt-6 pb-8">
       <PriceCompareClient />
     </main>
   )
