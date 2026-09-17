@@ -2,7 +2,7 @@ import type { ProductHit, StoreDTO } from './types'
 
 const WW_BASE = 'https://www.woolworths.co.nz'
 const WW_UA =
-  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36'
 
 const PRODUCT_SEARCH_QUERY = `
 query ProductSearch($searchInput: CompositeSearchInput!) {
@@ -189,16 +189,60 @@ type CookieCache = {
 }
 
 let cookieCache: CookieCache | null = null
+let proxyAgent: unknown | null | undefined
 
-function browserHeaders(extra?: Record<string, string>) {
+function envWoolworthsCookie() {
+  return (process.env.WOOLWORTHS_COOKIE || '').trim()
+}
+
+function guestTokenFromCookie(cookie: string) {
+  const match = cookie.match(/(?:^|;\s*)__guest__token=([^;]+)/)
+  return match?.[1] ? decodeURIComponent(match[1]) : null
+}
+
+function envWoolworthsProxy() {
+  return (process.env.WOOLWORTHS_PROXY || process.env.HTTPS_PROXY || '').trim()
+}
+
+async function getFetchDispatcher() {
+  const proxyUrl = envWoolworthsProxy()
+  if (!proxyUrl) return undefined
+  if (proxyAgent === null) return undefined
+  if (proxyAgent) return proxyAgent
+  try {
+    const moduleName = 'undici'
+    const undici = (await import(moduleName)) as {
+      ProxyAgent: new (url: string) => unknown
+    }
+    proxyAgent = new undici.ProxyAgent(proxyUrl)
+    return proxyAgent
+  } catch (error) {
+    console.error('[woolworths] failed to init proxy agent', error)
+    proxyAgent = null
+    return undefined
+  }
+}
+
+async function wwFetch(url: string, init: RequestInit = {}) {
+  const dispatcher = await getFetchDispatcher()
+  return fetch(url, {
+    ...init,
+    ...(dispatcher ? ({ dispatcher } as RequestInit) : {}),
+  })
+}
+
+function browserHeaders(cookie?: string, extra?: Record<string, string>) {
+  const guestToken = cookie ? guestTokenFromCookie(cookie) : null
   return {
     Accept: 'application/json, text/plain, */*',
-    'Accept-Language': 'en-NZ,en;q=0.9',
+    'Accept-Language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7',
     'User-Agent': WW_UA,
     'x-requested-with': 'OnlineShopping.WebApp',
     'x-ui-ver': '7.21.1',
     Origin: WW_BASE,
-    Referer: `${WW_BASE}/shop/searchproducts`,
+    Referer: `${WW_BASE}/shop/search/products`,
+    ...(cookie ? { Cookie: cookie } : {}),
+    ...(guestToken ? { Authorization: `Bearer ${guestToken}` } : {}),
     ...extra,
   }
 }
@@ -233,12 +277,25 @@ function mergeCookieJar(existing: string, setCookies: string[]) {
     .join('; ')
 }
 
+/**
+ * Prefer manually provided browser cookie (Vercel env `WOOLWORTHS_COOKIE`).
+ * Falls back to anonymous homepage bootstrap when unset.
+ */
 async function bootstrapWoolworthsSession(): Promise<string> {
+  const configured = envWoolworthsCookie()
+  if (configured) {
+    cookieCache = {
+      cookie: configured,
+      expiresAt: Date.now() + 6 * 60 * 60_000,
+    }
+    return configured
+  }
+
   if (cookieCache && cookieCache.expiresAt > Date.now() + 60_000) {
     return cookieCache.cookie
   }
 
-  const res = await fetch(`${WW_BASE}/`, {
+  const res = await wwFetch(`${WW_BASE}/`, {
     headers: {
       Accept: 'text/html,application/xhtml+xml',
       'User-Agent': WW_UA,
@@ -333,8 +390,8 @@ function mapGraphqlProduct(raw: GqlProduct): ProductHit | null {
 
 async function searchViaRest(query: string, cookie: string): Promise<ProductHit | null> {
   const url = `${WW_BASE}/api/v1/products?target=search&search=${encodeURIComponent(query)}&size=8&page=1&inStockProductsOnly=false`
-  const res = await fetch(url, {
-    headers: browserHeaders(cookie ? { Cookie: cookie } : undefined),
+  const res = await wwFetch(url, {
+    headers: browserHeaders(cookie),
     signal: AbortSignal.timeout(12_000),
     cache: 'no-store',
   })
@@ -344,9 +401,12 @@ async function searchViaRest(query: string, cookie: string): Promise<ProductHit 
     throw new Error(`Woolworths REST ${res.status}: ${text.slice(0, 160)}`)
   }
 
-  cookieCache = {
-    cookie: mergeCookieJar(cookie, collectSetCookie(res)),
-    expiresAt: Date.now() + 20 * 60_000,
+  // Keep manually configured cookies stable; only merge bootstrap cookies.
+  if (!envWoolworthsCookie()) {
+    cookieCache = {
+      cookie: mergeCookieJar(cookie, collectSetCookie(res)),
+      expiresAt: Date.now() + 20 * 60_000,
+    }
   }
 
   const data = (await res.json()) as { products?: { items?: WwProduct[] } }
@@ -372,12 +432,11 @@ async function searchViaGraphql(query: string, cookie: string): Promise<ProductH
     },
   }
 
-  const res = await fetch(`${WW_BASE}/api/graphql?op-name=ProductSearch`, {
+  const res = await wwFetch(`${WW_BASE}/api/graphql?op-name=ProductSearch`, {
     method: 'POST',
-    headers: browserHeaders({
+    headers: browserHeaders(cookie, {
       'Content-Type': 'application/json',
       'WNZX-Operation-Name': 'ProductSearch',
-      ...(cookie ? { Cookie: cookie } : {}),
     }),
     body: JSON.stringify(payload),
     signal: AbortSignal.timeout(12_000),
@@ -389,9 +448,11 @@ async function searchViaGraphql(query: string, cookie: string): Promise<ProductH
     throw new Error(`Woolworths GraphQL ${res.status}: ${text.slice(0, 160)}`)
   }
 
-  cookieCache = {
-    cookie: mergeCookieJar(cookie, collectSetCookie(res)),
-    expiresAt: Date.now() + 20 * 60_000,
+  if (!envWoolworthsCookie()) {
+    cookieCache = {
+      cookie: mergeCookieJar(cookie, collectSetCookie(res)),
+      expiresAt: Date.now() + 20 * 60_000,
+    }
   }
 
   const data = (await res.json()) as {
