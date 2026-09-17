@@ -7,6 +7,7 @@ import { haversineKm, mapPool } from '../_lib/utils'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
+export const maxDuration = 60
 
 const bodySchema = z.object({
   query: z.string().trim().min(1).max(160),
@@ -114,7 +115,8 @@ export async function POST(req: Request) {
 
     let results = [...pnsResults, ...wwResults]
     if (inStockOnly) {
-      results = results.filter((r) => r.product?.inStock)
+      // Keep failed lookups visible; only hide successful out-of-stock hits.
+      results = results.filter((r) => !r.product || r.product.inStock)
     }
 
     results.sort((a, b) => {
