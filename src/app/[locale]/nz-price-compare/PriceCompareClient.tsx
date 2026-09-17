@@ -334,17 +334,9 @@ export default function PriceCompareClient() {
         )}
 
         <div className="flex items-center gap-1.5 rounded-xl bg-white p-1.5 shadow-sm">
-          <button
-            type="button"
-            aria-label={t('captureAria')}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#006948]/10 text-[#006948] active:scale-95"
-            onClick={openCamera}
-          >
-            {recognizing ? <Loader2 className="h-5 w-5 animate-spin" /> : <Camera className="h-5 w-5" />}
-          </button>
           <div className="flex min-w-0 flex-1 items-center rounded-lg bg-[#f2f3ff] px-2 py-1">
             <input
-              className="w-full bg-transparent font-[family-name:var(--font-kiwi-headline)] text-base font-semibold text-[#131b2e] outline-none"
+              className="w-full bg-transparent font-[family-name:var(--font-kiwi-headline)] text-base text-[#131b2e] outline-none"
               placeholder={t('queryPlaceholder')}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
