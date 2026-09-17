@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { listPaknSaveStores, searchPaknSaveProduct } from '../_lib/paknsave'
-import { listWoolworthsStores, searchWoolworthsProduct } from '../_lib/woolworths'
+import {
+  listWoolworthsStores,
+  priceWoolworthsAtStore,
+  resolveWoolworthsMatch,
+  unwrapWoolworthsStoreKey,
+} from '../_lib/woolworths'
 import type { ComparedProductDTO, PriceResultDTO, StoreDTO } from '../_lib/types'
 import { haversineKm, mapPool } from '../_lib/utils'
 
@@ -20,6 +25,7 @@ const bodySchema = z.object({
 const DEFAULT_ORIGIN = { latitude: -36.8485, longitude: 174.7633 }
 
 function withDistance(store: StoreDTO, originLat: number, originLng: number): number | null {
+  if (typeof store.distanceKm === 'number') return store.distanceKm
   if (store.latitude == null || store.longitude == null) return null
   return Math.round(haversineKm(originLat, originLng, store.latitude, store.longitude) * 10) / 10
 }
@@ -44,7 +50,7 @@ export async function POST(req: Request) {
   try {
     const [paknsaveStores, woolworthsStores] = await Promise.all([
       listPaknSaveStores(),
-      Promise.resolve(listWoolworthsStores()),
+      listWoolworthsStores({ latitude: originLat, longitude: originLng }),
     ])
     const storeMap = new Map<string, StoreDTO>([...paknsaveStores, ...woolworthsStores].map((s) => [s.id, s]))
 
@@ -55,16 +61,6 @@ export async function POST(req: Request) {
 
     const pnsSelected = selected.filter((s) => s.chain === 'paknsave')
     const wwSelected = selected.filter((s) => s.chain === 'woolworths')
-
-    let wwProduct = null as Awaited<ReturnType<typeof searchWoolworthsProduct>>
-    let wwError: string | null = null
-    if (wwSelected.length > 0) {
-      try {
-        wwProduct = await searchWoolworthsProduct(query)
-      } catch (error) {
-        wwError = error instanceof Error ? error.message : 'Woolworths search failed'
-      }
-    }
 
     const pnsResults = await mapPool(pnsSelected, 4, async (store): Promise<PriceResultDTO> => {
       try {
@@ -99,19 +95,57 @@ export async function POST(req: Request) {
       }
     })
 
-    const wwResults: PriceResultDTO[] = wwSelected.map((store) => ({
-      storeId: store.id,
-      chain: store.chain,
-      storeName: store.name,
-      shortName: store.shortName,
-      address: store.address,
-      latitude: store.latitude,
-      longitude: store.longitude,
-      distanceKm: withDistance(store, originLat, originLng),
-      product: wwProduct,
-      error: wwError || (wwProduct ? null : 'No matching product'),
-      priceScope: 'catalogue',
-    }))
+    const wwMatch =
+      wwSelected.length > 0 ? await resolveWoolworthsMatch(query).catch(() => null) : null
+
+    const wwResults = await mapPool(wwSelected, 3, async (store): Promise<PriceResultDTO> => {
+      const scope = unwrapWoolworthsStoreKey(store.id) ? 'store' : 'catalogue'
+      try {
+        if (!wwMatch) {
+          return {
+            storeId: store.id,
+            chain: store.chain,
+            storeName: store.name,
+            shortName: store.shortName,
+            address: store.address,
+            latitude: store.latitude,
+            longitude: store.longitude,
+            distanceKm: withDistance(store, originLat, originLng),
+            product: null,
+            error: 'No matching product',
+            priceScope: scope,
+          }
+        }
+        const product = await priceWoolworthsAtStore(store.id, wwMatch)
+        return {
+          storeId: store.id,
+          chain: store.chain,
+          storeName: store.name,
+          shortName: store.shortName,
+          address: store.address,
+          latitude: store.latitude,
+          longitude: store.longitude,
+          distanceKm: withDistance(store, originLat, originLng),
+          product,
+          error: product ? null : 'No matching product',
+          priceScope: scope,
+        }
+      } catch (error) {
+        return {
+          storeId: store.id,
+          chain: store.chain,
+          storeName: store.name,
+          shortName: store.shortName,
+          address: store.address,
+          latitude: store.latitude,
+          longitude: store.longitude,
+          distanceKm: withDistance(store, originLat, originLng),
+          product: null,
+          error: error instanceof Error ? error.message : 'Search failed',
+          priceScope: scope,
+        }
+      }
+    })
 
     let results = [...pnsResults, ...wwResults]
     if (inStockOnly) {
@@ -126,8 +160,7 @@ export async function POST(req: Request) {
       return (a.distanceKm ?? 999) - (b.distanceKm ?? 999)
     })
 
-    const bestProduct =
-      results.find((r) => r.product)?.product || wwProduct || pnsResults.find((r) => r.product)?.product || null
+    const bestProduct = results.find((r) => r.product)?.product || null
 
     const comparedProduct: ComparedProductDTO | null = bestProduct
       ? {

@@ -34,6 +34,7 @@ type StoreDTO = {
   region: string
   latitude: number | null
   longitude: number | null
+  distanceKm?: number | null
   onlineActive: boolean
 }
 
@@ -102,6 +103,7 @@ function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number) {
 }
 
 function storeDistanceKm(store: StoreDTO, origin: { lat: number; lng: number }) {
+  if (typeof store.distanceKm === 'number') return store.distanceKm
   if (store.latitude == null || store.longitude == null) return Number.POSITIVE_INFINITY
   return haversineKm(origin.lat, origin.lng, store.latitude, store.longitude)
 }
@@ -130,7 +132,7 @@ export default function PriceCompareClient() {
   const [storesLoading, setStoresLoading] = useState(true)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [chainFilter, setChainFilter] = useState<ChainId>('paknsave')
-  const [inStockOnly, setInStockOnly] = useState(true)
+  const [inStockOnly, setInStockOnly] = useState(false)
   const [query, setQuery] = useState(DEFAULT_QUERY)
   const [recognizing, setRecognizing] = useState(false)
   const [recognizedLabel, setRecognizedLabel] = useState<string | null>(null)
@@ -157,7 +159,11 @@ export default function PriceCompareClient() {
     ;(async () => {
       try {
         setStoresLoading(true)
-        const res = await fetch('/api/price-compare/stores')
+        const params = new URLSearchParams({
+          lat: String(origin.lat),
+          lng: String(origin.lng),
+        })
+        const res = await fetch(`/api/price-compare/stores?${params}`)
         if (!res.ok) throw new Error('stores failed')
         const data = (await res.json()) as { stores: StoreDTO[] }
         if (cancelled) return
@@ -171,11 +177,19 @@ export default function PriceCompareClient() {
     return () => {
       cancelled = true
     }
-  }, [t])
+  }, [origin.lat, origin.lng, t])
 
   useEffect(() => {
-    if (!stores.length || selectionTouchedRef.current) return
-    setSelectedIds(pickNearestDefaults(stores, origin))
+    if (!stores.length) return
+    if (!selectionTouchedRef.current) {
+      setSelectedIds(pickNearestDefaults(stores, origin))
+      return
+    }
+    setSelectedIds((prev) => {
+      const valid = new Set(stores.map((s) => s.id))
+      const kept = prev.filter((id) => valid.has(id))
+      return kept.length > 0 ? kept : pickNearestDefaults(stores, origin)
+    })
   }, [origin, stores])
 
   const filteredStores = useMemo(

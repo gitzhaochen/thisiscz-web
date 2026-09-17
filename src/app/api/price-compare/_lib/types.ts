@@ -10,6 +10,8 @@ export type StoreDTO = {
   region: string
   latitude: number | null
   longitude: number | null
+  /** Precomputed distance from the request origin (e.g. Woolworths locations API). */
+  distanceKm?: number | null
   onlineActive: boolean
 }
 

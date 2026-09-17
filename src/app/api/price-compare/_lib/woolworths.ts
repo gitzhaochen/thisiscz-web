@@ -4,24 +4,27 @@ const WW_BASE = 'https://www.woolworths.co.nz'
 const WW_UA =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36'
 
+const DEFAULT_ORIGIN = { latitude: -36.8485, longitude: 174.7633 }
+
 const PRODUCT_SEARCH_QUERY = `
 query ProductSearch($searchInput: CompositeSearchInput!) {
   My {
     products(searchInput: $searchInput) {
       results {
+        __typename
         ... on ProductSummary {
-          __typename
           sku
           productName
           slug
           imageUrl
           brand
+          storeKey
           variants {
             variantKey
             name
+            availabilityStatus
             purchaseUnit { unit }
             variantPrice {
-              currency
               isSpecial
               isClubPrice
               sellingPrice
@@ -32,7 +35,6 @@ query ProductSearch($searchInput: CompositeSearchInput!) {
           }
         }
         ... on SponsoredProduct {
-          __typename
           sku
           productName
           slug
@@ -41,9 +43,9 @@ query ProductSearch($searchInput: CompositeSearchInput!) {
           variants {
             variantKey
             name
+            availabilityStatus
             purchaseUnit { unit }
             variantPrice {
-              currency
               isSpecial
               isClubPrice
               sellingPrice
@@ -60,7 +62,54 @@ query ProductSearch($searchInput: CompositeSearchInput!) {
 }
 `.trim()
 
-/** Auckland-area Woolworths pickup locations (catalogue pricing; official store list API is account-gated). */
+const PRODUCT_DETAIL_VARIANT = `
+  key
+  sku
+  volumeSize
+  availabilityStatus
+  variantPrice { sellingPrice wasPrice cupPrice cupUnit isSpecial isClubPrice }
+  assets { url }
+`
+
+const PRODUCT_DETAIL_QUERY = `
+query ProductDetail($keys: [ID!]!, $storeKey: String!) {
+  products(keys: $keys, storeKey: $storeKey) {
+    key
+    brand
+    name
+    slug
+    variants {
+      __typename
+      ... on GroceryVariant {${PRODUCT_DETAIL_VARIANT} barcode }
+      ... on RegulatedVariant {${PRODUCT_DETAIL_VARIANT} barcode }
+      ... on GeneralMerchandiseVariant {${PRODUCT_DETAIL_VARIANT} barcode }
+      ... on NonMerchandiseVariant {${PRODUCT_DETAIL_VARIANT} barcode }
+      ... on MonetaryVariant {${PRODUCT_DETAIL_VARIANT} }
+    }
+  }
+}
+`.trim()
+
+const SEARCH_LOCATIONS_QUERY = `
+query SearchLocations($input: LocationsInput!) {
+  locations(input: $input) {
+    locations {
+      id
+      name
+      storeId
+      description
+      distance
+      address {
+        locality { suburb city state postcode country }
+        lines { line1 line2 line3 line4 line5 }
+      }
+      store { storeId name }
+    }
+  }
+}
+`.trim()
+
+/** Fallback when the live locations API is blocked; ids are not real storeKeys. */
 export const WOOLWORTHS_AUCKLAND_STORES: StoreDTO[] = [
   {
     id: 'ww:takapuna',
@@ -160,35 +209,19 @@ export const WOOLWORTHS_AUCKLAND_STORES: StoreDTO[] = [
   },
 ]
 
-type WwProduct = {
-  sku?: string
-  name?: string
-  brand?: string
-  barcode?: string
-  availabilityStatus?: string
-  stockLevel?: number
-  price?: {
-    salePrice?: number
-    originalPrice?: number
-    isClubPrice?: boolean
-  }
-  size?: {
-    volumeSize?: string
-    cupPrice?: number
-    cupMeasure?: string
-  }
-  images?: {
-    small?: string
-    big?: string
-  }
-}
-
 type CookieCache = {
   cookie: string
   expiresAt: number
 }
 
+type NearbyCache = {
+  key: string
+  stores: StoreDTO[]
+  expiresAt: number
+}
+
 let cookieCache: CookieCache | null = null
+let nearbyCache: NearbyCache | null = null
 let proxyAgent: unknown | null | undefined
 
 function envWoolworthsCookie() {
@@ -201,7 +234,9 @@ function guestTokenFromCookie(cookie: string) {
 }
 
 function envWoolworthsProxy() {
-  return (process.env.WOOLWORTHS_PROXY || process.env.HTTPS_PROXY || '').trim()
+  // Only honor an explicit Woolworths proxy. Do not inherit shell HTTPS_PROXY —
+  // Cursor/sandbox proxies often break undici with "Unsupported URL scheme".
+  return (process.env.WOOLWORTHS_PROXY || '').trim()
 }
 
 async function getFetchDispatcher() {
@@ -277,10 +312,6 @@ function mergeCookieJar(existing: string, setCookies: string[]) {
     .join('; ')
 }
 
-/**
- * Prefer manually provided browser cookie (Vercel env `WOOLWORTHS_COOKIE`).
- * Falls back to anonymous homepage bootstrap when unset.
- */
 async function bootstrapWoolworthsSession(): Promise<string> {
   const configured = envWoolworthsCookie()
   if (configured) {
@@ -314,33 +345,27 @@ async function bootstrapWoolworthsSession(): Promise<string> {
   return cookie
 }
 
-function mapRestProduct(raw: WwProduct): ProductHit {
-  const sale = raw.price?.salePrice ?? raw.price?.originalPrice ?? 0
-  const cupPrice = raw.size?.cupPrice
-  const cupMeasure = raw.size?.cupMeasure
-  const unitPriceLabel =
-    typeof cupPrice === 'number' && cupMeasure ? `$${cupPrice.toFixed(2)}/${cupMeasure}` : null
-  const status = (raw.availabilityStatus || '').toLowerCase()
-  const inStock = status === 'in stock' || status.includes('in stock') || (raw.stockLevel ?? 0) > 0
+async function ensureCookie() {
+  return bootstrapWoolworthsSession()
+}
 
-  return {
-    productId: String(raw.sku || ''),
-    name: [raw.brand, raw.name].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim() || raw.name || 'Unknown',
-    brand: raw.brand || null,
-    size: raw.size?.volumeSize || null,
-    imageUrl: raw.images?.big || raw.images?.small || null,
-    barcode: raw.barcode || null,
-    price: sale,
-    unitPriceLabel,
-    clubPrice: raw.price?.isClubPrice ? sale : null,
-    inStock,
-    productUrl: raw.sku ? `${WW_BASE}/shop/productdetails?stockcode=${encodeURIComponent(raw.sku)}` : null,
+function rememberCookie(cookie: string, res: Response) {
+  if (envWoolworthsCookie()) return
+  cookieCache = {
+    cookie: mergeCookieJar(cookie, collectSetCookie(res)),
+    expiresAt: Date.now() + 20 * 60_000,
   }
 }
 
 type GqlVariant = {
   variantKey?: string
+  key?: string
+  sku?: string
   name?: string
+  volumeSize?: string
+  availabilityStatus?: string
+  barcode?: string | null
+  assets?: Array<{ url?: string | null }>
   variantPrice?: {
     isClubPrice?: boolean
     sellingPrice?: number
@@ -350,17 +375,162 @@ type GqlVariant = {
   }
 }
 
-type GqlProduct = {
+type GqlSearchProduct = {
   __typename?: string
   sku?: string
   productName?: string
   slug?: string
   imageUrl?: string
   brand?: string
+  storeKey?: string
   variants?: GqlVariant[]
 }
 
-function mapGraphqlProduct(raw: GqlProduct): ProductHit | null {
+type GqlDetailProduct = {
+  key?: string
+  brand?: string
+  name?: string
+  slug?: string
+  variants?: GqlVariant[]
+}
+
+type WwLocation = {
+  id?: string
+  name?: string
+  storeId?: string | null
+  description?: string | null
+  distance?: number | null
+  address?: {
+    locality?: {
+      suburb?: string | null
+      city?: string | null
+      state?: string | null
+      postcode?: string | null
+    }
+    lines?: Record<string, string | null | undefined>
+  }
+  store?: { storeId?: string; name?: string } | null
+}
+
+function shortStoreName(name: string) {
+  return name
+    .replace(/^Woolworths\s+/i, '')
+    .replace(/\s+Woolworths$/i, '')
+    .replace(/^Countdown\s+/i, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+function addressLines(lines?: Record<string, string | null | undefined>) {
+  if (!lines) return []
+  return ['line1', 'line2', 'line3', 'line4', 'line5']
+    .map((key) => lines[key]?.trim())
+    .filter((line): line is string => Boolean(line))
+}
+
+function mapLocation(raw: WwLocation): StoreDTO | null {
+  const storeKey = (raw.store?.storeId || raw.storeId || '').trim()
+  if (!storeKey) return null
+  const name = (raw.store?.name || raw.name || '').trim()
+  if (!name) return null
+  const lines = addressLines(raw.address?.lines)
+  const suburb = raw.address?.locality?.suburb?.trim() || ''
+  const city = raw.address?.locality?.city?.trim() || suburb || 'New Zealand'
+  const region = raw.address?.locality?.state?.trim() || city
+  const distance =
+    typeof raw.distance === 'number' && Number.isFinite(raw.distance)
+      ? Math.round(raw.distance * 10) / 10
+      : null
+
+  return {
+    id: `ww:${storeKey}`,
+    chain: 'woolworths',
+    name,
+    shortName: shortStoreName(name),
+    address: lines.join(', ') || suburb || name,
+    city,
+    region,
+    latitude: null,
+    longitude: null,
+    distanceKm: distance,
+    onlineActive: true,
+  }
+}
+
+/** Extract catalogue storeKey from `ww:9171` ids. Slug fallbacks (static list) return null. */
+export function unwrapWoolworthsStoreKey(storeId: string): string | null {
+  const raw = storeId.startsWith('ww:') ? storeId.slice(3) : storeId
+  return /^\d+$/.test(raw) ? raw : null
+}
+
+async function graphql<T>(
+  operationName: string,
+  query: string,
+  variables: Record<string, unknown>,
+  cookie: string,
+): Promise<{ data: T; cookie: string }> {
+  const res = await wwFetch(`${WW_BASE}/api/graphql?op-name=${encodeURIComponent(operationName)}`, {
+    method: 'POST',
+    headers: browserHeaders(cookie, {
+      'Content-Type': 'application/json',
+      'WNZX-Operation-Name': operationName,
+    }),
+    body: JSON.stringify({ operationName, query, variables }),
+    signal: AbortSignal.timeout(12_000),
+    cache: 'no-store',
+  })
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => '')
+    throw new Error(`Woolworths ${operationName} ${res.status}: ${text.slice(0, 160)}`)
+  }
+
+  rememberCookie(cookie, res)
+
+  const payload = (await res.json()) as {
+    errors?: Array<{ message?: string }>
+    data?: T
+  }
+
+  if (payload.errors?.length) {
+    throw new Error(payload.errors.map((e) => e.message).filter(Boolean).join('; ') || `${operationName} error`)
+  }
+  if (!payload.data) {
+    throw new Error(`${operationName} returned empty data`)
+  }
+
+  return { data: payload.data, cookie: cookieCache?.cookie || cookie }
+}
+
+function normalizeAvailability(status?: string | null) {
+  return (status || '').toLowerCase().replace(/[_\s-]+/g, '')
+}
+
+/** Woolworths uses enums like InStock / OutOfStock / Available — not "in stock". */
+function isWoolworthsInStock(status?: string | null) {
+  const s = normalizeAvailability(status)
+  if (!s) return true
+  if (
+    s.includes('outofstock') ||
+    s.includes('unavailable') ||
+    s.includes('notavailable') ||
+    s.includes('notforsale')
+  ) {
+    return false
+  }
+  if (s.includes('instock') || s.includes('available') || s.includes('lowstock')) return true
+  // Unknown status but priced: treat as ranged/in-stock rather than hide results.
+  return true
+}
+
+function catalogueSku(sku?: string | null, fallback?: string | null) {
+  const raw = String(sku || fallback || '').trim()
+  if (!raw) return ''
+  // ProductDetail often returns variant keys like "6064244-EA"; catalogue urls use the base sku.
+  return raw.replace(/-(EA|KG|PK)$/i, '')
+}
+
+function mapSearchProduct(raw: GqlSearchProduct): ProductHit | null {
   const variant = raw.variants?.[0]
   const price = variant?.variantPrice
   const sale = price?.sellingPrice ?? price?.wasPrice
@@ -370,10 +540,14 @@ function mapGraphqlProduct(raw: GqlProduct): ProductHit | null {
   const cupUnit = price?.cupUnit
   const unitPriceLabel =
     typeof cupPrice === 'number' && cupUnit ? `$${cupPrice.toFixed(2)}/${cupUnit}` : null
+  const sku = catalogueSku(raw.sku, variant?.variantKey)
 
   return {
-    productId: String(raw.sku || variant?.variantKey || ''),
-    name: [raw.brand, raw.productName].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim() || raw.productName || 'Unknown',
+    productId: sku,
+    name:
+      [raw.brand, raw.productName].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim() ||
+      raw.productName ||
+      'Unknown',
     brand: raw.brand || null,
     size: variant?.name || null,
     imageUrl: raw.imageUrl || null,
@@ -381,139 +555,186 @@ function mapGraphqlProduct(raw: GqlProduct): ProductHit | null {
     price: sale,
     unitPriceLabel,
     clubPrice: price?.isClubPrice ? sale : null,
-    inStock: true,
-    productUrl: raw.sku
-      ? `${WW_BASE}/shop/product-details/${encodeURIComponent(raw.sku)}${raw.slug ? `/${encodeURIComponent(raw.slug)}` : ''}`
+    inStock: isWoolworthsInStock(variant?.availabilityStatus),
+    productUrl: sku
+      ? `${WW_BASE}/shop/product-details/${encodeURIComponent(sku)}${raw.slug ? `/${encodeURIComponent(raw.slug)}` : ''}`
       : null,
   }
 }
 
-async function searchViaRest(query: string, cookie: string): Promise<ProductHit | null> {
-  const url = `${WW_BASE}/api/v1/products?target=search&search=${encodeURIComponent(query)}&size=8&page=1&inStockProductsOnly=false`
-  const res = await wwFetch(url, {
-    headers: browserHeaders(cookie),
-    signal: AbortSignal.timeout(12_000),
-    cache: 'no-store',
-  })
+function mapDetailProduct(raw: GqlDetailProduct, fallback?: ProductHit | null): ProductHit | null {
+  const variant = raw.variants?.[0]
+  const price = variant?.variantPrice
+  const sale = price?.sellingPrice ?? price?.wasPrice
+  if (typeof sale !== 'number') return null
 
-  if (!res.ok) {
-    const text = await res.text().catch(() => '')
-    throw new Error(`Woolworths REST ${res.status}: ${text.slice(0, 160)}`)
+  const cupPrice = price?.cupPrice
+  const cupUnit = price?.cupUnit
+  const unitPriceLabel =
+    typeof cupPrice === 'number' && cupUnit ? `$${cupPrice.toFixed(2)}/${cupUnit}` : null
+  const sku = catalogueSku(variant?.sku || raw.key, fallback?.productId)
+  const imageUrl = variant?.assets?.[0]?.url || fallback?.imageUrl || null
+
+  return {
+    productId: sku,
+    name:
+      [raw.brand, raw.name].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim() ||
+      raw.name ||
+      fallback?.name ||
+      'Unknown',
+    brand: raw.brand || fallback?.brand || null,
+    size: variant?.volumeSize || fallback?.size || null,
+    imageUrl,
+    barcode: variant?.barcode || fallback?.barcode || null,
+    price: sale,
+    unitPriceLabel,
+    clubPrice: price?.isClubPrice ? sale : null,
+    inStock: isWoolworthsInStock(variant?.availabilityStatus),
+    productUrl: sku
+      ? `${WW_BASE}/shop/product-details/${encodeURIComponent(sku)}${raw.slug ? `/${encodeURIComponent(raw.slug)}` : ''}`
+      : fallback?.productUrl || null,
   }
-
-  // Keep manually configured cookies stable; only merge bootstrap cookies.
-  if (!envWoolworthsCookie()) {
-    cookieCache = {
-      cookie: mergeCookieJar(cookie, collectSetCookie(res)),
-      expiresAt: Date.now() + 20 * 60_000,
-    }
-  }
-
-  const data = (await res.json()) as { products?: { items?: WwProduct[] } }
-  const first = data.products?.items?.[0]
-  return first ? mapRestProduct(first) : null
 }
 
-async function searchViaGraphql(query: string, cookie: string): Promise<ProductHit | null> {
-  const payload = {
-    operationName: 'ProductSearch',
-    query: PRODUCT_SEARCH_QUERY,
-    variables: {
-      searchInput: {
-        byKeyword: {
-          value: query,
-          pageIndex: 0,
-          pageSize: 8,
-          facetFilters: [],
-          staticFilters: [],
-          sortBy: 'RELEVANCE',
-        },
+async function searchCatalogue(query: string, cookie: string): Promise<{ hit: ProductHit | null; storeKey: string | null }> {
+  const { data } = await graphql<{
+    My?: { products?: { results?: GqlSearchProduct[] } }
+  }>('ProductSearch', PRODUCT_SEARCH_QUERY, {
+    searchInput: {
+      byKeyword: {
+        value: query,
+        pageIndex: 0,
+        pageSize: 8,
+        facetFilters: [],
+        staticFilters: [],
+        sortBy: 'RELEVANCE',
       },
     },
-  }
+  }, cookie)
 
-  const res = await wwFetch(`${WW_BASE}/api/graphql?op-name=ProductSearch`, {
-    method: 'POST',
-    headers: browserHeaders(cookie, {
-      'Content-Type': 'application/json',
-      'WNZX-Operation-Name': 'ProductSearch',
-    }),
-    body: JSON.stringify(payload),
-    signal: AbortSignal.timeout(12_000),
-    cache: 'no-store',
-  })
-
-  if (!res.ok) {
-    const text = await res.text().catch(() => '')
-    throw new Error(`Woolworths GraphQL ${res.status}: ${text.slice(0, 160)}`)
-  }
-
-  if (!envWoolworthsCookie()) {
-    cookieCache = {
-      cookie: mergeCookieJar(cookie, collectSetCookie(res)),
-      expiresAt: Date.now() + 20 * 60_000,
-    }
-  }
-
-  const data = (await res.json()) as {
-    errors?: Array<{ message?: string }>
-    data?: { My?: { products?: { results?: GqlProduct[] } } }
-  }
-
-  if (data.errors?.length) {
-    throw new Error(data.errors.map((e) => e.message).filter(Boolean).join('; ') || 'GraphQL error')
-  }
-
-  const results = data.data?.My?.products?.results || []
+  const results = data.My?.products?.results || []
   for (const item of results) {
     if (item.__typename && !['ProductSummary', 'SponsoredProduct'].includes(item.__typename)) continue
-    const mapped = mapGraphqlProduct(item)
-    if (mapped) return mapped
+    const hit = mapSearchProduct(item)
+    if (hit?.productId) {
+      return { hit, storeKey: item.storeKey || null }
+    }
   }
-  return null
+  return { hit: null, storeKey: null }
 }
 
-export function listWoolworthsStores(): StoreDTO[] {
+async function fetchProductAtStore(
+  sku: string,
+  storeKey: string,
+  cookie: string,
+  fallback?: ProductHit | null,
+): Promise<ProductHit | null> {
+  const { data } = await graphql<{ products?: GqlDetailProduct[] }>(
+    'ProductDetail',
+    PRODUCT_DETAIL_QUERY,
+    { keys: [sku], storeKey },
+    cookie,
+  )
+
+  const product = data.products?.[0]
+  if (!product) return null
+  return mapDetailProduct(product, fallback)
+}
+
+async function fetchNearbyStores(latitude: number, longitude: number, cookie: string): Promise<StoreDTO[]> {
+  const { data } = await graphql<{
+    locations?: { locations?: WwLocation[] }
+  }>('SearchLocations', SEARCH_LOCATIONS_QUERY, {
+    input: {
+      search: '',
+      allStores: false,
+      filter: {
+        sortingMethod: 'DISTANCE',
+        sortingOrder: 'ASCENDING',
+        max: 40,
+      },
+      geolocation: { latitude, longitude },
+    },
+  }, cookie)
+
+  const seen = new Set<string>()
+  const stores: StoreDTO[] = []
+  for (const raw of data.locations?.locations || []) {
+    const mapped = mapLocation(raw)
+    if (!mapped || seen.has(mapped.id)) continue
+    seen.add(mapped.id)
+    stores.push(mapped)
+  }
+  return stores
+}
+
+export async function listWoolworthsStores(opts?: {
+  latitude?: number
+  longitude?: number
+}): Promise<StoreDTO[]> {
+  const latitude = opts?.latitude ?? DEFAULT_ORIGIN.latitude
+  const longitude = opts?.longitude ?? DEFAULT_ORIGIN.longitude
+  const cacheKey = `${latitude.toFixed(3)},${longitude.toFixed(3)}`
+
+  if (nearbyCache && nearbyCache.key === cacheKey && nearbyCache.expiresAt > Date.now()) {
+    return nearbyCache.stores
+  }
+
+  try {
+    const cookie = await ensureCookie()
+    const stores = await fetchNearbyStores(latitude, longitude, cookie)
+    if (stores.length > 0) {
+      nearbyCache = {
+        key: cacheKey,
+        stores,
+        expiresAt: Date.now() + 10 * 60_000,
+      }
+      return stores
+    }
+  } catch (error) {
+    console.error('[woolworths] nearby stores failed', error)
+  }
+
   return WOOLWORTHS_AUCKLAND_STORES
 }
 
-export async function searchWoolworthsProduct(query: string): Promise<ProductHit | null> {
-  const errors: string[] = []
-  const existingCookie = cookieCache?.cookie || ''
+/**
+ * Resolve a catalogue match once, then price it at a specific store via ProductDetail(storeKey).
+ * Falls back to catalogue price when the store id is not a real storeKey.
+ */
+export async function searchWoolworthsProduct(storeId: string, query: string): Promise<ProductHit | null> {
+  const matched = await resolveWoolworthsMatch(query)
+  if (!matched) return null
+  return priceWoolworthsAtStore(storeId, matched)
+}
 
-  // Bootstrap in parallel; do not wait for it before first attempt.
-  const cookiePromise = bootstrapWoolworthsSession().catch(() => existingCookie)
+export type WoolworthsMatch = {
+  hit: ProductHit
+  sessionStoreKey: string | null
+  cookie: string
+}
 
-  const attempt = async (cookie: string) =>
-    Promise.any([searchViaGraphql(query, cookie), searchViaRest(query, cookie)])
+export async function resolveWoolworthsMatch(query: string): Promise<WoolworthsMatch | null> {
+  const cookie = await ensureCookie()
+  const { hit, storeKey } = await searchCatalogue(query, cookie)
+  if (!hit?.productId) return null
+  return { hit, sessionStoreKey: storeKey, cookie: cookieCache?.cookie || cookie }
+}
+
+export async function priceWoolworthsAtStore(
+  storeId: string,
+  matched: WoolworthsMatch,
+): Promise<ProductHit | null> {
+  const storeKey = unwrapWoolworthsStoreKey(storeId) || matched.sessionStoreKey
+  if (!storeKey) return matched.hit
 
   try {
-    return await attempt(existingCookie)
-  } catch (firstError) {
-    if (firstError instanceof AggregateError) {
-      for (const err of firstError.errors || []) {
-        errors.push(err instanceof Error ? err.message : String(err))
-      }
-    } else if (firstError instanceof Error) {
-      errors.push(firstError.message)
-    }
+    return (
+      (await fetchProductAtStore(matched.hit.productId, storeKey, matched.cookie, matched.hit)) ||
+      matched.hit
+    )
+  } catch (error) {
+    console.error('[woolworths] ProductDetail failed', storeKey, error)
+    return matched.hit
   }
-
-  const freshCookie = await cookiePromise
-  cookieCache = null
-  const retryCookie = (await bootstrapWoolworthsSession().catch(() => freshCookie)) || freshCookie
-
-  try {
-    return await attempt(retryCookie)
-  } catch (secondError) {
-    if (secondError instanceof AggregateError) {
-      for (const err of secondError.errors || []) {
-        errors.push(err instanceof Error ? err.message : String(err))
-      }
-    } else if (secondError instanceof Error) {
-      errors.push(secondError.message)
-    }
-  }
-
-  throw new Error(errors.filter(Boolean).slice(0, 2).join(' | ') || 'Woolworths search failed')
 }
