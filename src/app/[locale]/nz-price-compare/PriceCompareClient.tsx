@@ -286,6 +286,19 @@ export default function PriceCompareClient() {
     cameraInputRef.current?.click()
   }
 
+  function clearCameraPreview() {
+    setPreviewUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev)
+      return null
+    })
+    setRecognizedLabel(null)
+  }
+
+  function runTextSearch() {
+    clearCameraPreview()
+    runSearch(query, selectedIds)
+  }
+
   function toggleStore(id: string) {
     selectionTouchedRef.current = true
     if (selectedIds.includes(id)) {
@@ -341,7 +354,7 @@ export default function PriceCompareClient() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') runSearch(query, selectedIds)
+                if (e.key === 'Enter') runTextSearch()
               }}
             />
             {query ? (
@@ -359,7 +372,7 @@ export default function PriceCompareClient() {
             type="button"
             className="rounded-lg bg-[#006948] px-3 py-2 text-xs font-bold text-white disabled:opacity-60"
             disabled={searching}
-            onClick={() => runSearch(query, selectedIds)}
+            onClick={runTextSearch}
           >
             {searching ? <Loader2 className="h-4 w-4 animate-spin" /> : t('compare')}
           </button>
