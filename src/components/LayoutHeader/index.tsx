@@ -10,14 +10,17 @@ const LayoutHeader = () => {
   const i18nCommon = useTranslations('Common')
   const i18nCars = useTranslations('PageCars')
   const i18nNzSchools = useTranslations('PageNzSchools')
+  const i18nPriceCompare = useTranslations('PageNzPriceCompare')
   const pathname = usePathname()
   const locale = useLocale()
 
   const mobileTitle = pathname.startsWith('/nzschools')
     ? i18nNzSchools('seoTitle')
-    : pathname.startsWith('/cars')
-      ? i18nCars('seoTitle')
-      : i18nCommon('siteTitle')
+    : pathname.startsWith('/nz-price-compare')
+      ? i18nPriceCompare('seoTitle')
+      : pathname.startsWith('/cars')
+        ? i18nCars('seoTitle')
+        : i18nCommon('siteTitle')
 
   return (
     <div className="bg-background sticky top-0 z-10 border-b border-dashed">

@@ -4,7 +4,7 @@ import { INDEXED_LOCALES, SITE_URL } from '@/lib/seo'
 
 export const revalidate = 86400
 
-const STATIC_PATHS = ['', '/posts', '/nzschools', '/cars', '/resume'] as const
+const STATIC_PATHS = ['', '/posts', '/nzschools', '/nz-price-compare', '/cars', '/resume'] as const
 
 async function getSchools() {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL

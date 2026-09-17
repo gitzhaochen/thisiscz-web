@@ -17,6 +17,7 @@
     "bookmarks": "我的书签",
     "posts": "我的帖子",
     "nzSchools": "NZ学校",
+    "nzPriceCompare": "NZ商品比价",
     "nzRedNoteCars": "NZ小红书二手车",
     "resume": "简历",
     "aiTalk": "AI聊天",
@@ -416,6 +417,55 @@
     "viewDetail": "查看详情",
     "sourceLink": "来源链接",
     "backToList": "返回列表"
+  },
+  "PageNzPriceCompare": {
+    "seoTitle": "商品比价",
+    "seoDescription": "拍照识别商品名称，对比 Woolworths 绿超与 PAK'nSAVE 黄超多家门店实时价格，支持门店筛选与库存过滤。",
+    "seoKeywords": "新西兰比价,绿超,黄超,Woolworths,PaknSave,商品价格,奥克兰超市,拍照识物",
+    "intro": "拍照或输入商品名，对比奥克兰绿超与黄超多家门店当前价格。",
+    "location": "Auckland Central",
+    "queryPlaceholder": "输入或扫描商品名称…",
+    "compare": "比价",
+    "captureAria": "拍照识别",
+    "clearAria": "清除",
+    "aiRecognizing": "AI 识图识别中: {name}",
+    "aiRecognized": "AI 已识别: {name}",
+    "retake": "重新拍照",
+    "tabs": {
+      "green": "绿超 Woolworths",
+      "yellow": "黄超 PAK'n"
+    },
+    "tabStoreCount": "{selected}/{available}",
+    "storeLibrary": "已选 {selected} / 备选 {available} · 合计 {totalSelected}/{max}",
+    "inStockOnly": "仅看有库存",
+    "loadingStores": "门店加载中…",
+    "comparing": "正在比价",
+    "compared": "已比价",
+    "barcode": "条码",
+    "editableHint": "可在上方修改商品名称后重新比价",
+    "justUpdated": "刚刚更新 · 实时抓取奥克兰各店",
+    "readyToCompare": "选择门店后点击比价开始查询",
+    "resultTitle": "门店比价列表 ({count})",
+    "sortPrice": "价格从低到高",
+    "sortDistance": "距离最近",
+    "emptyResults": "输入商品名或拍照后开始比价",
+    "badge": {
+      "green": "绿超 Woolworths",
+      "yellow": "黄超 PAK'nSAVE"
+    },
+    "bestDeal": "全网最低 BEST DEAL",
+    "clubPrice": "Reward卡: ${price}",
+    "cataloguePriceNote": "线上目录价（各店库存可能不同）",
+    "outOfStock": "暂无库存",
+    "noMatch": "未找到匹配商品",
+    "errors": {
+      "stores": "门店列表加载失败",
+      "search": "比价查询失败，请稍后重试",
+      "recognize": "商品识别失败，请重拍或手动输入",
+      "emptyQuery": "请先输入或识别商品名称",
+      "noStores": "请至少选择一家门店",
+      "maxStores": "最多选择 {max} 家门店比价"
+    }
   },
   "PageNzSchools": {
     "seoTitle": "新西兰中小学校数据",

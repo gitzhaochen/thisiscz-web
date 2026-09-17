@@ -17,6 +17,7 @@
     "bookmarks": "My Bookmarks",
     "posts": "My Posts",
     "nzSchools": "NZ Schools",
+    "nzPriceCompare": "NZ Price Compare",
     "nzRedNoteCars": "NZ RedNote Cars",
     "resume": "Resume",
     "aiTalk": "AiTalk",
@@ -436,6 +437,55 @@
     "viewDetail": "View detail",
     "sourceLink": "Source Link",
     "backToList": "Back to list"
+  },
+  "PageNzPriceCompare": {
+    "seoTitle": "NZ Grocery Price Compare",
+    "seoDescription": "Snap a product photo or type a name, then compare live prices across Woolworths and PAK'nSAVE stores with multi-store filters.",
+    "seoKeywords": "NZ price compare,Woolworths,PaknSave,grocery prices,Auckland supermarket,product OCR",
+    "intro": "Snap or type a product name to compare live Auckland Woolworths and PAK'nSAVE store prices.",
+    "location": "Auckland Central",
+    "queryPlaceholder": "Type or scan a product name…",
+    "compare": "Compare",
+    "captureAria": "Take photo",
+    "clearAria": "Clear",
+    "aiRecognizing": "AI recognizing: {name}",
+    "aiRecognized": "AI recognized: {name}",
+    "retake": "Retake",
+    "tabs": {
+      "green": "Woolworths",
+      "yellow": "PAK'nSAVE"
+    },
+    "tabStoreCount": "{selected}/{available}",
+    "storeLibrary": "Selected {selected} / available {available} · total {totalSelected}/{max}",
+    "inStockOnly": "In stock only",
+    "loadingStores": "Loading stores…",
+    "comparing": "Comparing",
+    "compared": "Compared",
+    "barcode": "Barcode",
+    "editableHint": "Edit the name above and compare again",
+    "justUpdated": "Just updated · live Auckland store prices",
+    "readyToCompare": "Pick stores, then tap Compare",
+    "resultTitle": "Store prices ({count})",
+    "sortPrice": "Price low to high",
+    "sortDistance": "Nearest",
+    "emptyResults": "Enter a product name or take a photo to compare",
+    "badge": {
+      "green": "Woolworths",
+      "yellow": "PAK'nSAVE"
+    },
+    "bestDeal": "BEST DEAL",
+    "clubPrice": "Rewards: ${price}",
+    "cataloguePriceNote": "Online catalogue price (stock may vary by store)",
+    "outOfStock": "Out of stock",
+    "noMatch": "No matching product",
+    "errors": {
+      "stores": "Failed to load stores",
+      "search": "Price comparison failed. Please try again.",
+      "recognize": "Could not recognize the product. Retake or type the name.",
+      "emptyQuery": "Enter or recognize a product name first",
+      "noStores": "Select at least one store",
+      "maxStores": "You can compare at most {max} stores"
+    }
   },
   "PageNzSchools": {
     "seoTitle": "NZ Schools Data",
