@@ -303,8 +303,8 @@ export default function PriceCompareClient() {
     <div className="mx-auto max-w-3xl pb-28 font-[family-name:var(--font-kiwi-body)]">
       <header className="mb-4">
         <div className="flex items-center justify-between gap-2">
-          <h1 className="font-[family-name:var(--font-kiwi-headline)] text-xl font-bold tracking-tight text-[#131b2e] sm:text-2xl">
-            <span className="text-[#006948]">KiwiPrice</span> Compare
+          <h1 className="font-[family-name:var(--font-kiwi-headline)] text-lg font-bold tracking-tight text-[#131b2e] sm:text-2xl">
+            <span className="text-[#006948]">Grocery Price</span> Compare
           </h1>
           <CurrentLocationLabel latitude={origin.lat} longitude={origin.lng} />
         </div>
@@ -402,13 +402,13 @@ export default function PriceCompareClient() {
                 key={id}
                 type="button"
                 onClick={() => setChainFilter(id)}
-                className={`flex items-center justify-center gap-1 rounded-lg px-1 py-2 text-[12px] font-semibold transition-all sm:gap-1.5 sm:text-sm ${
+                className={`flex items-center justify-center gap-1 rounded-lg px-1 py-2 text-[13px] font-semibold transition-all sm:gap-1.5 sm:text-sm ${
                   active ? 'bg-white text-[#131b2e] shadow-sm' : 'text-[#3d4a42] hover:bg-white/60'
                 }`}
               >
                 <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${chainDotClass(id)}`} />
                 <span className="truncate">{label}</span>
-                <span className="rounded-full bg-[#e2e7ff] px-1.5 py-0.5 font-mono text-[10px] text-[#3d4a42]">
+                <span className="rounded-full bg-[#e2e7ff] px-1.5 py-0.5 font-mono text-[11px] text-[#3d4a42]">
                   {t('tabStoreCount', { selected: stats.selected, available: stats.available })}
                 </span>
               </button>
@@ -558,7 +558,9 @@ export default function PriceCompareClient() {
             >
               <div className="flex items-center justify-between gap-2">
                 <div className="flex min-w-0 items-center gap-1.5">
-                  <span className={`rounded px-2 py-0.5 text-[11px] font-black ${chainBadgeClass(row.chain)}`}>
+                  <span
+                    className={`rounded px-2 py-0.5 text-[10px] font-black whitespace-nowrap ${chainBadgeClass(row.chain)}`}
+                  >
                     {row.chain === 'paknsave' ? t('badge.yellow') : t('badge.green')}
                   </span>
                   <span className="truncate font-[family-name:var(--font-kiwi-headline)] text-sm font-bold text-[#131b2e]">
@@ -569,11 +571,11 @@ export default function PriceCompareClient() {
                   ) : null}
                 </div>
                 {isBest ? (
-                  <span className="shrink-0 rounded-full bg-[#006948] px-2 py-0.5 text-[11px] font-bold text-white shadow-sm">
+                  <span className="shrink-0 rounded-full bg-[#006948] px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
                     {t('bestDeal')}
                   </span>
                 ) : delta != null && delta > 0 ? (
-                  <span className="shrink-0 rounded-full bg-[#ffdea6] px-2 py-0.5 text-[11px] font-bold text-[#271900]">
+                  <span className="shrink-0 rounded-full bg-[#ffdea6] px-2 py-0.5 text-[10px] font-bold text-[#271900]">
                     +{formatPrice(delta)} NZD
                   </span>
                 ) : null}

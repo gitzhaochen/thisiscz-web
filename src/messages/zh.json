@@ -419,7 +419,7 @@
     "backToList": "返回列表"
   },
   "PageNzPriceCompare": {
-    "seoTitle": "商品比价",
+    "seoTitle": "NZ 商品比价",
     "seoDescription": "拍照识别商品名称，对比 Woolworths 绿超与 PAK'nSAVE 黄超多家门店实时价格，支持门店筛选与库存过滤。",
     "seoKeywords": "新西兰比价,绿超,黄超,Woolworths,PaknSave,商品价格,奥克兰超市,拍照识物",
     "intro": "拍照或输入商品名，对比奥克兰绿超与黄超多家门店当前价格。",
@@ -436,8 +436,8 @@
     "retake": "重新选择",
     "tabs": {
       "all": "全部",
-      "green": "绿超 Woolworths",
-      "yellow": "黄超 PAK'n"
+      "green": "绿超",
+      "yellow": "黄超"
     },
     "tabStoreCount": "{selected}/{available}",
     "storeLibrary": "已选 {selected} / 备选 {available} · 合计 {totalSelected}/{max}",
@@ -457,7 +457,7 @@
       "green": "绿超 Woolworths",
       "yellow": "黄超 PAK'nSAVE"
     },
-    "bestDeal": "全网最低 BEST DEAL",
+    "bestDeal": "当前最低",
     "clubPrice": "Reward卡: ${price}",
     "cataloguePriceNote": "线上目录价（各店库存可能不同）",
     "outOfStock": "暂无库存",
