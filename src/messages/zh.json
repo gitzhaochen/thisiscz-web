@@ -426,11 +426,13 @@
     "location": "Auckland Central",
     "queryPlaceholder": "输入或扫描商品名称…",
     "compare": "比价",
-    "captureAria": "拍照识别",
+    "captureAria": "拍照或上传图片识别",
     "clearAria": "清除",
+    "takePhoto": "拍照上传",
+    "uploadImage": "从相册选择",
     "aiRecognizing": "AI 识图识别中: {name}",
     "aiRecognized": "AI 已识别: {name}",
-    "retake": "重新拍照",
+    "retake": "重新选择",
     "tabs": {
       "green": "绿超 Woolworths",
       "yellow": "黄超 PAK'n"
@@ -462,6 +464,7 @@
       "stores": "门店列表加载失败",
       "search": "比价查询失败，请稍后重试",
       "recognize": "商品识别失败，请重拍或手动输入",
+      "invalidImage": "请选择图片文件",
       "emptyQuery": "请先输入或识别商品名称",
       "noStores": "请至少选择一家门店",
       "maxStores": "最多选择 {max} 家门店比价"

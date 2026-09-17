@@ -446,11 +446,13 @@
     "location": "Auckland Central",
     "queryPlaceholder": "Type or scan a product name…",
     "compare": "Compare",
-    "captureAria": "Take photo",
+    "captureAria": "Take photo or upload image",
     "clearAria": "Clear",
+    "takePhoto": "Take photo",
+    "uploadImage": "Choose from gallery",
     "aiRecognizing": "AI recognizing: {name}",
     "aiRecognized": "AI recognized: {name}",
-    "retake": "Retake",
+    "retake": "Choose again",
     "tabs": {
       "green": "Woolworths",
       "yellow": "PAK'nSAVE"
@@ -482,6 +484,7 @@
       "stores": "Failed to load stores",
       "search": "Price comparison failed. Please try again.",
       "recognize": "Could not recognize the product. Retake or type the name.",
+      "invalidImage": "Please choose an image file",
       "emptyQuery": "Enter or recognize a product name first",
       "noStores": "Select at least one store",
       "maxStores": "You can compare at most {max} stores"

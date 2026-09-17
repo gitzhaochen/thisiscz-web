@@ -4,6 +4,7 @@ import {
   Camera,
   CheckSquare,
   Crosshair,
+  ImagePlus,
   Loader2,
   MapPin,
   Pencil,
@@ -11,8 +12,14 @@ import {
   X,
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, useTransition, type ReactNode } from 'react'
 import { toast } from 'sonner'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 type ChainId = 'paknsave' | 'woolworths'
 type SortMode = 'price' | 'distance'
@@ -65,7 +72,8 @@ type ComparedProductDTO = {
 
 const DEFAULT_QUERY = ''
 const AUCKLAND = { lat: -36.8485, lng: 174.7633 }
-const DEFAULT_PER_CHAIN = 3
+const DEFAULT_PAKNSAVE = 4
+const DEFAULT_WOOLWORTHS = 2
 const MAX_SELECTED_STORES = 10
 
 function formatPrice(value: number) {
@@ -103,20 +111,21 @@ function sortStoresByDistance(stores: StoreDTO[], origin: { lat: number; lng: nu
 }
 
 function pickNearestDefaults(stores: StoreDTO[], origin: { lat: number; lng: number }) {
-  const nearest = (chain: ChainId) =>
+  const nearest = (chain: ChainId, count: number) =>
     sortStoresByDistance(
       stores.filter((s) => s.chain === chain),
       origin,
     )
-      .slice(0, DEFAULT_PER_CHAIN)
+      .slice(0, count)
       .map((s) => s.id)
 
-  return [...nearest('paknsave'), ...nearest('woolworths')]
+  return [...nearest('paknsave', DEFAULT_PAKNSAVE), ...nearest('woolworths', DEFAULT_WOOLWORTHS)]
 }
 
 export default function PriceCompareClient() {
   const t = useTranslations('PageNzPriceCompare')
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const cameraInputRef = useRef<HTMLInputElement>(null)
+  const galleryInputRef = useRef<HTMLInputElement>(null)
   const [stores, setStores] = useState<StoreDTO[]>([])
   const [storesLoading, setStoresLoading] = useState(true)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
@@ -244,6 +253,10 @@ export default function PriceCompareClient() {
 
   async function onPickImage(file: File | null) {
     if (!file) return
+    if (!file.type.startsWith('image/')) {
+      toast.error(t('errors.invalidImage'))
+      return
+    }
     if (previewUrl) URL.revokeObjectURL(previewUrl)
     setPreviewUrl(URL.createObjectURL(file))
     setRecognizing(true)
@@ -264,7 +277,43 @@ export default function PriceCompareClient() {
       toast.error(t('errors.recognize'))
     } finally {
       setRecognizing(false)
+      if (cameraInputRef.current) cameraInputRef.current.value = ''
+      if (galleryInputRef.current) galleryInputRef.current.value = ''
     }
+  }
+
+  function openCamera() {
+    cameraInputRef.current?.click()
+  }
+
+  function openGallery() {
+    galleryInputRef.current?.click()
+  }
+
+  function ImageSourceMenu({
+    trigger,
+    align = 'end',
+    side = 'top',
+  }: {
+    trigger: ReactNode
+    align?: 'start' | 'center' | 'end'
+    side?: 'top' | 'bottom'
+  }) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+        <DropdownMenuContent align={align} side={side} className="min-w-44">
+          <DropdownMenuItem onSelect={openCamera} className="gap-2">
+            <Camera className="h-4 w-4" />
+            {t('takePhoto')}
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={openGallery} className="gap-2">
+            <ImagePlus className="h-4 w-4" />
+            {t('uploadImage')}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
   }
 
   function toggleStore(id: string) {
@@ -318,25 +367,32 @@ export default function PriceCompareClient() {
                   : t('aiRecognized', { name: recognizedLabel || '' })}
               </span>
             </div>
-            <button
-              type="button"
-              className="shrink-0 text-xs font-semibold text-[#006948]"
-              onClick={() => fileInputRef.current?.click()}
-            >
-              {t('retake')}
-            </button>
+            <ImageSourceMenu
+              side="bottom"
+              align="end"
+              trigger={
+                <button type="button" className="shrink-0 text-xs font-semibold text-[#006948]">
+                  {t('retake')}
+                </button>
+              }
+            />
           </div>
         )}
 
         <div className="flex items-center gap-1.5 rounded-xl bg-white p-1.5 shadow-sm">
-          <button
-            type="button"
-            aria-label={t('captureAria')}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#006948]/10 text-[#006948] active:scale-95"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            {recognizing ? <Loader2 className="h-5 w-5 animate-spin" /> : <Camera className="h-5 w-5" />}
-          </button>
+          <ImageSourceMenu
+            side="bottom"
+            align="start"
+            trigger={
+              <button
+                type="button"
+                aria-label={t('captureAria')}
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#006948]/10 text-[#006948] active:scale-95"
+              >
+                {recognizing ? <Loader2 className="h-5 w-5 animate-spin" /> : <Camera className="h-5 w-5" />}
+              </button>
+            }
+          />
           <div className="flex min-w-0 flex-1 items-center rounded-lg bg-[#f2f3ff] px-2 py-1">
             <input
               className="w-full bg-transparent font-[family-name:var(--font-kiwi-headline)] text-sm font-semibold text-[#131b2e] outline-none"
@@ -372,10 +428,17 @@ export default function PriceCompareClient() {
         </div>
 
         <input
-          ref={fileInputRef}
+          ref={cameraInputRef}
           type="file"
           accept="image/*"
           capture="environment"
+          className="hidden"
+          onChange={(e) => onPickImage(e.target.files?.[0] || null)}
+        />
+        <input
+          ref={galleryInputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
           className="hidden"
           onChange={(e) => onPickImage(e.target.files?.[0] || null)}
         />
@@ -618,14 +681,19 @@ export default function PriceCompareClient() {
         })}
       </section>
 
-      <button
-        type="button"
-        aria-label={t('captureAria')}
-        className="fixed right-4 bottom-20 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#006948] text-white shadow-xl transition-transform hover:scale-105 active:scale-95"
-        onClick={() => fileInputRef.current?.click()}
-      >
-        <Camera className="h-7 w-7" />
-      </button>
+      <ImageSourceMenu
+        align="end"
+        side="top"
+        trigger={
+          <button
+            type="button"
+            aria-label={t('captureAria')}
+            className="fixed right-4 bottom-20 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#006948] text-white shadow-xl transition-transform hover:scale-105 active:scale-95"
+          >
+            <Camera className="h-7 w-7" />
+          </button>
+        }
+      />
     </div>
   )
 }
