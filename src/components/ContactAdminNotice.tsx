@@ -1,13 +1,18 @@
+'use client'
+
 import { LinkIcon } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 type ContactAdminNoticeProps = {
   className?: string
 }
 
 export default function ContactAdminNotice({ className }: ContactAdminNoticeProps) {
+  const t = useTranslations('PageCars')
+
   return (
     <div className={className || 'text-muted-foreground mt-6 flex items-center justify-center text-xs'}>
-      如需上下架车源，
+      {t('contactAdminBefore')}
       <a
         href="https://xhslink.com/m/4LHeBgbktey"
         target="_blank"
@@ -15,7 +20,7 @@ export default function ContactAdminNotice({ className }: ContactAdminNoticeProp
         className="inline-flex items-center gap-2 text-xs underline"
       >
         <LinkIcon className="h-3 w-3" />
-        跳转小红书联系管理员
+        {t('contactAdminLink')}
       </a>
     </div>
   )

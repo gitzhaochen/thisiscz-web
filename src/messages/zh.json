@@ -416,7 +416,54 @@
     "mileageUnit": "里程",
     "viewDetail": "查看详情",
     "sourceLink": "来源链接",
-    "backToList": "返回列表"
+    "backToList": "返回列表",
+    "noImage": "暂无图片",
+    "yearLabel": "{year}年",
+    "mileageKm": "{value} 公里",
+    "mileageWanKm": "{value}万公里",
+    "contactAdminBefore": "如需上下架车源，",
+    "contactAdminLink": "跳转小红书联系管理员",
+    "detail": {
+      "vehicleInfo": "车源信息",
+      "sellerInfo": "卖家信息",
+      "postContent": "帖子内容",
+      "price": "价格",
+      "status": "状态",
+      "mileage": "公里数",
+      "year": "年份",
+      "manufacturer": "品牌",
+      "model": "车型",
+      "transmission": "变速箱",
+      "engineDisplacement": "排量",
+      "fuelType": "燃油类型",
+      "region": "地区",
+      "sellerType": "卖家类型",
+      "originalPostPublishedAt": "原贴发布时间"
+    },
+    "enums": {
+      "transmission": {
+        "automatic": "自动",
+        "manual": "手动"
+      },
+      "fuelType": {
+        "petrol": "汽油",
+        "diesel": "柴油",
+        "hybrid": "混动",
+        "phev": "插混",
+        "ev": "纯电",
+        "other": "其他"
+      },
+      "sellerType": {
+        "individual": "个人",
+        "dealer": "商家"
+      },
+      "status": {
+        "active": "在售",
+        "sold": "已售",
+        "offShelf": "下架",
+        "pending": "待售"
+      }
+    }
   },
   "PageNzPriceCompare": {
     "seoTitle": "NZ 商品比价",

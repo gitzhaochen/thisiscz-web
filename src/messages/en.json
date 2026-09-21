@@ -436,7 +436,54 @@
     "mileageUnit": "Mileage",
     "viewDetail": "View detail",
     "sourceLink": "Source Link",
-    "backToList": "Back to list"
+    "backToList": "Back to list",
+    "noImage": "No image",
+    "yearLabel": "{year}",
+    "mileageKm": "{value} km",
+    "mileageWanKm": "{value}万公里",
+    "contactAdminBefore": "Need to list or delist a car? ",
+    "contactAdminLink": "Contact admin on RedNote",
+    "detail": {
+      "vehicleInfo": "Vehicle info",
+      "sellerInfo": "Seller info",
+      "postContent": "Listing description",
+      "price": "Price",
+      "status": "Status",
+      "mileage": "Mileage",
+      "year": "Year",
+      "manufacturer": "Make",
+      "model": "Model",
+      "transmission": "Transmission",
+      "engineDisplacement": "Engine",
+      "fuelType": "Fuel type",
+      "region": "Location",
+      "sellerType": "Seller type",
+      "originalPostPublishedAt": "Original post time"
+    },
+    "enums": {
+      "transmission": {
+        "automatic": "Automatic",
+        "manual": "Manual"
+      },
+      "fuelType": {
+        "petrol": "Petrol",
+        "diesel": "Diesel",
+        "hybrid": "Hybrid",
+        "phev": "PHEV",
+        "ev": "EV",
+        "other": "Other"
+      },
+      "sellerType": {
+        "individual": "Private",
+        "dealer": "Dealer"
+      },
+      "status": {
+        "active": "Active",
+        "sold": "Sold",
+        "offShelf": "Off shelf",
+        "pending": "Pending"
+      }
+    }
   },
   "PageNzPriceCompare": {
     "seoTitle": "NZ Grocery Price Compare",

@@ -2,12 +2,7 @@
 
 import ContactAdminNotice from '@/components/ContactAdminNotice'
 import { useGetApiCarsPublicId } from '@/lib/api/generated'
-import {
-  getCarStatusLabel,
-  getFuelTypeLabel,
-  getSellerTypeLabel,
-  getTransmissionLabel,
-} from '@/lib/carEnumLabels'
+import { formatCarMileageKm, getCarEnumLabel } from '@/lib/carFormat'
 import { getLocalizedCarPost } from '@/lib/carLocalizedPost'
 import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
@@ -57,7 +52,7 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
     const normalized = /(?:z|[+-]\d{2}:?\d{2})$/i.test(value) ? value : `${value}Z`
     const date = new Date(normalized)
     if (Number.isNaN(date.getTime())) return value
-    return date.toLocaleString()
+    return date.toLocaleString(locale)
   }
 
   return (
@@ -88,7 +83,7 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
               ))
             ) : (
               <SwiperSlide>
-                <div className="text-muted-foreground flex h-full items-center justify-center text-sm">No image</div>
+                <div className="text-muted-foreground flex h-full items-center justify-center text-sm">{t('noImage')}</div>
               </SwiperSlide>
             )}
           </Swiper>
@@ -123,75 +118,67 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
 
         <div className="grid gap-3 md:grid-cols-2">
           <div className="space-y-2 rounded-lg border p-3 text-sm">
-            <div className="text-muted-foreground">车源信息</div>
+            <div className="text-muted-foreground">{t('detail.vehicleInfo')}</div>
             <p>
-              <span className="font-medium">价格：</span>
+              <span className="font-medium">{t('detail.price')}: </span>
               <span className="font-semibold text-[#ef4444] tabular-nums">
                 {showValue(car.price)} {showValue(car.currency)}
               </span>
             </p>
             <p>
-              <span className="font-medium">状态：</span>
-              {getCarStatusLabel(car.status)}
+              <span className="font-medium">{t('detail.status')}: </span>
+              {getCarEnumLabel('status', car.status, t)}
             </p>
             <p>
-              <span className="font-medium">公里数：</span>
-              {typeof car.mileageKm === 'number' && car.mileageKm > 0
-                ? `${(car.mileageKm / 10000).toFixed(1).replace(/\.0$/, '')}万公里`
-                : '-'}
+              <span className="font-medium">{t('detail.mileage')}: </span>
+              {formatCarMileageKm(car.mileageKm, locale, t)}
             </p>
             <p>
-              <span className="font-medium">年份：</span>
+              <span className="font-medium">{t('detail.year')}: </span>
               {showValue(car.year)}
             </p>
             <p>
-              <span className="font-medium">品牌：</span>
+              <span className="font-medium">{t('detail.manufacturer')}: </span>
               {showValue(car.manufacturer)}
             </p>
             <p>
-              <span className="font-medium">车型：</span>
+              <span className="font-medium">{t('detail.model')}: </span>
               {showValue(car.model)}
             </p>
-
             <p>
-              <span className="font-medium">变速箱：</span>
-              {getTransmissionLabel(car.transmission)}
+              <span className="font-medium">{t('detail.transmission')}: </span>
+              {getCarEnumLabel('transmission', car.transmission, t)}
             </p>
             <p>
-              <span className="font-medium">排量：</span>
+              <span className="font-medium">{t('detail.engineDisplacement')}: </span>
               {showValue(car.engineDisplacementL)}
             </p>
             <p>
-              <span className="font-medium">燃油类型：</span>
-              {getFuelTypeLabel(car.fuelType)}
+              <span className="font-medium">{t('detail.fuelType')}: </span>
+              {getCarEnumLabel('fuelType', car.fuelType, t)}
             </p>
             <p>
-              <span className="font-medium">地区：</span>
+              <span className="font-medium">{t('detail.region')}: </span>
               {showValue(car.country)} {showValue(car.city)}
             </p>
-
-            {/* <p>
-              <span className="font-medium">更新时间：</span>
-              {formatDateTime(car.updatedAt)}
-            </p> */}
           </div>
 
           <div className="space-y-2 rounded-lg border p-3 text-sm">
-            <div className="text-muted-foreground">卖家信息</div>
+            <div className="text-muted-foreground">{t('detail.sellerInfo')}</div>
             <p>
-              <span className="font-medium">卖家类型：</span>
-              {getSellerTypeLabel(car.sellerType)}
+              <span className="font-medium">{t('detail.sellerType')}: </span>
+              {getCarEnumLabel('sellerType', car.sellerType, t)}
             </p>
             <p>
-              <span className="font-medium">原贴发布时间：</span>
+              <span className="font-medium">{t('detail.originalPostPublishedAt')}: </span>
               {formatDateTime(car.originalPostPublishedAt)}
             </p>
           </div>
         </div>
 
         <div className="prose dark:prose-invert md:text-md max-w-none rounded-lg border p-3 text-sm leading-relaxed">
-          <div className="text-muted-foreground">帖子内容</div>
-          <p>{localizedPost.content}</p>
+          <div className="text-muted-foreground">{t('detail.postContent')}</div>
+          <p className="whitespace-pre-wrap">{localizedPost.content}</p>
         </div>
         <ContactAdminNotice />
       </div>
