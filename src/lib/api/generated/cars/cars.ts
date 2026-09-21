@@ -25,7 +25,15 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query'
 
-import type { CarCreationDTO, CarDTO, CarDTOPaginationResult, CarStatusUpdateDTO, GetApiCarsParams } from '.././models'
+import type {
+  CarBatchDeleteDTO,
+  CarBatchStatusUpdateDTO,
+  CarCreationDTO,
+  CarDTO,
+  CarDTOPaginationResult,
+  CarStatusUpdateDTO,
+  GetApiCarsParams,
+} from '.././models'
 
 import { customInstance } from '.././mutator'
 
@@ -710,6 +718,153 @@ export const usePatchApiCarsPublicIdStatus = <TError = unknown, TContext = unkno
   TContext
 > => {
   const mutationOptions = getPatchApiCarsPublicIdStatusMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+export const patchApiCarsBatchStatus = (
+  carBatchStatusUpdateDTO: CarBatchStatusUpdateDTO,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<void>(
+    {
+      url: `/api/cars/batch/status`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: carBatchStatusUpdateDTO,
+    },
+    options,
+  )
+}
+
+export const getPatchApiCarsBatchStatusMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof patchApiCarsBatchStatus>>,
+    TError,
+    { data: CarBatchStatusUpdateDTO },
+    TContext
+  >
+  request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof patchApiCarsBatchStatus>>,
+  TError,
+  { data: CarBatchStatusUpdateDTO },
+  TContext
+> => {
+  const mutationKey = ['patchApiCarsBatchStatus']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof patchApiCarsBatchStatus>>,
+    { data: CarBatchStatusUpdateDTO }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return patchApiCarsBatchStatus(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PatchApiCarsBatchStatusMutationResult = NonNullable<Awaited<ReturnType<typeof patchApiCarsBatchStatus>>>
+export type PatchApiCarsBatchStatusMutationBody = CarBatchStatusUpdateDTO
+export type PatchApiCarsBatchStatusMutationError = unknown
+
+export const usePatchApiCarsBatchStatus = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof patchApiCarsBatchStatus>>,
+      TError,
+      { data: CarBatchStatusUpdateDTO },
+      TContext
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof patchApiCarsBatchStatus>>,
+  TError,
+  { data: CarBatchStatusUpdateDTO },
+  TContext
+> => {
+  const mutationOptions = getPatchApiCarsBatchStatusMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+export const postApiCarsBatchDelete = (
+  carBatchDeleteDTO: CarBatchDeleteDTO,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<void>(
+    {
+      url: `/api/cars/batch/delete`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: carBatchDeleteDTO,
+      signal,
+    },
+    options,
+  )
+}
+
+export const getPostApiCarsBatchDeleteMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiCarsBatchDelete>>,
+    TError,
+    { data: CarBatchDeleteDTO },
+    TContext
+  >
+  request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiCarsBatchDelete>>,
+  TError,
+  { data: CarBatchDeleteDTO },
+  TContext
+> => {
+  const mutationKey = ['postApiCarsBatchDelete']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiCarsBatchDelete>>, { data: CarBatchDeleteDTO }> = (
+    props,
+  ) => {
+    const { data } = props ?? {}
+
+    return postApiCarsBatchDelete(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiCarsBatchDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof postApiCarsBatchDelete>>>
+export type PostApiCarsBatchDeleteMutationBody = CarBatchDeleteDTO
+export type PostApiCarsBatchDeleteMutationError = unknown
+
+export const usePostApiCarsBatchDelete = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiCarsBatchDelete>>,
+      TError,
+      { data: CarBatchDeleteDTO },
+      TContext
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiCarsBatchDelete>>,
+  TError,
+  { data: CarBatchDeleteDTO },
+  TContext
+> => {
+  const mutationOptions = getPostApiCarsBatchDeleteMutationOptions(options)
 
   return useMutation(mutationOptions, queryClient)
 }

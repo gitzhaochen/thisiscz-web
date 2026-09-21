@@ -7,6 +7,8 @@
  */
 
 export * from './authenticationResponseDTO'
+export * from './carBatchDeleteDTO'
+export * from './carBatchStatusUpdateDTO'
 export * from './carCreationDTO'
 export * from './carCreationDTOFuelType'
 export * from './carCreationDTOSellerType'
