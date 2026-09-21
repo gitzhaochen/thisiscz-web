@@ -59,11 +59,19 @@ export default async function LocaleLayout({ children, params }: Props) {
           gtag('config', 'G-WXNH2RJ7N7');
         `}
       </Script>
-      {/* <Script id="crisp-chat" type="text/javascript" strategy="afterInteractive">
+      <Script id="tawk-to" strategy="afterInteractive">
         {`
-          window.$crisp=[];window.CRISP_WEBSITE_ID="860f0fe8-6635-4118-9b68-a8f12ec0bd6c";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
+          var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+          (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/6ab0ac05776426344625f66a/1k311vtpl';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+          })();
         `}
-      </Script> */}
+      </Script>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         <NextIntlClientProvider>
           <QueryClientProvider>

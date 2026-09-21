@@ -49,7 +49,7 @@ const createR2Client = () => {
 }
 
 const MAX_IMAGE_BYTES = Number(process.env.XHS_PARSE_MAX_IMAGE_BYTES || 10 * 1024 * 1024)
-const MAX_UPLOAD_IMAGES = 5
+const MAX_UPLOAD_IMAGES = 10
 
 type UploadImagesToR2Options = {
   sourceUrl: string
