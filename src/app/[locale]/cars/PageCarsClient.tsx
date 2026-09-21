@@ -8,7 +8,8 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Link } from '@/i18n/navigation'
 import { CarStatus, FuelType, useGetApiCars } from '@/lib/api/generated'
-import { useTranslations } from 'next-intl'
+import { getLocalizedCarPost } from '@/lib/carLocalizedPost'
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
@@ -37,6 +38,7 @@ const sortOptions = ['latest', 'priceLow'] as const
 
 export default function PageCarsClient() {
   const t = useTranslations('PageCars')
+  const locale = useLocale()
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -245,6 +247,7 @@ export default function PageCarsClient() {
           const carPublicId = car.publicId
           if (!carPublicId) return null
           const imageUrl = car.imageUrls?.[0] || ''
+          const localizedPost = getLocalizedCarPost(car, locale)
           const mileageWan =
             typeof car.mileageKm === 'number' && car.mileageKm > 0
               ? `${(car.mileageKm / 10000).toFixed(1).replace(/\.0$/, '')}万公里`
@@ -259,7 +262,7 @@ export default function PageCarsClient() {
                 {imageUrl ? (
                   <Image
                     src={imageUrl}
-                    alt={car.postTitle || ''}
+                    alt={localizedPost.title || ''}
                     fill
                     sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
                     className="object-cover object-center transition-transform duration-300 hover:scale-105"
@@ -269,7 +272,7 @@ export default function PageCarsClient() {
                 )}
               </div>
               <div className="space-y-1 p-2 text-xs">
-                <p className="line-clamp-1 text-sm font-semibold">{car.postTitle}</p>
+                <p className="line-clamp-1 text-sm font-semibold">{localizedPost.title}</p>
                 <div className="flex items-center justify-between gap-1">
                   <div className="flex items-center gap-1">
                     <span>{car.year ? `${car.year}年` : '-'}</span>

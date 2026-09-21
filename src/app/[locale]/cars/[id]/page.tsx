@@ -1,6 +1,7 @@
 import CarDetailClient from './components/CarDetailClient'
 import { apiFetchServer } from '@/lib/apiFetch'
 import type { CarDTO } from '@/lib/api/generated'
+import { getLocalizedCarPost } from '@/lib/carLocalizedPost'
 import { Locale } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
@@ -36,9 +37,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   }
 
+  const localized = getLocalizedCarPost(car, locale)
+
   return {
-    title: car.postTitle,
-    description: buildDesc(car.postContent),
+    title: localized.title || t('seoTitle'),
+    description: buildDesc(localized.content) || t('seoDescription'),
   }
 }
 

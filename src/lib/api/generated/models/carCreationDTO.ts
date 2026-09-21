@@ -52,5 +52,9 @@ export interface CarCreationDTO {
   postTitle?: string | null
   /** @nullable */
   postContent?: string | null
+  /** @nullable */
+  postTitleEn?: string | null
+  /** @nullable */
+  postContentEn?: string | null
   imageUrls?: string[]
 }

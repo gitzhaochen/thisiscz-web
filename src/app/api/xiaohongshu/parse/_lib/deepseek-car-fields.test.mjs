@@ -14,13 +14,19 @@ test('accepts valid high-confidence fields with exact evidence', () => {
         mileageKm: { value: 82000, confidence: 0.95, evidence: '8.2万公里' },
         city: { value: 'Auckland', confidence: 0.9, evidence: '奥克兰' },
       },
+      translations: {
+        postTitleEn: 'Car for sale in Auckland',
+        postContentEn: 'Private sale, $18,500, 82,000 km.',
+      },
     }),
     '奥克兰个人卖车，售价 $18,500，行驶 8.2万公里',
   )
 
-  assert.equal(result.price?.value, 18500)
-  assert.equal(result.mileageKm?.value, 82000)
-  assert.equal(result.city?.value, 'Auckland')
+  assert.equal(result.fields.price?.value, 18500)
+  assert.equal(result.fields.mileageKm?.value, 82000)
+  assert.equal(result.fields.city?.value, 'Auckland')
+  assert.equal(result.translations.postTitleEn, 'Car for sale in Auckland')
+  assert.equal(result.translations.postContentEn, 'Private sale, $18,500, 82,000 km.')
 })
 
 test('accepts an AI-normalized masked NZD price', () => {
@@ -34,8 +40,10 @@ test('accepts an AI-normalized masked NZD price', () => {
     '奥克兰卖车，价格75**刀',
   )
 
-  assert.equal(result.price?.value, 7500)
-  assert.equal(result.currency?.value, 'NZD')
+  assert.equal(result.fields.price?.value, 7500)
+  assert.equal(result.fields.currency?.value, 'NZD')
+  assert.equal(result.translations.postTitleEn, null)
+  assert.equal(result.translations.postContentEn, null)
 })
 
 test('rejects low-confidence fields and evidence not present in source', () => {
@@ -49,8 +57,8 @@ test('rejects low-confidence fields and evidence not present in source', () => {
     '2019 丰田出售',
   )
 
-  assert.equal(result.year, undefined)
-  assert.equal(result.model, undefined)
+  assert.equal(result.fields.year, undefined)
+  assert.equal(result.fields.model, undefined)
 })
 
 test('rejects invalid enum values and malformed JSON', () => {
@@ -94,6 +102,10 @@ test('uses DeepSeek JSON mode once and reports usage', async () => {
                 fields: {
                   manufacturer: { value: 'Toyota', confidence: 0.95, evidence: '丰田' },
                 },
+                translations: {
+                  postTitleEn: 'Toyota Corolla',
+                  postContentEn: 'Private sale',
+                },
               }),
             },
           },
@@ -112,6 +124,8 @@ test('uses DeepSeek JSON mode once and reports usage', async () => {
     assert.equal(requestBody.max_tokens, 4096)
     assert.equal(requestBody.temperature, 0)
     assert.equal(result.fields.manufacturer?.value, 'Toyota')
+    assert.equal(result.translations.postTitleEn, 'Toyota Corolla')
+    assert.equal(result.translations.postContentEn, 'Private sale')
     assert.equal(result.usage?.totalTokens, 130)
   } finally {
     globalThis.fetch = previousFetch

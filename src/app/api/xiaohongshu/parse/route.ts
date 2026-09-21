@@ -143,6 +143,8 @@ export async function GET(request: NextRequest) {
       sourceUrl: finalUrl,
       postTitle: title,
       postContent: content,
+      postTitleEn: aiResult.translations.postTitleEn,
+      postContentEn: aiResult.translations.postContentEn,
       imageUrls,
       parsedFields: parsedResult.fields,
       fieldSources: parsedResult.fieldSources,

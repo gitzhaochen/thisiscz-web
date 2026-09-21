@@ -77,6 +77,8 @@ const formSchema = z.object({
   originalPostPublishedAt: z.string().optional(),
   postTitle: z.string().optional(),
   postContent: z.string().optional(),
+  postTitleEn: z.string().optional(),
+  postContentEn: z.string().optional(),
   imageUrlsText: z.string().optional(),
 })
 
@@ -149,6 +151,8 @@ type XhsParseResponse = {
   sourceUrl?: string
   postTitle?: string
   postContent?: string
+  postTitleEn?: string | null
+  postContentEn?: string | null
   imageUrls?: string[]
   parsedFields?: ParsedXhsCarFields
   parseSource?: 'deepseek'
@@ -201,6 +205,8 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
       originalPostPublishedAt: '',
       postTitle: '',
       postContent: '',
+      postTitleEn: '',
+      postContentEn: '',
       imageUrlsText: '',
     },
   })
@@ -243,6 +249,8 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
       originalPostPublishedAt: formatDateTimeLocal(carDetail.originalPostPublishedAt),
       postTitle: carDetail.postTitle || '',
       postContent: carDetail.postContent || '',
+      postTitleEn: carDetail.postTitleEn || '',
+      postContentEn: carDetail.postContentEn || '',
       imageUrlsText: (carDetail.imageUrls || []).join('\n'),
     })
   }, [carDetail, form])
@@ -326,6 +334,8 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
       originalPostPublishedAt: parseOptionalDateTime(values.originalPostPublishedAt),
       postTitle: parseOptionalText(values.postTitle),
       postContent: parseOptionalText(values.postContent),
+      postTitleEn: parseOptionalText(values.postTitleEn),
+      postContentEn: parseOptionalText(values.postContentEn),
       imageUrls,
     }
 
@@ -367,6 +377,12 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
       }
       if (result.postContent) {
         form.setValue('postContent', result.postContent, { shouldDirty: true, shouldValidate: true })
+      }
+      if (result.postTitleEn) {
+        form.setValue('postTitleEn', result.postTitleEn, { shouldDirty: true, shouldValidate: true })
+      }
+      if (result.postContentEn) {
+        form.setValue('postContentEn', result.postContentEn, { shouldDirty: true, shouldValidate: true })
       }
       if (Array.isArray(result.imageUrls) && result.imageUrls.length > 0) {
         form.setValue('imageUrlsText', result.imageUrls.join('\n'), {
@@ -813,7 +829,22 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
               name="postTitle"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Post title</FormLabel>
+                  <FormLabel>Post title (ZH)</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <FormField
+              control={form.control}
+              name="postTitleEn"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Post title (EN)</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -828,7 +859,22 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
               name="postContent"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Post content</FormLabel>
+                  <FormLabel>Post content (ZH)</FormLabel>
+                  <FormControl>
+                    <Textarea rows={6} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <FormField
+              control={form.control}
+              name="postContentEn"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Post content (EN)</FormLabel>
                   <FormControl>
                     <Textarea rows={6} {...field} />
                   </FormControl>

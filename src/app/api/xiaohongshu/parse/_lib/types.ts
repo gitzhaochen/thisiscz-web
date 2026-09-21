@@ -39,6 +39,10 @@ export type DeepSeekUsage = {
 
 export type DeepSeekCarParseResult = {
   fields: AiParsedCarFields
+  translations: {
+    postTitleEn: string | null
+    postContentEn: string | null
+  }
   model: string
   usage?: DeepSeekUsage
   durationMs: number

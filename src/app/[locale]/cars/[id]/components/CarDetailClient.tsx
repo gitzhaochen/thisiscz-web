@@ -1,5 +1,6 @@
 'use client'
 
+import ContactAdminNotice from '@/components/ContactAdminNotice'
 import { useGetApiCarsPublicId } from '@/lib/api/generated'
 import {
   getCarStatusLabel,
@@ -7,7 +8,8 @@ import {
   getSellerTypeLabel,
   getTransmissionLabel,
 } from '@/lib/carEnumLabels'
-import { useTranslations } from 'next-intl'
+import { getLocalizedCarPost } from '@/lib/carLocalizedPost'
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useState } from 'react'
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules'
@@ -17,10 +19,10 @@ import 'swiper/css'
 import 'swiper/css/free-mode'
 import 'swiper/css/navigation'
 import 'swiper/css/thumbs'
-import ContactAdminNotice from '@/components/ContactAdminNotice'
 
 export default function CarDetailClient({ publicId }: { publicId: string }) {
   const t = useTranslations('PageCars')
+  const locale = useLocale()
   const { data: car, isPending } = useGetApiCarsPublicId(publicId, {
     query: { enabled: !!publicId },
   })
@@ -45,6 +47,7 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
   }
 
   const images = car.imageUrls || []
+  const localizedPost = getLocalizedCarPost(car, locale)
   const showValue = (value: unknown) => {
     if (value === null || value === undefined || value === '') return '-'
     return String(value)
@@ -60,7 +63,7 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
   return (
     <div className="page-wrapper py-6">
       <div className="mx-auto max-w-[860px] space-y-4">
-        <h1 className="text-xl font-bold">{car.postTitle}</h1>
+        <h1 className="text-xl font-bold">{localizedPost.title}</h1>
 
         <div className="relative overflow-hidden rounded-lg border">
           <Swiper
@@ -75,7 +78,7 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
                   <div className="relative h-full w-full">
                     <Image
                       src={url}
-                      alt={`${car.postTitle || 'car'}-${index}`}
+                      alt={`${localizedPost.title || 'car'}-${index}`}
                       fill
                       sizes="(max-width: 768px) 100vw, 680px"
                       className="object-cover object-center"
@@ -107,7 +110,7 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
                 <div className="thumb relative aspect-square overflow-hidden rounded-md border">
                   <Image
                     src={url}
-                    alt={`${car.postTitle || 'car'}-${index}`}
+                    alt={`${localizedPost.title || 'car'}-${index}`}
                     fill
                     sizes="(max-width: 768px) 20vw, 85px"
                     className="object-cover"
@@ -188,7 +191,7 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
 
         <div className="prose dark:prose-invert md:text-md max-w-none rounded-lg border p-3 text-sm leading-relaxed">
           <div className="text-muted-foreground">帖子内容</div>
-          <p>{car.postContent}</p>
+          <p>{localizedPost.content}</p>
         </div>
         <ContactAdminNotice />
       </div>
