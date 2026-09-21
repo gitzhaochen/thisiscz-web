@@ -423,6 +423,7 @@
     "mileageWanKm": "{value}万公里",
     "contactAdminBefore": "如需上下架车源，",
     "contactAdminLink": "跳转小红书联系管理员",
+    "contactSeller": "联系卖家",
     "detail": {
       "vehicleInfo": "车源信息",
       "sellerInfo": "卖家信息",

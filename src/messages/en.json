@@ -443,6 +443,7 @@
     "mileageWanKm": "{value}万公里",
     "contactAdminBefore": "Need to list or delist a car? ",
     "contactAdminLink": "Contact admin on RedNote",
+    "contactSeller": "Contact seller",
     "detail": {
       "vehicleInfo": "Vehicle info",
       "sellerInfo": "Seller info",

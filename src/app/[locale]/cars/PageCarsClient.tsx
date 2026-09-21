@@ -267,25 +267,30 @@ export default function PageCarsClient() {
                     className="object-cover object-center transition-transform duration-300 hover:scale-105"
                   />
                 ) : (
-                  <div className="text-muted-foreground flex h-full items-center justify-center text-sm">{t('noImage')}</div>
-                )}
-              </div>
-              <div className="space-y-1 p-2 text-xs">
-                <p className="line-clamp-1 text-sm font-semibold">{localizedPost.title}</p>
-                <div className="flex items-center justify-between gap-1">
-                  <div className="flex items-center gap-1">
-                    <span>{yearLabel}</span>
-                    <span>{mileageLabel}</span>
+                  <div className="text-muted-foreground flex h-full items-center justify-center text-sm">
+                    {t('noImage')}
                   </div>
-                  <span className="text-sm font-semibold text-[#ef4444] tabular-nums">${car.price}</span>
+                )}
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/35 to-transparent px-2 pt-6 pb-2">
+                  <p className="line-clamp-2 text-xs font-semibold text-white drop-shadow-sm">{localizedPost.title}</p>
                 </div>
+              </div>
+              <div className="flex items-center justify-between gap-1 p-2 text-xs">
+                <div className="flex items-center gap-1 font-bold">
+                  <span>{yearLabel}</span>
+                  <span>{mileageLabel}</span>
+                </div>
+                <span className="flex items-baseline gap-0.5 text-[#ef4444] tabular-nums">
+                  <span className="text-[10px] leading-none font-semibold">NZ$</span>
+                  <span className="text-lg leading-none font-extrabold tracking-tight">{car.price}</span>
+                </span>
               </div>
             </Link>
           )
         })}
       </div>
 
-      <ContactAdminNotice />
+      {/* <ContactAdminNotice /> */}
 
       {totalPages > 1 && (
         <div className="mt-8 flex justify-center">

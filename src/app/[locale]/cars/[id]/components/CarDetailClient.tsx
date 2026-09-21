@@ -1,9 +1,11 @@
 'use client'
 
 import ContactAdminNotice from '@/components/ContactAdminNotice'
+import { Button } from '@/components/ui/button'
 import { useGetApiCarsPublicId } from '@/lib/api/generated'
 import { formatCarMileageKm, getCarEnumLabel } from '@/lib/carFormat'
 import { getLocalizedCarPost } from '@/lib/carLocalizedPost'
+import { MessageCircle } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -55,6 +57,23 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
     return date.toLocaleString(locale)
   }
 
+  const openTawkChat = () => {
+    const w = window as Window & {
+      Tawk_API?: {
+        maximize?: () => void
+        onLoad?: () => void
+      }
+    }
+    if (typeof w.Tawk_API?.maximize === 'function') {
+      w.Tawk_API.maximize()
+      return
+    }
+    w.Tawk_API = w.Tawk_API || {}
+    w.Tawk_API.onLoad = () => {
+      w.Tawk_API?.maximize?.()
+    }
+  }
+
   return (
     <div className="page-wrapper py-6">
       <div className="mx-auto max-w-[860px] space-y-4">
@@ -83,7 +102,9 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
               ))
             ) : (
               <SwiperSlide>
-                <div className="text-muted-foreground flex h-full items-center justify-center text-sm">{t('noImage')}</div>
+                <div className="text-muted-foreground flex h-full items-center justify-center text-sm">
+                  {t('noImage')}
+                </div>
               </SwiperSlide>
             )}
           </Swiper>
@@ -119,10 +140,13 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
         <div className="grid gap-3 md:grid-cols-2">
           <div className="space-y-2 rounded-lg border p-3 text-sm">
             <div className="text-muted-foreground">{t('detail.vehicleInfo')}</div>
-            <p>
+            <p className="flex items-baseline gap-1">
               <span className="font-medium">{t('detail.price')}: </span>
-              <span className="font-semibold text-[#ef4444] tabular-nums">
-                {showValue(car.price)} {showValue(car.currency)}
+              <span className="flex items-baseline gap-0.5 text-[#ef4444] tabular-nums">
+                <span className="text-xs leading-none font-semibold">
+                  {car.currency === 'NZD' || !car.currency ? 'NZ$' : `${showValue(car.currency)}$`}
+                </span>
+                <span className="text-xl leading-none font-extrabold tracking-tight">{showValue(car.price)}</span>
               </span>
             </p>
             <p>
@@ -173,6 +197,10 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
               <span className="font-medium">{t('detail.originalPostPublishedAt')}: </span>
               {formatDateTime(car.originalPostPublishedAt)}
             </p>
+            <Button type="button" className="mt-2 w-1/2 cursor-pointer bg-[#03a84e]" onClick={openTawkChat}>
+              <MessageCircle className="h-4 w-4" />
+              {t('contactSeller')}
+            </Button>
           </div>
         </div>
 
@@ -180,7 +208,7 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
           <div className="text-muted-foreground">{t('detail.postContent')}</div>
           <p className="whitespace-pre-wrap">{localizedPost.content}</p>
         </div>
-        <ContactAdminNotice />
+        {/* <ContactAdminNotice /> */}
       </div>
       <style jsx global>{`
         .car-detail-swiper .swiper-button-prev,

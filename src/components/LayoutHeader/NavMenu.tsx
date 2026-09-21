@@ -17,9 +17,9 @@ import { useEffect, useState } from 'react'
 export const navigation = [
   { name: 'home', href: '/' },
   { name: 'nzSchools', href: '/nzschools' },
+  { name: 'nzRedNoteCars', href: '/cars' },
   { name: 'nzPriceCompare', href: '/nz-price-compare' },
   { name: 'mathMotion', href: '/mathMotion' },
-  { name: 'nzRedNoteCars', href: '/cars' },
   { name: 'posts', href: '/posts' },
   { name: 'bookmarks', href: '/bookmarks' },
   // { name: 'aiTalk', href: '/aiTalk' },

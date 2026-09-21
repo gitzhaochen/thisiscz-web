@@ -5,7 +5,7 @@ type TranslateFn = {
   (key: string, values: Record<string, string | number | Date>): string
 }
 
-const fallback = '-'
+const fallback = ''
 
 export function formatCarYear(year: number | null | undefined, t: TranslateFn) {
   if (typeof year !== 'number') return fallback
