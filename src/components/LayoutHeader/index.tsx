@@ -19,7 +19,7 @@ const LayoutHeader = () => {
     : pathname.startsWith('/nz-price-compare')
       ? i18nPriceCompare('seoTitle')
       : pathname.startsWith('/cars')
-        ? i18nCars('seoTitle')
+        ? i18nCars('title')
         : i18nCommon('siteTitle')
 
   return (

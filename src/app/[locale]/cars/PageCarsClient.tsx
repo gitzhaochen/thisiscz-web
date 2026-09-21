@@ -255,6 +255,7 @@ export default function PageCarsClient() {
             <Link
               key={carPublicId}
               href={`/cars/${carPublicId}`}
+              target="_blank"
               className="flex flex-col rounded-sm border transition-shadow hover:shadow-md"
             >
               <div className="relative aspect-square w-full overflow-hidden rounded-t-sm">
@@ -275,14 +276,14 @@ export default function PageCarsClient() {
                   <p className="line-clamp-2 text-xs font-semibold text-white drop-shadow-sm">{localizedPost.title}</p>
                 </div>
               </div>
-              <div className="flex items-center justify-between gap-1 p-2 text-xs">
-                <div className="flex items-center gap-1 font-bold">
+              <div className="flex items-center justify-between gap-1 p-2 tracking-tight">
+                <div className="flex items-center gap-1 text-[11px] font-bold">
                   <span>{yearLabel}</span>
                   <span>{mileageLabel}</span>
                 </div>
-                <span className="flex items-baseline gap-0.5 text-[#ef4444] tabular-nums">
+                <span className="flex items-baseline text-[#ef4444] tabular-nums">
                   <span className="text-[10px] leading-none font-semibold">NZ$</span>
-                  <span className="text-lg leading-none font-extrabold tracking-tight">{car.price}</span>
+                  <span className="text-[15px] leading-none font-extrabold tracking-tight">{car.price}</span>
                 </span>
               </div>
             </Link>
