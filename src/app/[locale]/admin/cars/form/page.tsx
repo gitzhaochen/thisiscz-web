@@ -11,19 +11,27 @@ import {
   SellerType,
   SourcePlatformType,
   TransmissionType,
+  customInstance,
   getGetApiCarsPublicIdQueryKey,
-  useGetApiCarsPublicId,
   usePostApiCarsCreate,
   usePutApiCarsPublicId,
 } from '@/lib/api/generated'
-import type { CarCreationDTO } from '@/lib/api/generated'
+import type { CarCreationDTO, CarDTO } from '@/lib/api/generated'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
+
+type CarAdminDTO = CarDTO & {
+  contactPhone?: string | null
+  contactWechat?: string | null
+  contactEmail?: string | null
+  parseSourceUrl?: string | null
+  sourceUrl?: string | null
+}
 
 const transmissionOptions = [TransmissionType.automatic, TransmissionType.manual] as const
 const fuelTypeOptions = [
@@ -197,8 +205,11 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
     },
   })
 
-  const { data: carDetail } = useGetApiCarsPublicId(publicId, {
-    query: { enabled: isEdit },
+  const { data: carDetail } = useQuery({
+    queryKey: [`/api/cars/admin/${publicId}`],
+    queryFn: ({ signal }) =>
+      customInstance<CarAdminDTO>({ url: `/api/cars/admin/${publicId}`, method: 'GET', signal }),
+    enabled: isEdit,
   })
 
   useEffect(() => {
@@ -254,6 +265,7 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
         toast.success('Car updated')
         await queryClient.invalidateQueries({ queryKey: ['/api/cars'] })
         await queryClient.invalidateQueries({ queryKey: getGetApiCarsPublicIdQueryKey(publicId) })
+        await queryClient.invalidateQueries({ queryKey: [`/api/cars/admin/${publicId}`] })
       },
       onError: () => {
         toast.error('Update failed')

@@ -179,21 +179,9 @@ export default function AdminCarsPage() {
                       </TableCell>
                       <TableCell className="text-xs">{car.publicId}</TableCell>
                       <TableCell className="max-w-[340px]">
-                        {car.sourceUrl ? (
-                          <a
-                            href={car.sourceUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="block truncate font-medium hover:underline"
-                            title={car.postTitle || undefined}
-                          >
-                            {car.postTitle || '-'}
-                          </a>
-                        ) : (
-                          <p className="truncate font-medium" title={car.postTitle || undefined}>
-                            {car.postTitle || '-'}
-                          </p>
-                        )}
+                        <p className="truncate font-medium" title={car.postTitle || undefined}>
+                          {car.postTitle || '-'}
+                        </p>
                       </TableCell>
                       <TableCell className="font-semibold text-[#ef4444] tabular-nums">
                         {formattedPrice} {car.currency || ''}

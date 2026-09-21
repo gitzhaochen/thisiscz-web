@@ -5,10 +5,8 @@ import {
   getCarStatusLabel,
   getFuelTypeLabel,
   getSellerTypeLabel,
-  getSourcePlatformLabel,
   getTransmissionLabel,
 } from '@/lib/carEnumLabels'
-import { LinkIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -182,34 +180,8 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
               {getSellerTypeLabel(car.sellerType)}
             </p>
             <p>
-              <span className="font-medium">电话：</span>
-              {showValue(car.contactPhone)}
-            </p>
-            <p>
-              <span className="font-medium">微信：</span>
-              {showValue(car.contactWechat)}
-            </p>
-            <p>
-              <span className="font-medium">邮箱：</span>
-              {showValue(car.contactEmail)}
-            </p>
-            <p>
               <span className="font-medium">原贴发布时间：</span>
               {formatDateTime(car.originalPostPublishedAt)}
-            </p>
-            <p>
-              <span className="font-medium">数据来源：</span>
-              {car.sourceUrl && (
-                <a
-                  href={car.sourceUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm underline"
-                >
-                  <LinkIcon className="h-3 w-3" />
-                  跳转小红书查看原文
-                </a>
-              )}
             </p>
           </div>
         </div>

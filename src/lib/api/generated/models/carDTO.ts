@@ -32,12 +32,6 @@ export interface CarDTO {
   /** @nullable */
   fuelType?: CarDTOFuelType
   /** @nullable */
-  contactPhone?: string | null
-  /** @nullable */
-  contactWechat?: string | null
-  /** @nullable */
-  contactEmail?: string | null
-  /** @nullable */
   country?: string | null
   /** @nullable */
   city?: string | null
@@ -46,10 +40,6 @@ export interface CarDTO {
   status?: CarStatus
   /** @nullable */
   sourcePlatform?: CarDTOSourcePlatform
-  /** @nullable */
-  parseSourceUrl?: string | null
-  /** @nullable */
-  sourceUrl?: string | null
   /** @nullable */
   originalPostPublishedAt?: string | null
   /** @nullable */
