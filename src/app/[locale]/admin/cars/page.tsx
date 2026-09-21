@@ -276,7 +276,7 @@ export default function AdminCarsPage() {
                   <input
                     ref={selectAllRef}
                     type="checkbox"
-                    className="h-3.5 w-3.5 accent-current"
+                    className="h-3.5 w-3.5 cursor-pointer accent-current"
                     checked={allPageSelected}
                     onChange={toggleSelectAll}
                     aria-label="全选当前页"
@@ -310,7 +310,7 @@ export default function AdminCarsPage() {
                     <TableCell>
                       <input
                         type="checkbox"
-                        className="h-3.5 w-3.5 accent-current"
+                        className="h-3.5 w-3.5 cursor-pointer accent-current"
                         checked={isSelected}
                         onChange={() => toggleSelectOne(car.publicId!)}
                         aria-label={`选择 ${car.publicId}`}
