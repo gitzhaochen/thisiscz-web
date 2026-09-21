@@ -76,7 +76,7 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
 
   return (
     <div className="page-wrapper py-6">
-      <div className="mx-auto max-w-[860px] space-y-4">
+      <div className="mx-auto w-full min-w-0 max-w-[860px] space-y-4">
         <h1 className="text-xl font-bold">{localizedPost.title}</h1>
 
         <div className="relative overflow-hidden rounded-lg border">
@@ -111,30 +111,34 @@ export default function CarDetailClient({ publicId }: { publicId: string }) {
         </div>
 
         {images.length > 1 && (
-          <Swiper
-            onSwiper={setThumbsSwiper}
-            modules={[FreeMode, Thumbs]}
-            watchSlidesProgress
-            freeMode
-            spaceBetween={8}
-            slidesPerView={5}
-            breakpoints={{ 768: { slidesPerView: 8 } }}
-            className="[&_.swiper-slide-thumb-active_.thumb]:ring-primary mt-2 !overflow-visible [&_.swiper-slide-thumb-active_.thumb]:ring-2"
-          >
-            {images.map((url, index) => (
-              <SwiperSlide key={`${url}-${index}`}>
-                <div className="thumb relative aspect-square overflow-hidden rounded-md border">
-                  <Image
-                    src={url}
-                    alt={`${localizedPost.title || 'car'}-${index}`}
-                    fill
-                    sizes="(max-width: 768px) 20vw, 85px"
-                    className="object-cover"
-                  />
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          <div className="mt-2 min-w-0 overflow-hidden py-0.5">
+            <Swiper
+              onSwiper={setThumbsSwiper}
+              modules={[FreeMode, Thumbs]}
+              watchSlidesProgress
+              freeMode
+              spaceBetween={8}
+              slidesPerView="auto"
+              className="[&_.swiper-slide-thumb-active_.thumb]:ring-primary [&_.swiper-slide-thumb-active_.thumb]:ring-2"
+            >
+              {images.map((url, index) => (
+                <SwiperSlide key={`${url}-${index}`} className="!w-[72px] md:!w-[80px]">
+                  <button
+                    type="button"
+                    className="thumb relative block aspect-square w-full cursor-pointer overflow-hidden rounded-md border"
+                  >
+                    <Image
+                      src={url}
+                      alt={`${localizedPost.title || 'car'}-${index}`}
+                      fill
+                      sizes="80px"
+                      className="object-cover"
+                    />
+                  </button>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
         )}
 
         <div className="grid gap-3 md:grid-cols-2">
