@@ -4,7 +4,9 @@ import {
   extractDateText,
   extractDetailTitle,
   extractImages,
+  extractInitialStateNote,
   extractMeta,
+  isXiaohongshuLoginHtml,
   removeHashtagTopics,
   sanitizeText,
 } from './_lib/html'
@@ -13,6 +15,8 @@ import type { AiParsedCarFields, DeepSeekCarParseResult, ParsedCarFields, Parsed
 import { NextRequest, NextResponse } from 'next/server'
 
 const ACCEPTED_HOSTS = ['xiaohongshu.com', 'xhslink.com', 'xhscdn.com', 'xhslink.cn']
+const MOBILE_USER_AGENT =
+  'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1'
 
 const getTitle = (html: string) => {
   return (
@@ -106,9 +110,9 @@ export async function GET(request: NextRequest) {
       method: 'GET',
       redirect: 'follow',
       headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36',
+        'User-Agent': MOBILE_USER_AGENT,
         'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+        Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
       },
       cache: 'no-store',
     })
@@ -119,15 +123,33 @@ export async function GET(request: NextRequest) {
 
     const html = await response.text()
     const finalUrl = response.url || parsed.toString()
-    const title = getTitle(html)
-    const content = getContent(html)
+
+    if (isXiaohongshuLoginHtml(finalUrl, html)) {
+      return NextResponse.json(
+        {
+          error: 'Xiaohongshu redirected to login; keep xsec_token in the share link and retry',
+          code: 'login_wall',
+        },
+        { status: 502 },
+      )
+    }
+
+    const note = extractInitialStateNote(html)
+    const title = note?.title || getTitle(html)
+    const content = note?.content || getContent(html)
     const dateText = sanitizeText(extractDateText(html))
-    const imageUrls = extractImages(html)
+    const imageUrls = note?.imageUrls?.length ? note.imageUrls : extractImages(html)
+    const originalPostPublishedAt = note?.publishedAtIso || parseOriginalPostPublishedAt(dateText)
+
+    if (!title && !content) {
+      return NextResponse.json(
+        { error: 'Note content unavailable from Xiaohongshu page', code: 'empty_note' },
+        { status: 502 },
+      )
+    }
+
     let aiResult: DeepSeekCarParseResult
-    console.log('title', title)
-    console.log('content', content)
-    console.log('dateText', dateText)
-    console.log('imageUrls', imageUrls)
+
     try {
       aiResult = await extractCarFieldsWithDeepSeek(title, content)
     } catch (error) {
@@ -137,7 +159,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'AI parse failed', code }, { status })
     }
 
-    const parsedResult = buildParsedFields(aiResult.fields, parseOriginalPostPublishedAt(dateText))
+    const parsedResult = buildParsedFields(aiResult.fields, originalPostPublishedAt)
 
     return NextResponse.json({
       sourceUrl: finalUrl,

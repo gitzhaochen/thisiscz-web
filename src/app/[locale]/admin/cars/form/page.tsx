@@ -502,10 +502,10 @@ export function AdminCarsFormPage({ mode = 'edit' }: AdminCarsFormPageProps) {
               onChange={(e) => {
                 let text = e.target.value
                 text = text.trim()
-                // 使用正则提取以 http/https 开头的链接
-                const match = text.match(/https?:\/\/[^\s]+/)
+                // 使用正则提取以 http/https 开头的链接，并去掉末尾杂质
+                const match = text.match(/https?:\/\/[^\s<>"']+/i)
                 if (match) {
-                  setXhsUrl(match[0])
+                  setXhsUrl(match[0].replace(/[)，。,.!！?？]+$/g, ''))
                 } else {
                   toast.error('请粘贴包含有效的小红书链接（以 http/https 开头）')
                   setXhsUrl('')
