@@ -6,6 +6,9 @@ import { SITE_URL } from '@/lib/seo'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  other: {
+    'google-adsense-account': 'ca-pub-5979869043161336',
+  },
 }
 
 const schoolbell = Schoolbell({
