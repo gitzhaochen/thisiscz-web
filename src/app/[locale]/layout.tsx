@@ -59,6 +59,12 @@ export default async function LocaleLayout({ children, params }: Props) {
           gtag('config', 'G-WXNH2RJ7N7');
         `}
       </Script>
+      <Script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5979869043161336"
+        crossOrigin="anonymous"
+        strategy="afterInteractive"
+      />
       <Script id="tawk-to" strategy="afterInteractive">
         {`
           var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
