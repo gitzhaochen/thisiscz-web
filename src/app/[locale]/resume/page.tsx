@@ -11,7 +11,7 @@ export default async function ResumePage({ params }: Props) {
   const { locale } = await params
   setRequestLocale(locale)
 
-  const resumePath = join(process.cwd(), 'public', 'assets', 'resume', 'CZ-10yrsExp-WebDeveloper-CV.md')
+  const resumePath = join(process.cwd(), 'public', 'assets', 'resume', 'CZ-Developer-CV.md')
   const resume = await readFile(resumePath, 'utf8')
 
   return (
