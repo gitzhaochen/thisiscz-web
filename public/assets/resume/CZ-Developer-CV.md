@@ -2,7 +2,7 @@
 
 **Frontend/Fullstack Developer** | Auckland, NZ | Partner Work Visa | Work immediately
 
-027-533-3909 | realzhaochen@gmail.com | [thisiscz.com](https://thisiscz.com) | [GitHub](https://github.com/gitzhaochen) | [LinkedIn](https://www.linkedin.com/in/realzhaochen/)
+realzhaochen@gmail.com | [thisiscz.com](https://thisiscz.com) | [GitHub](https://github.com/gitzhaochen) | [LinkedIn](https://www.linkedin.com/in/realzhaochen/)
 
 ## Professional Profile
 
