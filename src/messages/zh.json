@@ -10,10 +10,59 @@
     "label": "Language"
   },
   "HomePage": {
-    "title": "你好，世界！"
+    "seoTitle": "CZ 的世界｜前端开发、实用工具与新西兰生活",
+    "seoDescription": "CZ 的个人站点：分享 Web 开发实践、自建的新西兰生活工具，以及可交互的数学动画等内容。",
+    "eyebrow": "个人站点 · 新西兰奥克兰",
+    "title": "你好，我是 CZ。",
+    "intro": "我是一名前端方向的全栈开发者，有大约 10 年构建 Web 产品、SaaS 平台、电商系统和 Web3 应用的经验。这个网站是我的数字花园，用来放我做过的东西、写下的笔记，以及在奥克兰生活学习时积累的一些经验。",
+    "avatarAlt": "CZ 的头像",
+    "ctaAbout": "了解更多关于我",
+    "ctaExplore": "看看这里有什么",
+    "tags": ["React", "Next.js", "TypeScript", "奥克兰"],
+    "featuresEyebrow": "这里有什么",
+    "featuresTitle": "你可以在这里做什么",
+    "featuresDescription": "这些是我为自己做的实用工具和内容，也许刚好对你有用。点击卡片即可进入对应页面。",
+    "open": "打开",
+    "features": {
+      "nzSchools": {
+        "title": "新西兰学校数据",
+        "description": "按城市、学段、EQI 和 UE 率查询新西兰学校，学校详情包含在校人数、族裔构成、地址与地图。"
+      },
+      "nzPriceCompare": {
+        "title": "新西兰商品比价",
+        "description": "拍照或输入商品名，对比奥克兰绿超 Woolworths 与黄超 PAK'nSAVE 各门店的实时价格。"
+      },
+      "nzBargainCars": {
+        "title": "新西兰个人二手车",
+        "description": "从小红书收集的个人二手车源，支持按价格、年份、里程和城市筛选。"
+      },
+      "mathMotion": {
+        "title": "动画数学",
+        "description": "拖动图形、调整参数，用动画看清周长、面积和角度公式是怎么推导出来的。"
+      },
+      "posts": {
+        "title": "我的帖子",
+        "description": "技术笔记、生活随笔和做项目时踩过的坑，支持点赞与多级评论。"
+      },
+      "bookmarks": {
+        "title": "我的书签",
+        "description": "按分类整理的书签收藏，记录我反复使用的工具和资源。"
+      }
+    },
+    "moreTitle": "还可以看看",
+    "moreAboutMe": "关于我",
+    "moreResume": "开发者简历",
+    "moreGithub": "GitHub",
+    "footerNote": "使用 Next.js 与 Tailwind CSS 构建。"
+  },
+  "PageAboutMe": {
+    "seoTitle": "关于我 | CZ 的世界",
+    "seoDescription": "了解 CZ——一名生活在新西兰奥克兰的前端方向全栈开发者。",
+    "title": "关于我"
   },
   "Navigation": {
     "home": "首页",
+    "about": "关于我",
     "bookmarks": "我的书签",
     "posts": "我的帖子",
     "nzSchools": "NZ学校",

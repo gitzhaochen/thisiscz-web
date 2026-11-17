@@ -10,10 +10,59 @@
     "label": "Language"
   },
   "HomePage": {
-    "title": "Hello world!"
+    "seoTitle": "ThisIsCZ — Web developer in Auckland, tools & NZ life",
+    "seoDescription": "CZ's personal site: web development notes, hand-built tools for New Zealand life, and interactive math animations.",
+    "eyebrow": "Personal site · Auckland, New Zealand",
+    "title": "Hi, This is CZ.",
+    "intro": "I'm a full-stack developer with a front-end focus and about 10 years of experience building web products, SaaS platforms, e-commerce and Web3 apps. This site is my digital garden: the tools I build, the notes I keep, and what I learn while settling into life in New Zealand.",
+    "avatarAlt": "Portrait of CZ",
+    "ctaAbout": "More about me",
+    "ctaExplore": "Browse the features",
+    "tags": ["React", "Next.js", "TypeScript", "Auckland, NZ"],
+    "featuresEyebrow": "What's here",
+    "featuresTitle": "Things you can explore",
+    "featuresDescription": "Small, practical tools and content I built for myself — some of them may be useful to you too. Every card opens the real page.",
+    "open": "Open",
+    "features": {
+      "nzSchools": {
+        "title": "NZ Schools Data",
+        "description": "Search New Zealand schools by city, level, EQI and UE rate. Each profile includes enrolment, ethnicity, address and a map."
+      },
+      "nzPriceCompare": {
+        "title": "Grocery Price Compare",
+        "description": "Snap a product photo or type a name to compare live Woolworths and PAK'nSAVE prices across Auckland stores."
+      },
+      "nzBargainCars": {
+        "title": "NZ Bargain Cars",
+        "description": "Private used-car listings collected from Chinese social media, with filters for price, year, mileage and city."
+      },
+      "mathMotion": {
+        "title": "Math Motion",
+        "description": "Drag and animate plane-geometry diagrams to see where perimeter, area and angle formulas actually come from."
+      },
+      "posts": {
+        "title": "Posts",
+        "description": "Technical notes, life updates and side-project write-ups — with likes and threaded comments."
+      },
+      "bookmarks": {
+        "title": "Bookmarks",
+        "description": "A growing collection of useful links I keep coming back to, sorted by category."
+      }
+    },
+    "moreTitle": "Also here",
+    "moreAboutMe": "About me",
+    "moreResume": "Resume",
+    "moreGithub": "GitHub",
+    "footerNote": "Built with Next.js and Tailwind CSS."
+  },
+  "PageAboutMe": {
+    "seoTitle": "About me | ThisIsCZ",
+    "seoDescription": "Learn more about CZ — a front-end-focused full-stack developer based in Auckland, New Zealand.",
+    "title": "About me"
   },
   "Navigation": {
     "home": "Home",
+    "about": "About me",
     "bookmarks": "My Bookmarks",
     "posts": "My Posts",
     "nzSchools": "NZ Schools",

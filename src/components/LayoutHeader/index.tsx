@@ -25,10 +25,10 @@ const LayoutHeader = () => {
   return (
     <div className="bg-background sticky top-0 z-10 border-b border-dashed">
       <div className="page-wrapper flex items-center justify-between py-2">
-        <div className="flex flex-1 items-center gap-[200px]">
+        <div className="flex flex-1 items-center gap-8 lg:gap-10 xl:gap-20">
           <Link
             href="/"
-            className={`${locale === 'en' ? 'font-schoolbell tracking-wide' : 'font-chinese opacity-80'} text-md font-bold`}
+            className={`${locale === 'en' ? 'font-schoolbell tracking-wide' : 'font-chinese opacity-80'} text-md font-bold whitespace-nowrap`}
           >
             <span className="md:hidden">{mobileTitle}</span>
             <span className="hidden md:inline">{i18nCommon('siteTitle')}</span>

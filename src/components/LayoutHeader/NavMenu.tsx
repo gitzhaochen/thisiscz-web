@@ -22,6 +22,7 @@ export const navigation = [
   { name: 'mathMotion', href: '/mathMotion' },
   { name: 'posts', href: '/posts' },
   { name: 'bookmarks', href: '/bookmarks' },
+  { name: 'about', href: '/aboutMe' },
   // { name: 'aiTalk', href: '/aiTalk' },
   // { name: 'resume', href: '/resume' },
 ]
@@ -53,10 +54,10 @@ export const MobileNavMenu = () => {
   }, [pathname, activeTopicParam])
 
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       <Drawer direction="left" open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
-          <Button variant="ghost" size="icon" className="md:hidden">
+          <Button variant="ghost" size="icon" className="lg:hidden">
             <Menu className="h-6 w-6" />
           </Button>
         </DrawerTrigger>
@@ -130,12 +131,12 @@ export const PcNavMenu = () => {
   const i18nNav = useTranslations('Navigation')
 
   return (
-    <div className="hidden items-center gap-10 md:flex">
+    <div className="hidden items-center gap-6 lg:flex xl:gap-8">
       {navigation.map((item) => (
         <Link
           key={item.href}
           href={item.href}
-          className={`text-sm ${pathname === item.href ? 'font-bold' : 'font-normal'}`}
+          className={`text-sm whitespace-nowrap ${pathname === item.href ? 'font-bold' : 'font-normal'}`}
         >
           {i18nNav(item.name)}
         </Link>

@@ -7,12 +7,17 @@ Live demo: [thisiscz.vercel.app](https://thisiscz.com)
 ## Features
 
 - **i18n** — English and Chinese via `next-intl`
+- **Homepage** — Short site intro with feature cards linking to every section
+- **About me** — Personal intro rendered from Markdown at `/aboutMe`
 - **Posts** — List, detail, categories, likes, and nested comments
 - **Bookmarks** — Curated links with categories and admin management
-- **Resume** — Markdown resume rendered on the homepage
+- **NZ Schools** — School directory with filters, profiles, maps and UE data
+- **NZ Price Compare** — Live Woolworths / PAK'nSAVE grocery price comparison
+- **NZ Bargain Cars** — Private used-car listings collected from social media
+- **Math Motion** — Interactive geometry animations for formula derivations
+- **Resume** — Markdown developer CV at `/resume`
 - **Admin** — Create and edit posts and bookmarks (Google OAuth)
 - **AI Talk** — Voice/text chat powered by DeepSeek (via Route Handler proxy)
-- **Utilities** — Crypto tracker and NZ Spend calculator pages
 
 ## Tech Stack
 
