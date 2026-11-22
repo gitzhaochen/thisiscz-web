@@ -25,6 +25,8 @@ const zcoolKuaiLe = ZCOOL_KuaiLe({
   display: 'swap',
 })
 
+const impactSiteVerification = { value: 'd55e3882-0d77-46b0-94cb-524c28cc8dcc' }
+
 type Props = {
   children: ReactNode
 }
@@ -34,6 +36,7 @@ export default async function RootLayout({ children }: Props) {
 
   return (
     <html lang={locale} suppressHydrationWarning>
+      <meta name="impact-site-verification" {...impactSiteVerification} />
       <body className={`${schoolbell.variable} ${zcoolKuaiLe.variable}`}>{children}</body>
     </html>
   )
